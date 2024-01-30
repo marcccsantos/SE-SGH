@@ -4,7 +4,7 @@ body, html {
 }
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content:left;
     flex-direction: column; 
     position: fixed;
     width: 100%;
@@ -13,11 +13,11 @@ header {
 nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 15px;
     font-family: 'Lexend';
     font-size: 11px;
     color: #FFF39C;
-    margin-left: 45px;
+    margin-left: 50px;
 }
 li:hover {
     text-decoration: underline;
@@ -49,34 +49,32 @@ nav a {
 
 @media screen and (max-width:769px) {
     .logo-header {
-        width: 70%;
-        max-width: 50px;
+        max-width: 70px;
     }
     .sgh-text {
-        width: 70%; 
-        max-width: 250px;
-        margin-top: 10px;
+        max-width: 300px;
+        margin-top: 20px;
     }
     nav ul {
         font-size: 1.198vw;
-        gap: 15px;
         margin-top: -6px;
         margin-left: 14px;
     }
 }
-@media screen and (max-width:320px) {
+@media screen and (max-width:360px) {
     .logo-header {
         width: 50%;
-        max-width: 30px;
+        max-width: 40px;
     }
     .sgh-text {
         width: 60%; 
         max-width: 200px;
-        margin-top: 8px;
+        margin-top: 13px;
     }
     nav ul {
-        font-size: 0.885vw;
+        font-size: 0.938vw;
+        gap: 10px;
         margin-top: -5px;
-        margin-left: -8px;
+        margin-left: 3px;
     }
 }
