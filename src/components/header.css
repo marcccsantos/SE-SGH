@@ -5,20 +5,25 @@ body, html {
 header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex-direction: column; 
+    position: relative;
     background-color: #176906;
 }
 nav ul {
     list-style: none;
     display: flex;
-    gap: 15px;
+    gap: 20px;
     font-family: 'Lexend';
     font-size: 11px;
     color: #FFF39C;
+    margin-left: 45px;
 }
 li:hover {
     text-decoration: underline;
     color: white;
+}
+.logout {
+    color: #E6CB02;
 }
 nav a {
     text-decoration: none;
@@ -27,7 +32,6 @@ nav a {
 .logo-header {
     width: 100%;
     max-width: 90px;
-    margin-left: 20px;
 }
 .sgh-text {
     width: 100%;
@@ -38,16 +42,40 @@ nav a {
     display: flex;
     align-items: start;
     width: 100%;
-    position: fixed;
     background-color: #176906;
 }
+
 
 @media screen and (max-width:769px) {
     .logo-header {
         width: 70%;
-        max-width: 70px;
+        max-width: 50px;
     }
     .sgh-text {
         width: 70%; 
+        max-width: 250px;
+        margin-top: 10px;
+    }
+    nav ul {
+        font-size: 1.198vw;
+        gap: 15px;
+        margin-top: -6px;
+        margin-left: 14px;
+    }
+}
+@media screen and (max-width:320px) {
+    .logo-header {
+        width: 50%;
+        max-width: 30px;
+    }
+    .sgh-text {
+        width: 60%; 
+        max-width: 200px;
+        margin-top: 8px;
+    }
+    nav ul {
+        font-size: 0.885vw;
+        margin-top: -5px;
+        margin-left: -8px;
     }
 }

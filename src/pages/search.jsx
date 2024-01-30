@@ -7,7 +7,7 @@ const Search = () => {
         <>  
             <Header />
             
-            
+            <Footer />
         </>
     )
 }

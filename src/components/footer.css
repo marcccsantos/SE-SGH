@@ -8,3 +8,9 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+@media screen and (max-width:769px) {
+    footer {
+        font-size: 0.781vw;
+    }
+}
