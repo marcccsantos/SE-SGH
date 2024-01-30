@@ -12,7 +12,7 @@ const header = () => {
                 <nav>
                     <ul>
                         <li><Link to="/search">SEARCH RECORD</Link></li>
-                        <li>VIEW RECORD</li>
+                        <li><Link to="/ViewRecord">VIEW RECORD</Link></li>
                         <li>ADD RECORD</li>
                         <li>ARCHIVE RECORD</li>
                         <li>ACTIVITY LOG</li>
