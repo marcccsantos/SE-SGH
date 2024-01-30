@@ -1,0 +1,10 @@
+footer {
+    background-color: #176906;
+    text-align: center;
+    font-family: 'Lexend';
+    font-size: 11px;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
