@@ -3,7 +3,10 @@ position: absolute;
 top: 200px;
 right: 150px;
 }
-
+.body-add{
+    display: flex;
+    position: relative;
+}
 .col-1{
     margin-right: 1em;
     margin-bottom: 20px;
@@ -148,7 +151,7 @@ input[name="expiry"] {
   }
   
 .add-image {
-    display: block;
+    display:flex;
     width: 310px;
     height: auto;
 }
