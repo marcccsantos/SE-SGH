@@ -6,7 +6,11 @@ import Login from "./pages/login";
 import Forgot from "./pages/forgot";
 import Search from "./pages/search";
 import ViewRecord from "./pages/ViewRecord";
+<<<<<<< Updated upstream
 import { useEffect, useState } from "react";
+=======
+import AddRecord from "./pages/AddRecord";
+>>>>>>> Stashed changes
 
 const App = () => {
     const [user, setUser] = useState(null);
@@ -34,6 +38,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/forgot" element={<Forgot />} />
+<<<<<<< Updated upstream
                     <Route path="/search" element={
                         <ProtectedRoute user={user}>
                             <Search />
@@ -44,6 +49,11 @@ const App = () => {
                             <ViewRecord />
                         </ProtectedRoute>
                     } />
+=======
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/ViewRecord" element={<ViewRecord />} />
+                    <Route path="/AddRecord" element={<AddRecord />} />
+>>>>>>> Stashed changes
                 </Routes>
             </Router>
         </div>
