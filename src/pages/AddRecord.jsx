@@ -8,20 +8,6 @@ const AddRecord = () => {
     return (
         <>  
             <Header/>
-            <div className="body-add">
-                <div>
-                    <div class="add-image-container">
-                        <img src="add-image.png" alt="Avatar" class="add-image"/>
-                        <div class="overlay">
-                            <img src="drop-img.png" alt="Add image" class="add-image-plus"/>
-                            <div class="drag-here">Drag & Drop Image Here</div>
-                        </div>
-                    </div>    
-                        <button className="choose-img" type="submit">
-                            <legend>Choose File</legend>
-                        </button>
-                        <p className="support">Supported File Types: .jpg, .png</p>
-                </div>
                 <div className="AddRecordForm">
                     <div className="row-1">
                     {/*FIRST NAME*/}
@@ -243,7 +229,20 @@ const AddRecord = () => {
                         <legend>Cancel</legend>
                     </button>
                 </div>
-            </div>
+
+                <div>
+                    <div class="add-image-container row-1">
+                        <img src="add-image.png" alt="Avatar" class="add-image"/>
+                        <div class="overlay">
+                            <img src="drop-img.png" alt="Add image" class="add-image-plus"/>
+                            <div class="drag-here">Drag & Drop Image Here</div>
+                        </div>
+                    </div>    
+                        <button className="choose-img" type="submit">
+                            <legend>Choose File</legend>
+                        </button>
+                        <p className="support">Supported File Types: .jpg, .png</p>
+                </div>
         <Footer />
         </>
     )
