@@ -2,9 +2,9 @@ import ItemsList from '../components/ItemsList';
 
 const ViewRecord = () => {
     return ( 
-        <div>
+      <div>
         <ItemsList />
-      </div>
+      </div> 
   
      );
 }

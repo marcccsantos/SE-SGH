@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './login.css'; 
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisibility] = useState(false);
+
+  const navigate = useNavigate();
  
   const passwordVisibility = () => {
     setPasswordVisibility(!passwordVisible);
@@ -17,7 +21,25 @@ const Login = () => {
     return () => {
       document.body.classList.remove('loginPage');
     };
-  }, []);
+  }, []); 
+
+  const handleLogin = () => {
+    if (!username || !password) return;
+    signInWithEmailAndPassword(auth, username, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        navigate('/search');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+      });
+  };
+
+  const handleUsername = (event) => setUsername(event.target.value);
+  const handlePassword = (event) => setPassword(event.target.value);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -47,7 +69,7 @@ const Login = () => {
               placeholder="Enter Username"
               className="username"
               required
-              value = {username} onChange={(e) => {setUsername(e.target.value)}}
+              value = {username} onChange={handleUsername}
             />
 
             <input
@@ -56,7 +78,7 @@ const Login = () => {
               className="password"
               id="input"
               required
-              value = {password} onChange={(e) => {setPassword(e.target.value)}}
+              value = {password} onChange={handlePassword}
             />
             {passwordVisible ? (
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="eye-btn" onClick={passwordVisibility}>
@@ -69,7 +91,7 @@ const Login = () => {
               </svg>
             )}
 
-            <button className="login-button" type="submit">
+            <button className="login-button" onClick={handleLogin}>
               LOGIN
             </button>
           </form>

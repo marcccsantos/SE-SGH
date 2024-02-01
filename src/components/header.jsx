@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom';
 import './header.css'; 
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
 
 const header = () => {
+    const handleLogOut = () => {
+        signOut(auth)
+            .then(() => console.log("Sign Out"))
+            .catch((error) => console.log(error));
+    };
+
     return (  
         <>
             <header>
@@ -17,7 +25,7 @@ const header = () => {
                         <li>ARCHIVE RECORD</li>
                         <li>ACTIVITY LOG</li>
                         <li>PAYROLL</li>
-                        <li className="logout"><Link to="/">LOGOUT</Link></li>
+                        <li className="logout" onClick={handleLogOut}>LOGOUT</li>
                     </ul>
                 </nav>
             </header>

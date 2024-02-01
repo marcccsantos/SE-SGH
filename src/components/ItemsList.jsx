@@ -1,7 +1,7 @@
 // src/components/ItemsList.jsx
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import db from '../firebase';
+//import db from '../firebase';
 
 const ItemsList = () => {
   const [items, setItems] = useState([]);
