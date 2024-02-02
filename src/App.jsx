@@ -5,8 +5,8 @@ import { ProtectedRoute } from "./components/protectedRoute"
 import Login from "./pages/login";
 import Forgot from "./pages/forgot";
 import Search from "./pages/search";
-import AddRecord from "./pages/AddRecord";
 import ViewRecord from "./pages/ViewRecord";
+import NotFound from "./pages/not-found";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -35,9 +35,17 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/forgot" element={<Forgot />} />
-                    <Route path="/search" element={<Search />} />
-                    <Route path="/ViewRecord" element={<ViewRecord />} />
-                    <Route path="/AddRecord" element={<AddRecord />} />
+                    <Route path="/search" element={
+                        <ProtectedRoute user={user}>
+                            <Search />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/ViewRecord" element={
+                        <ProtectedRoute user={user}>
+                            <ViewRecord />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="*" element={<NotFound />}/>
                 </Routes>
             </Router>
         </div>
