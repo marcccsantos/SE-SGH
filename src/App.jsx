@@ -8,6 +8,7 @@ import Search from "./pages/search";
 import ViewRecord from "./pages/ViewRecord";
 import AddRecord from "./pages/AddRecord";
 import NotFound from "./pages/not-found";
+import DTR from "./pages/DTR"
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<NotFound />}/>
+                    <Route path="/DTR" element={<DTR />}/>
                 </Routes>
             </Router>
         </div>
