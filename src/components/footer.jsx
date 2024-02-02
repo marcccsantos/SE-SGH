@@ -4,7 +4,7 @@ const footer = () => {
     return ( 
         <>
             <footer>
-                <p>COPYRIGHTS ©SOFTIES 2023 ALL RIGHTS RESERVED</p>
+                <p className="copyright-footer">COPYRIGHTS © 2023 ALL RIGHTS RESERVED</p>
             </footer>
         </>
      );

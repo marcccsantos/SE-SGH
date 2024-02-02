@@ -6,7 +6,7 @@ header {
     display: flex;
     justify-content:left;
     flex-direction: column; 
-    position: fixed;
+    position: relative;
     width: 100%;
     background-color: #176906;
 }
@@ -14,10 +14,12 @@ nav ul {
     list-style: none;
     display: flex;
     gap: 15px;
-    font-family: 'Lexend';
+    font-family: 'Inter';
+    font-weight: 600;
     font-size: 11px;
     color: #FFF39C;
     margin-left: 50px;
+    cursor: pointer;
 }
 li:hover {
     text-decoration: underline;

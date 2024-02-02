@@ -3,7 +3,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column; 
-    height: 100vh;
 }
 .logo-search {
     width: 100%;
@@ -12,13 +11,13 @@
 .sgh-search {
     width: 100%;
     max-width: 200px;
-    margin-top: -25px;
+    margin-top: -20px;
 }
 .search-icon {
     width: 100%;
     max-width: 15px;
     position: absolute;
-    margin-top: 223px;
+    margin-top: 214px;
     margin-right: 370px;
 }
 form {
@@ -35,7 +34,7 @@ form {
 }
 .btn-search {
     margin-top: 15px;
-    /*margin-left: 180px;*/
+    margin-bottom: 15px;
 }
 
 

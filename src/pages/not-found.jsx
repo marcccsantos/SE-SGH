@@ -1,7 +1,13 @@
-const notFound = () => {
+import { Link } from "react-router-dom";
+
+const NotFound = () => {
     return ( 
-        <h2>Sorry this page is not available</h2>
-     );
+        <div className="not-found">
+            <h2>Sorry</h2>
+            <p>That page cannot be found</p>
+            <Link to="/search">Go back</Link>
+        </div>
+    );
 }
  
-export default notFound;
+export default NotFound;

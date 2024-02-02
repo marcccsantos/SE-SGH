@@ -4,9 +4,9 @@ footer {
     font-family: 'Lexend';
     font-size: 11px;
     color: white;
-    position: fixed;
-    bottom: 0;
     width: 100%;
+    position: fixed;
+    bottom: 0; 
 }
 
 @media screen and (max-width:769px) {
