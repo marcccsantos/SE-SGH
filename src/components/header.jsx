@@ -21,9 +21,8 @@ const header = () => {
                     <ul>
                         <li><Link to="/search">SEARCH RECORD</Link></li>
                         <li><Link to="/ViewRecord">VIEW RECORD</Link></li>
-                        <li>ADD RECORD</li>
+                        <li><Link to="/AddRecord">ADD RECORD</Link></li>
                         <li>ARCHIVE RECORD</li>
-                        <li>ACTIVITY LOG</li>
                         <li>PAYROLL</li>
                         <li className="logout" onClick={handleLogOut}>LOGOUT</li>
                     </ul>

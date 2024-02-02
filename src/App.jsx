@@ -6,6 +6,7 @@ import Login from "./pages/login";
 import Forgot from "./pages/forgot";
 import Search from "./pages/search";
 import ViewRecord from "./pages/ViewRecord";
+import AddRecord from "./pages/AddRecord";
 import NotFound from "./pages/not-found";
 import { useEffect, useState } from "react";
 
@@ -43,6 +44,11 @@ const App = () => {
                     <Route path="/ViewRecord" element={
                         <ProtectedRoute user={user}>
                             <ViewRecord />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/AddRecord" element={
+                        <ProtectedRoute user={user}>
+                            <AddRecord  />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<NotFound />}/>

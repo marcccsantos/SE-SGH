@@ -68,6 +68,8 @@ const Login = () => {
               type="text"
               placeholder="Enter Username"
               className="username"
+              name="username"
+              autoComplete="username"
               required
               value = {username} onChange={handleUsername}
             />
@@ -77,6 +79,8 @@ const Login = () => {
               placeholder="Enter Password"
               className="password"
               id="input"
+              name="password"
+              autoComplete="current-password"
               required
               value = {password} onChange={handlePassword}
             />

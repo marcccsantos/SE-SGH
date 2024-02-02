@@ -229,7 +229,7 @@ const AddRecord = () => {
                         <legend>Cancel</legend>
                     </button>
                 </div>
-
+ 
                 <div>
                     <div class="add-image-container row-1">
                         <img src="add-image.png" alt="Avatar" class="add-image"/>
