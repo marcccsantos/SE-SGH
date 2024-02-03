@@ -8,7 +8,7 @@ const Search = () => {
         <>  
             <Header />
             
-            <div className="search">
+            <div className="search"> 
                 <img className="logo-search" src="/logo-1.png" alt="" />
                 <img className="sgh-search" src="/sgh.png" alt="" />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="search-icon">
