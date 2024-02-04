@@ -7,6 +7,7 @@ import Forgot from "./pages/forgot";
 import Search from "./pages/search";
 import ViewRecord from "./pages/ViewRecord";
 import AddRecord from "./pages/AddRecord";
+import AddRecordTest from "./pages/AddRecordTest"; //to be removed
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR"
 import { useEffect, useState } from "react";
@@ -50,6 +51,11 @@ const App = () => {
                     <Route path="/AddRecord" element={
                         <ProtectedRoute user={user}>
                             <AddRecord  />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/AddRecordTest" element={// to be removed
+                        <ProtectedRoute user={user}>
+                            <AddRecordTest />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<NotFound />}/>

@@ -1,38 +1,32 @@
 import React, { useState } from 'react';
 
 const DTR = () => {
-  const [clockedIn, setClockedIn] = useState(false);
+  const [isClockedIn, setIsClockedIn] = useState(false);
   const [clockInTime, setClockInTime] = useState(null);
   const [clockOutTime, setClockOutTime] = useState(null);
 
-  const handleClockIn = () => {
+  const handleClockInOut = () => {
     const now = new Date();
-    setClockInTime(now.toLocaleTimeString());
-    setClockedIn(true);
-  };
+    const formattedTime = now.toLocaleTimeString();
 
-  const handleClockOut = () => {
-    const now = new Date();
-    setClockOutTime(now.toLocaleTimeString());
-    setClockedIn(false);
+    if (isClockedIn) {
+      setClockOutTime(formattedTime);
+    } else {
+      setClockInTime(formattedTime);
+    }
+
+    setIsClockedIn(!isClockedIn);
   };
 
   return (
     <div>
       <h1>Daily Time Record</h1>
-      {clockedIn ? (
-        <div>
-          <p>Status: Clocked In</p>
-          <p>Time In: {clockInTime}</p>
-          <button onClick={handleClockOut}>Clock Out</button>
-        </div>
-      ) : (
-        <div>
-          <p>Status: Clocked Out</p>
-          <button onClick={handleClockIn}>Clock In</button>
-        </div>
-      )}
-      {clockOutTime && <p>Time Out: {clockOutTime}</p>}
+      <div>
+        <p>Status: {isClockedIn ? 'Clocked In' : 'Clocked Out'}</p>
+        {isClockedIn ? <p>Time In: {clockInTime}</p> : null}
+        {clockOutTime && <p>Time Out: {clockOutTime}</p>}
+        <button onClick={handleClockInOut}>{isClockedIn ? 'Clock Out' : 'Clock In'}</button>
+      </div>
     </div>
   );
 };
