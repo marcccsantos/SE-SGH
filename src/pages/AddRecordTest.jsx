@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../firebase';  // Import your Firestore and Storage instances
-import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const AddRecordTest = () => {
   const [employeeID, setEmployeeID] = useState('');
@@ -33,15 +33,15 @@ const AddRecordTest = () => {
 
     // Upload the image file to Firebase Storage
     try {
-        const storageRef = ref(storage, 'employee_picture/' + employeeID + '_' + imageFile.name);
-        await uploadString(storageRef, imageFile);
-        const downloadUrl = await getDownloadURL(storageRef);
-        setImageUrl(downloadUrl);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('Error uploading image: ' + error.message);
-        return;
-      }
+      const storageRef = ref(storage, `employee_picture/${employeeID}_${imageFile.name}`);
+      const snapshot = await uploadBytes(storageRef, imageFile);
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+      setImageUrl(downloadUrl);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image: ' + error.message);
+      return;
+    }
 
     // Add the employee data to Firestore
     try {
