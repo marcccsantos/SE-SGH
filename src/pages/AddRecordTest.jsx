@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
-import db from '../firebase'; // Import your Firestore instance
+import { db, storage, auth } from '../firebase';  // Import your Firestore and Storage instances
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 const AddRecordTest = () => {
   const [employeeID, setEmployeeID] = useState('');
@@ -8,41 +9,52 @@ const AddRecordTest = () => {
   const [firstName, setFirstName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [salary, setSalary] = useState('');
-  const [image, setImage] = useState('');
+  const [imageFile, setImageFile] = useState(null); // State to hold the selected image file
+  const [imageUrl, setImageUrl] = useState(''); // State to hold the URL of the uploaded image
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     // Validation
     if (!/^\d+$/.test(employeeID)) {
-        alert('Employee ID should be a number');
-        return;
-      }
-  
-      if (!/^\d+$/.test(salary)) {
-        alert('Salary should be a number');
-        return;
-      }
-  
-      if (!isValidDate(birthDate)) {
-        alert('Birth Date is not in a valid format (YYYY-MM-DD)');
-        return;
-      }
+      alert('Employee ID should be a number');
+      return;
+    }
 
+    if (!/^\d+$/.test(salary)) {
+      alert('Salary should be a number');
+      return;
+    }
+
+    if (!isValidDate(birthDate)) {
+      alert('Birth Date is not in a valid format (YYYY-MM-DD)');
+      return;
+    }
+
+    // Upload the image file to Firebase Storage
+    try {
+        const storageRef = ref(storage, 'employee_picture/' + employeeID + '_' + imageFile.name);
+        await uploadString(storageRef, imageFile);
+        const downloadUrl = await getDownloadURL(storageRef);
+        setImageUrl(downloadUrl);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Error uploading image: ' + error.message);
+        return;
+      }
 
     // Add the employee data to Firestore
     try {
-        const employeesCollection = collection(db, 'employees');
-  
-        const dataToAdd = {
-          employeeID: parseInt(employeeID, 10), // Convert to integer
-          lastName,
-          firstName,
-          birthDate,
-          salary: parseFloat(salary), // Convert to float
-          image,
-        };
+      const employeesCollection = collection(db, 'employees');
+
+      const dataToAdd = {
+        employeeID: parseInt(employeeID, 10), // Convert to integer
+        lastName,
+        firstName,
+        birthDate,
+        salary: parseFloat(salary), // Convert to float
+        imageUrl,
+      };
 
       await addDoc(employeesCollection, dataToAdd);
 
@@ -52,7 +64,8 @@ const AddRecordTest = () => {
       setFirstName('');
       setBirthDate('');
       setSalary('');
-      setImage('');
+      setImageFile(null);
+      setImageUrl('');
 
       console.log('Employee data added to Firestore!');
     } catch (error) {
@@ -63,6 +76,11 @@ const AddRecordTest = () => {
   const isValidDate = (dateString) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     return regex.test(dateString);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
   };
 
   return (
@@ -113,8 +131,8 @@ const AddRecordTest = () => {
         </label>
         <br />
         <label>
-          Image URL:
-          <input type="text" value={image} onChange={(e) => setImage(e.target.value)} />
+          Image:
+          <input type="file" accept="image/*" onChange={handleImageChange} />
         </label>
         <br />
         <button type="submit">Add Employee</button>
