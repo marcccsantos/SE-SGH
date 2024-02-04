@@ -1,8 +1,16 @@
+import React, { useEffect } from 'react';
 import './search.css'; 
 import Header from '../components/header';
 import Footer from '../components/footer';
 
 const Search = () => {
+    useEffect(() => {
+        document.body.classList.add('searchPage');
+    
+        return () => {
+          document.body.classList.remove('searchPage');
+        };
+    }, []); 
 
     return (
         <>  
