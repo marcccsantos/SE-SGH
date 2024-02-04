@@ -9,7 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisibility] = useState(false);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
  
   const passwordVisibility = () => {
     setPasswordVisibility(!passwordVisible);
