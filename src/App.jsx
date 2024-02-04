@@ -6,6 +6,7 @@ import Login from "./pages/login";
 import Forgot from "./pages/forgot";
 import Search from "./pages/search";
 import ViewRecord from "./pages/ViewRecord";
+import ViewProfile from "./pages/ViewProfile";
 import AddRecord from "./pages/AddRecord";
 import AddRecordTest from "./pages/AddRecordTest"; //to be removed
 import NotFound from "./pages/not-found";
@@ -46,6 +47,11 @@ const App = () => {
                     <Route path="/ViewRecord" element={
                         <ProtectedRoute user={user}>
                             <ViewRecord />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/ViewProfile" element={
+                        <ProtectedRoute user={user}>
+                            <ViewProfile />
                         </ProtectedRoute>
                     } />
                     <Route path="/AddRecord" element={

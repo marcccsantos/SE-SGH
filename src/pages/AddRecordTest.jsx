@@ -33,7 +33,7 @@ const AddRecordTest = () => {
 
     // Upload the image file to Firebase Storage
     try {
-      const storageRef = ref(storage, `employee_picture/${employeeID}_${imageFile.name}`);
+      const storageRef = ref(storage, `employee_picture/${employeeID}`);
       const snapshot = await uploadBytes(storageRef, imageFile);
       const downloadUrl = await getDownloadURL(snapshot.ref);
       setImageUrl(downloadUrl);
@@ -41,7 +41,7 @@ const AddRecordTest = () => {
       console.error('Error uploading image:', error);
       alert('Error uploading image: ' + error.message);
       return;
-    }
+    }    
 
     // Add the employee data to Firestore
     try {
