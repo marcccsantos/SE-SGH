@@ -8,7 +8,8 @@ import Search from "./pages/search";
 import ViewRecord from "./pages/ViewRecord";
 import ViewProfile from "./pages/ViewProfile";
 import AddRecord from "./pages/AddRecord";
-import AddRecordTest from "./pages/AddRecordTest"; //to be removed
+import AddRecordTest from "./pages/AddRecordTest"; //to be removed\
+import ArchiveRecord from "./pages/ArchiveRecord";
 import Payroll from "./pages/Payroll";
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR"
@@ -68,6 +69,11 @@ const App = () => {
                     <Route path="/Payroll" element={
                         <ProtectedRoute user={user}>
                             <Payroll />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/ArchiveRecord" element={
+                        <ProtectedRoute user={user}>
+                            <ArchiveRecord />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<NotFound />}/>

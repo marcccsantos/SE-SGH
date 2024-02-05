@@ -2,25 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const fetchItems = async (setItems) => {
-  try {
-    const querySnapshot = await getDocs(collection(db, 'testing2'));
-    const itemsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setItems(itemsData);
-  } catch (error) {
-    console.error('Error fetching items:', error);
-  }
-};
-
-const ItemsList = () => {
+const ArchiveRecord = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [sortBy, setSortBy] = useState('default');
   const [filterText, setFilterText] = useState('');
   const [selectedColumns, setSelectedColumns] = useState(['name', 'age', 'birth_date']);
 
+  const fetchItems = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'archiveRecords'));
+      const itemsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setItems(itemsData);
+    } catch (error) {
+      console.error('Error fetching archived items:', error);
+    }
+  };
+
   useEffect(() => {
-    fetchItems(setItems);
+    fetchItems();
   }, []);
 
   useEffect(() => {
@@ -54,37 +54,37 @@ const ItemsList = () => {
     setSelectedColumns(updatedColumns);
   };
 
-  const handleMoveToArchive = async (itemId) => {
+  const handleUnarchive = async (itemId) => {
     try {
-      const itemRef = doc(db, 'testing2', itemId);
+      const itemRef = doc(db, 'archiveRecords', itemId);
       const itemSnapshot = await getDoc(itemRef);
 
       if (itemSnapshot.exists()) {
         const itemData = itemSnapshot.data();
 
-        // Add the item to the "ArchiveRecords" collection
-        const archiveCollection = collection(db, 'archiveRecords');
-        await setDoc(doc(archiveCollection), itemData);
+        // Add the item back to the "testing2" collection
+        const testing2Collection = collection(db, 'testing2');
+        await setDoc(doc(testing2Collection), itemData);
 
-        // Delete the item from the original collection
+        // Delete the item from the archive collection
         await deleteDoc(itemRef);
 
-        // Refresh the items in the current collection
-        fetchItems(setItems);
+        // Refresh the archived items
+        fetchItems();
 
         // Log success message to console
-        console.log('Record successfully archived.');
+        console.log('Record successfully unarchived.');
       } else {
-        console.error('Item does not exist.');
+        console.error('Item does not exist in the archive.');
       }
     } catch (error) {
-      console.error('Error moving item to archive:', error);
+      console.error('Error unarchiving item:', error);
     }
   };
 
   return (
     <div>
-      <h1>Firestore Collection</h1>
+      <h1>Archive Records</h1>
       {/* Filter and Sort Controls */}
       <label>
         Search:
@@ -142,7 +142,7 @@ const ItemsList = () => {
                   </td>
                 ))}
                 <td>
-                  <button onClick={() => handleMoveToArchive(item.id)}>Move to Archive</button>
+                  <button onClick={() => handleUnarchive(item.id)}>Unarchive</button>
                 </td>
               </tr>
             ))}
@@ -153,4 +153,4 @@ const ItemsList = () => {
   );
 };
 
-export default ItemsList;
+export default ArchiveRecord;
