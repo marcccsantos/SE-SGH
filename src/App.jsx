@@ -9,6 +9,7 @@ import ViewRecord from "./pages/ViewRecord";
 import ViewProfile from "./pages/ViewProfile";
 import AddRecord from "./pages/AddRecord";
 import AddRecordTest from "./pages/AddRecordTest"; //to be removed
+import Payroll from "./pages/Payroll";
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR"
 import { useEffect, useState } from "react";
@@ -62,6 +63,11 @@ const App = () => {
                     <Route path="/AddRecordTest" element={// to be removed
                         <ProtectedRoute user={user}>
                             <AddRecordTest />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/Payroll" element={
+                        <ProtectedRoute user={user}>
+                            <Payroll />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<NotFound />}/>
