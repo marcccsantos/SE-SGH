@@ -26,7 +26,7 @@ body.searchPage {
     margin-top: 214px;
     margin-right: 370px;
 }
-form {
+.searchForm {
     display: flex;
     justify-content: center;
     align-items: center;
