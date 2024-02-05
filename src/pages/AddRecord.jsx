@@ -8,242 +8,178 @@ const AddRecord = () => {
     return (
         <>  
             <Header/>
-                <div className="AddRecordForm">
-                    <div className="row-1">
-                    {/*FIRST NAME*/}
-                        <div className="col-1">
-                            <label className="label-text">First Name: </label>
+                <div className="addTab">
+                    <div className="add-rec">
+                        <img src="add-image.png" alt="Avatar" className="add-image"/>
+                        <button className="choose-img" type="submit">Choose File</button>
+                        <p className="support">Supported File Types: .jpg, .png</p>
+
+                        
+                    </div>
+
+                    <div className="add-inputs">
+                        <form className="add-form">
+                            <div className="container">
+                                <label htmlFor="fname">First Name: </label>
                                 <input 
                                     type="text" 
                                     name="fname" 
+                                    id="fname"
                                     placeholder=" " 
                                     required
+                                    autoComplete="given-name"
                                 />
-                        </div>
-                    {/*LAST NAME*/}
-                        <div className="col-2">
-                            <label htmlFor="label-text">Last Name: </label>
+
+                                <label htmlFor="lname">Last Name: </label>
                                 <input 
                                     type="text" 
                                     name="lname" 
-                                    placeholder=" "
+                                    id="lname"
+                                    placeholder=" " 
                                     required
+                                    autoComplete="family-name"
                                 />
-                        </div>
-                    {/*MIDDLE NAME*/}
-                        <div className="col-3">
-                            <label htmlFor="label-text">Middle Name: </label>
+
+                                <label htmlFor="mname">Middle Name: </label>
                                 <input 
                                     type="text" 
                                     name="mname" 
-                                    placeholder=" "
+                                    id="mname"
+                                    placeholder=" " 
                                     required
+                                    autoComplete="additional-name"
                                 />
-                        </div>
-                    </div>
 
-                    <div className="row-2">
-                    {/*ADDRESS*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">Address: </label>
+                                <label htmlFor="address">Address: </label>
                                 <input 
                                     type="text" 
-                                    id="address" 
                                     name="address" 
-                                    placeholder=" "
+                                    id="address"
+                                    placeholder=" " 
                                     required
+                                    autoComplete="address" 
                                 />
-                        </div>                        
-                    </div>
 
-                    <div className="row-3">
-                    {/*BIRTHDAY*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">Birthday: </label>
+                                <label htmlFor="birthday">Birthday: </label>
                                 <input 
                                     type="date" 
                                     name="birthday" 
+                                    id="birthday" 
                                     placeholder=" "
                                     required
+                                    autoComplete="bday"
                                 />
-                        </div>
-                    {/*AGE*/}
-                        <div className="col-2">
-                            <label htmlFor="label-text">Age: </label>
+
+                                <label htmlFor="age">Age: </label>
                                 <input 
                                     type="text" 
                                     name="age" 
+                                    id="age"
                                     placeholder=" "
                                     required
+                                    autoComplete="age" 
                                 />
-                        </div>
-                    {/*SEX*/}
-                        <div className="col-3">
-                            <label htmlFor="label-text">Sex:</label>
-                                <input 
-                                    type="radio" 
-                                    id="male" 
-                                    name="sex" 
-                                    value="male" 
-                                    checked 
-                                />
-                            <label for="male">Male</label>
-                                <input 
-                                    type="radio" 
-                                    id="female" 
-                                    name="sex" 
-                                    value="female" 
-                                />
-                            <label for="female">Female</label>
-                        </div>
-                    {/*RATE/MONTH*/}
-                        <div className="col-4">
-                            <label htmlFor="label-text">Rate/Month: </label>
+
+                                <label htmlFor="sex">Sex: </label>
+                                <select className="gender" id="sex" name="sex">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+
+                                <label htmlFor="rate">Rate/Month: </label>
                                 <input 
                                     type="text" 
                                     name="rate" 
+                                    id="rate"
                                     placeholder=" "
                                     required
                                 />
-                        </div>                                                         
-                    </div>
 
-                    <div className="row-4">
-                    {/*STATUS*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">Status:</label>
-                                <input 
-                                    type="radio" 
-                                    id="regular" 
-                                    name="status" 
-                                    value="regular" 
-                                    checked
-                                />
-                            <label for="regular">Regular</label>
-                                <input 
-                                    type="radio" 
-                                    id="contractual" 
-                                    name="status" 
-                                    value="contractual" 
-                                />
-                            <label for="contractual">Contractual</label>
-                        </div>
-                    </div>
+                                <label htmlFor="status">Status: </label>
+                                <select className="status" id="status" name="status">
+                                    <option value="regular">Regular</option>
+                                    <option value="contractual">Contractual</option>
+                                </select>
 
-                    <div className="row-5">
-                    {/*DEPARTMENT*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">Department: </label>
+                                <label htmlFor="department">Department: </label>
                                 <input 
                                     type="text" 
                                     name="department" 
+                                    id="department"
                                     placeholder=" "
                                     required
                                 />
-                        </div>
-                    {/*POSITION*/}
-                        <div className="col-2">
-                            <label htmlFor="label-text">Position: </label>
-                                <input 
-                                type="text" 
-                                name="position" 
-                                placeholder=" "
-                                required
-                            />
-                        </div>      
-                    </div>
 
-                    <div className="row-6">
-                    {/*TIN #*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">TIN #: </label>
+                                <label htmlFor="position">Position: </label>
+                                <input 
+                                    type="text" 
+                                    name="position"
+                                    id="position" 
+                                    placeholder=" "
+                                    required
+                                />
+
+                                <label htmlFor="tin">TIN #: </label>
                                 <input 
                                     type="text"
                                     name="tin" 
+                                    id="tin"
                                     placeholder=" " 
                                     required
                                 />
-                        </div>
-                    {/*SSS #*/}
-                        <div className="col-2">
-                            <label htmlFor="label-text">SSS #: </label>
+
+                                <label htmlFor="sss">SSS #: </label>
                                 <input 
                                     type="text" 
                                     name="sss" 
+                                    id="sss"
                                     placeholder=" "
                                     required
                                 />
-                        </div>                        
-                    </div>
 
-                    <div className="row-7">
-                    {/*Contact #*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">Contact #: </label>
+                                <label htmlFor="contact">Contact #: </label>
                                 <input 
                                     type="text" 
                                     name="contact" 
+                                    id="contact"
                                     placeholder=" "
                                     required
                                 />
-                        </div>
-                    {/*DATE HIRED*/}
-                        <div className="col-2">
-                            <label htmlFor="label-text">Date Hired: </label>
+
+                                <label htmlFor="hire">Date Hired: </label>
                                 <input 
                                     type="datetime-local" 
                                     name="hire" 
+                                    id="hire"
                                     placeholder=" "
                                     required
                                 />
-                        </div>                                                   
-                    </div>
 
-                    <div className="row-8">
-                    {/*PRC #*/}
-                        <div className="col-1">
-                            <label htmlFor="label-text">PRC #: </label>
+                                <label htmlFor="prc">PRC #: </label>
                                 <input 
                                     type="text" 
                                     name="prc" 
+                                    id="prc"
                                     placeholder=" "
                                     required
                                 />
-                        </div>
-                    {/*PRC Expiry*/}
-                        <div className="col-2">
-                            <label htmlFor="label-text">PRC Expiry: </label>
+
+                                <label htmlFor="expiry">PRC Expiry: </label>
                                 <input 
                                     type="date" 
                                     name="expiry" 
+                                    id="expiry"
                                     placeholder=" "
                                     required
                                 />   
-                        </div>                                                
-                    </div>
 
-                    <button className="save" type="save">
-                        <div className="save-text">Save</div>
-                    </button>
-                    <button className="cancel" type="save">
-                        <legend>Cancel</legend>
-                    </button>
-                </div>
- 
-                <div>
-                    <div class="add-image-container row-1">
-                        <img src="add-image.png" alt="Avatar" class="add-image"/>
-                        <div class="overlay">
-                            <img src="drop-img.png" alt="Add image" class="add-image-plus"/>
-                            <div class="drag-here">Drag & Drop Image Here</div>
-                        </div>
-                    </div>    
-                        <button className="choose-img" type="submit">
-                            <legend>Choose File</legend>
-                        </button>
-                        <p className="support">Supported File Types: .jpg, .png</p>
-                </div>
-        <Footer />
+                                <button className="save" type="save">Save</button>
+                                <button className="cancel" type="save">Cancel</button>   
+                            </div>  
+                        </form>
+                    </div>  
+                </div>              
+            <Footer />
         </>
     )
 }
