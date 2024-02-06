@@ -23,7 +23,7 @@ body.searchPage {
     width: 100%;
     max-width: 15px;
     position: absolute;
-    margin-top: 214px;
+    margin-top: 203px;
     margin-right: 370px;
 }
 .searchForm {
@@ -37,23 +37,67 @@ body.searchPage {
 .search-input {
     width: 100%;
     text-align: center;
+    font-family: 'Inter';
+    font-weight:600;
+    color: black;
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+}
+.search-input:focus {
+    outline: none; 
+    border: 1px solid transparent; 
+}
+.search-input::placeholder {
+    color: black;
+    font-weight:600;
 }
 .btn-search {
-    margin-top: 15px;
+    width: 100%;
+    max-width: 70px;
+    background-color: white;
+    border-style:none ;
+    font-family: 'Inter';
+    padding: 3px;
+    margin-top: 20px;
     margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+    font-weight:600;
+    color: black;
 }
 
 
 @media screen and (max-width:769px) {
    
 }
-@media screen and (max-width:320px) {
+@media screen and (max-width:425px) {
+    .search{
+        top: 50%;
+        transform: translateY(50%); 
+    }
     .logo-search {
         width: 70%;
-        max-width: 100px;
+        max-width: 120px;
     }
     .sgh-search {
         width: 70%;
         max-width: 100px;
+        margin-top: -15px;
+    }
+    .search-icon {
+        max-width: 11px;
+        margin-top: 105px;
+        margin-right: 210px;
+    }
+    .search-input {
+        width: 70%;
+        font-size: 1.563vw;
+    }
+    .btn-search {
+        max-width: 40px;
+        font-size: 1.563vw;
+        margin-top: 10px;
     }
 }
