@@ -1,6 +1,7 @@
 body.searchPage {
     background-image: url('/public/bg-search.png');
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
 }
@@ -68,11 +69,36 @@ body.searchPage {
     color: black;
 }
 
-
-@media screen and (max-width:769px) {
-   
+@media screen and (min-width:322px) and (max-width:475px) {
+    .search{
+        top: 50%;
+        transform: translateY(50%); 
+    }
+    .logo-search {
+        width: 70%;
+        max-width: 120px;
+    }
+    .sgh-search {
+        width: 70%;
+        max-width: 100px;
+        margin-top: -15px;
+    }
+    .search-icon {
+        max-width: 11px;
+        margin-top: 105px;
+        margin-right: 240px;
+    }
+    .search-input {
+        width: 70%;
+        font-size: 1.563vw;
+    }
+    .btn-search {
+        max-width: 40px;
+        font-size: 1.563vw;
+        margin-top: 10px;
+    }
 }
-@media screen and (max-width:425px) {
+@media screen and (max-width:321px) {
     .search{
         top: 50%;
         transform: translateY(50%); 
