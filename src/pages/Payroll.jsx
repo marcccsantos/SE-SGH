@@ -3,7 +3,6 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import * as XLSX from 'xlsx';
 import './Payroll.css'; // Import Payroll CSS file
-
 // Import Header and Footer components
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -93,7 +92,7 @@ const Payroll = () => {
 
   return (
     <div>
-      <h1>Total Hours</h1>
+      <h1>Payroll</h1>
       <label>
         Employee ID:
         <input
@@ -102,9 +101,70 @@ const Payroll = () => {
           onChange={(e) => setEmployeeID(e.target.value)}
           pattern="\d*"
           title="Please enter only numbers"
+          disabled={generateForAllEmployees}
         />
       </label>
-      {totalHours !== null && <p>Total Hours: {totalHours.toFixed(2)} hours</p>}
+      <label>
+        Last Name:
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          disabled={generateForAllEmployees}
+        />
+      </label>
+      <label>
+        Start Date:
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+      </label>
+      <label>
+        End Date:
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+      </label>
+      <label>
+        Generate for all employees:
+        <input
+          type="checkbox"
+          checked={generateForAllEmployees}
+          onChange={(e) => setGenerateForAllEmployees(e.target.checked)}
+        />
+      </label>
+      <button onClick={generatePayroll}>Generate Payroll</button>
+      {isGeneratingPayroll && (
+        <div>
+          <h2>Payroll Data</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Last Name</th>
+                <th>Total Hours Worked</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payrollData.map((data, index) => (
+                <tr key={index}>
+                  <td>{data.employeeID}</td>
+                  <td>{data.lastName}</td>
+                  <td>{data.hoursWorked.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={savePayrollToExcel}>Save as Excel</button>
+        </div>
+      )}
+      {totalHours !== null && !isGeneratingPayroll && (
+        <p>Total Hours: {totalHours.toFixed(2)} hours</p>
+      )}
     </div>
   );
 };
