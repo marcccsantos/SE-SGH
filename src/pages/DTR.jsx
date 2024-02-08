@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { collection, addDoc, query, where, getDocs, updateDoc, doc} from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const DTR = () => {
@@ -25,10 +25,12 @@ const DTR = () => {
   
     // Check if the user has already timed in today
     const dtrCollection = collection(db, 'daily_time_records');
+    const today = new Date();
+    const dateString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     const dtrQuery = query(
       dtrCollection,
       where('employeeID', '==', parseInt(employeeID, 10)),
-      where('date', '==', new Date().toLocaleDateString())
+      where('date', '==', dateString)
     );
     const dtrSnapshot = await getDocs(dtrQuery);
   
@@ -37,8 +39,8 @@ const DTR = () => {
       const timeInData = {
         employeeID: parseInt(employeeID, 10),
         lastName,
-        date: new Date().toLocaleDateString(),
-        timeIn: new Date().toLocaleTimeString(),
+        date: dateString,
+        timeIn: today.toLocaleTimeString(),
       };
   
       const docRef = await addDoc(dtrCollection, timeInData);
@@ -66,20 +68,22 @@ const DTR = () => {
   
     // Check if the user has already timed out today
     const dtrCollection = collection(db, 'daily_time_records');
+    const today = new Date();
+    const dateString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     const dtrQuery = query(
       dtrCollection,
       where('employeeID', '==', parseInt(employeeID, 10)),
-      where('date', '==', new Date().toLocaleDateString())
+      where('date', '==', dateString)
     );
     const dtrSnapshot = await getDocs(dtrQuery);
   
     if (!dtrSnapshot.empty && !dtrSnapshot.docs[0].data().timeOut) {
       // User has not timed out today, proceed with time out
+      const docId = dtrSnapshot.docs[0].id;
       const timeOutData = {
-        timeOut: new Date().toLocaleTimeString(),
+        timeOut: today.toLocaleTimeString(),
       };
   
-      const docId = dtrSnapshot.docs[0].id;
       await updateDoc(doc(dtrCollection, docId), timeOutData);
       console.log('Time Out recorded:', docId);
       setTimeOut(timeOutData.timeOut);
@@ -87,8 +91,6 @@ const DTR = () => {
       console.log('User has already timed out today or has not timed in.');
     }
   };
-  
-  
 
   return (
     <div>
