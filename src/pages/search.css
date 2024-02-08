@@ -1,15 +1,16 @@
 body.searchPage {
-    background-image: url('/public/bg-search.png');
+    background: url('/public/bg-search.png') no-repeat center center fixed;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
 }
 .search {
     display: flex;
-    justify-content: center;
+    justify-content:start;
     align-items: center;
     flex-direction: column; 
+    height: 100vh;
 }
 .logo-search {
     width: 100%;
@@ -24,8 +25,16 @@ body.searchPage {
     width: 100%;
     max-width: 15px;
     position: absolute;
-    margin-top: 203px;
-    margin-right: 370px;
+    margin-left: 7px;
+}
+.search-box {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
 }
 .searchForm {
     display: flex;
@@ -36,16 +45,16 @@ body.searchPage {
     max-width: 400px;
 }
 .search-input {
-    width: 100%;
+    width: 94%;
+    margin-left: 28px;
+    margin-top: 3px;
     text-align: center;
     font-family: 'Inter';
     font-weight:600;
     color: black;
-    padding: 3px;
-    border-radius: 10px;
     border: 1px solid transparent;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
 }
+
 .search-input:focus {
     outline: none; 
     border: 1px solid transparent; 
@@ -69,11 +78,13 @@ body.searchPage {
     color: black;
 }
 
-@media screen and (min-width:322px) and (max-width:475px) {
-    .search{
-        top: 50%;
-        transform: translateY(50%); 
+@media screen and (min-width:2560px){
+    .search-input {
+        font-size: 0.43vw;
     }
+}
+
+@media screen and (min-width:322px) and (max-width:475px) {
     .logo-search {
         width: 70%;
         max-width: 120px;
@@ -83,14 +94,14 @@ body.searchPage {
         max-width: 100px;
         margin-top: -15px;
     }
-    .search-icon {
-        max-width: 11px;
-        margin-top: 105px;
-        margin-right: 240px;
-    }
     .search-input {
-        width: 70%;
+        width: 92%;
+        margin-left: 35px;
         font-size: 1.563vw;
+    }
+    .search-box {
+        width: 70%;
+        max-width: 500px;
     }
     .btn-search {
         max-width: 40px;
@@ -99,10 +110,6 @@ body.searchPage {
     }
 }
 @media screen and (max-width:321px) {
-    .search{
-        top: 50%;
-        transform: translateY(50%); 
-    }
     .logo-search {
         width: 70%;
         max-width: 120px;
@@ -113,13 +120,16 @@ body.searchPage {
         margin-top: -15px;
     }
     .search-icon {
-        max-width: 11px;
-        margin-top: 105px;
-        margin-right: 210px;
+        max-width: 9px;
+    }
+    .search-box {
+        width: 48%;
+        max-width: 500px;
     }
     .search-input {
-        width: 70%;
-        font-size: 1.563vw;
+        width: 82%;
+        margin-top: 5px;
+        height: 2px;
     }
     .btn-search {
         max-width: 40px;
