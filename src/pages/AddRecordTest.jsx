@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';  // Import your Firestore and Storage instances
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import './AddRecordTest.css'; 
+import Header from '../components/header';
+import Footer from '../components/footer';
 
 const AddRecordTest = () => {
   const [employeeID, setEmployeeID] = useState('');
@@ -25,6 +28,7 @@ const AddRecordTest = () => {
   const [prcExpiry, setPrcExpiry] = useState('');
   const [pagibig, setPagibig] = useState('');
   const [philhealth, setPhilhealth] = useState('');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,209 +110,225 @@ const AddRecordTest = () => {
   //Restrictions yet to be added
   return (
     <div>
-      <h1>Add Employee</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Employee ID:
-          <input
-            type="text"
-            value={employeeID}
-            onChange={(e) => setEmployeeID(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          First Name:
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Middle Name:
-          <input
-            type="text"
-            value={middleName}
-            onChange={(e) => setMiddleName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Address:
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Email Address:
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Contact Number:
-          <input
-            type="text"
-            value={contactNumber}
-            onChange={(e) => setContactNumber(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Birthday:
-          <input
-            type="date"
-            value={birthday}
-            onChange={(e) => setBirthday(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Age:
-          <input
-            type="number"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Gender:
-          <input
-            type="text"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Salary per Month:
-          <input
-            type="number"
-            value={salaryPerMonth}
-            onChange={(e) => setSalaryPerMonth(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Employment Status:
-          <input
-            type="text"
-            value={employmentStatus}
-            onChange={(e) => setEmploymentStatus(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Department:
-          <input
-            type="text"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Position:
-          <input
-            type="text"
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Date Hired:
-          <input
-            type="date"
-            value={dateHired}
-            onChange={(e) => setDateHired(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          T.I.N. #:
-          <input
-            type="text"
-            value={tin}
-            onChange={(e) => setTin(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          S.S.S. #:
-          <input
-            type="text"
-            value={sss}
-            onChange={(e) => setSss(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          P.R.C. #:
-          <input
-            type="text"
-            value={prc}
-            onChange={(e) => setPrc(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          P.R.C. Expiry:
-          <input
-            type="date"
-            value={prcExpiry}
-            onChange={(e) => setPrcExpiry(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Pag-IBIG #:
-          <input
-            type="text"
-            value={pagibig}
-            onChange={(e) => setPagibig(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          PhilHealth #:
-          <input
-            type="text"
-            value={philhealth}
-            onChange={(e) => setPhilhealth(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Image:
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </label>
-        <br />
-        <button type="submit">Add Employee</button>
-      </form>
-    </div>
+    <Header/>
+      <div className="addTab">
+        <div className="add-rec">
+          <img src="add-image.png" alt="Avatar" className="add-image"/>
+            <div className="">
+              <input className="choose-img"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </div>
+          <p className="support">Supported File Types: .jpg, .png</p>
+        </div>
+      <div className="add-inputs">
+          <form onSubmit={handleSubmit}>
+            <div className="container">
+              <label htmlFor="empID">Employee ID:</label>
+                <input
+                  type="text"
+                  id="empID"
+                  value={employeeID}
+                  onChange={(e) => setEmployeeID(e.target.value)}
+                  required
+                  autoComplete="given-id"
+                />
+              <label htmlFor="lname">Last Name:</label>
+                <input
+                  type="text"
+                  value={lastName}
+                  id="lname"
+                  name="lname"
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder=" " 
+                  required
+                  autoComplete="family-name"
+                />
+              <label htmlFor="fname">First Name:</label>
+                <input
+                  type="text"
+                  value={firstName}
+                  id="fname"
+                  name="fname"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  autoComplete="given-name"
+                />
+              <label htmlFor="mname">Middle Name:</label>
+                <input
+                  type="text"
+                  value={middleName}
+                  id="mname"
+                  name="mname"
+                  onChange={(e) => setMiddleName(e.target.value)}
+                  required
+                  autoComplete="additional-name"
+                />
+              <label htmlFor="address">Address:</label>
+                <input
+                  type="text"
+                  value={address}
+                  id="address"
+                  name="address"
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                  autoComplete="address" 
+                />
+              <label htmlFor="email">Email:</label>
+                <input
+                  type="email"
+                  value={email}
+                  id="email"
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email" 
+                />
+              <label htmlFor="contact">Contact:</label>
+                <input
+                  type="text"
+                  name="contact" 
+                  id="contact"
+                  value={contactNumber}
+                  onChange={(e) => setContactNumber(e.target.value)}
+                />
+              <label htmlFor="birthday">Birthday:</label>
+                <input
+                  type="date"
+                  name="birthday" 
+                  id="birthday" 
+                  value={birthday}
+                  onChange={(e) => setBirthday(e.target.value)}
+                  required
+                  autoComplete="bday"
+                />
+              <label htmlFor="age">Age:</label>
+                <input
+                  type="number"
+                  name="age" 
+                  id="age"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  required
+                  autoComplete="age" 
+                />
+              <label htmlFor="sex">Sex:</label>
+                <input className="sex" 
+                  type="text"
+                  name="sex"
+                  id="sex" 
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                />
+              <label htmlFor="rate">Rate/Month: </label>
+                <input
+                  type="number"
+                  value={salaryPerMonth}
+                  name="rate" 
+                  id="rate"
+                  onChange={(e) => setSalaryPerMonth(e.target.value)}
+                  required
+                  placeholder="₱"
+                />
+              <label htmlFor="status">Status:</label>
+                <input className="status"
+                  type="text"
+                  name="status"
+                  id="status" 
+                  value={employmentStatus}
+                  onChange={(e) => setEmploymentStatus(e.target.value)}
+                />
+              <label htmlFor="department">Department: </label>
+                <input
+                  type="text"
+                  name="department" 
+                  id="department"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  required
+                />
+                <label htmlFor="position">Position: </label>
+                <input
+                  type="text"
+                  name="position"
+                  id="position" 
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  required
+                />
+                <label htmlFor="hire">Date Hired: </label>
+                <input
+                  type="date"
+                  name="hire" 
+                  id="hire"
+                  value={dateHired}
+                  onChange={(e) => setDateHired(e.target.value)}
+                  required
+                />
+              <label htmlFor="tin">T.I.N. #:</label>
+                <input
+                  type="text"
+                  name="tin" 
+                  id="tin"
+                  value={tin}
+                  onChange={(e) => setTin(e.target.value)}
+                  required
+                />
+              <label htmlFor="sss">S.S.S. #:</label>
+                <input
+                  type="text"
+                  name="sss" 
+                  id="sss"
+                  value={sss}
+                  onChange={(e) => setSss(e.target.value)}
+                  required
+                />
+              <label htmlFor="prc">P.R.C. #:</label>
+                <input
+                  type="text"
+                  name="prc" 
+                  id="prc"
+                  value={prc}
+                  onChange={(e) => setPrc(e.target.value)}
+                  required
+                />
+              <label htmlFor="expiry">PRC Expiry: </label>
+                <input
+                  type="date"
+                  name="expiry" 
+                  id="expiry"
+                  value={prcExpiry}
+                  onChange={(e) => setPrcExpiry(e.target.value)}
+                  required
+                />
+              <label htmlFor="pag-ibig">Pag-IBIG #:</label>
+                <input
+                  type="text"
+                  name="pag-ibig"
+                  id="pag-ibig"
+                  value={pagibig}
+                  onChange={(e) => setPagibig(e.target.value)}
+                  required
+                />
+              <label htmlFor="phil">PhilHealth #:</label>
+                <input
+                  type="text"
+                  name="phil"
+                  id="phil"
+                  value={philhealth}
+                  onChange={(e) => setPhilhealth(e.target.value)}
+                  required
+                />
+              <button className="save" type="submit">Save</button>
+              <button className="cancel" type="save">Cancel</button>  
+            </div>
+          </form>
+ 
+        </div>
+      </div>
+    <Footer/>
+  </div>
   );
 };
 
