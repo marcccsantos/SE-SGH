@@ -5,14 +5,10 @@ footer {
     font-size: 11px;
     color: white;
     width: 100%;
-    position: absolute;
-    bottom: 0; 
-    height: auto; 
+    position: relative;
+    height: 30px; 
 }
 
-.copyright-footer {
-    padding: 5px;
-}
 
 @media screen and (max-width: 769px) {
     footer {
