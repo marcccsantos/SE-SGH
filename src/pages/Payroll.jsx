@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import './Payroll.css'; // Import Payroll CSS file
+
+// Import Header and Footer components
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Payroll = () => {
   const [employeeID, setEmployeeID] = useState('');
@@ -37,20 +42,32 @@ const Payroll = () => {
   }, [employeeID]);
 
   return (
-    <div>
-      <h1>Total Hours</h1>
-      <label>
-        Employee ID:
-        <input
-          type="text"
-          value={employeeID}
-          onChange={(e) => setEmployeeID(e.target.value)}
-          pattern="\d*"
-          title="Please enter only numbers"
-        />
-      </label>
-      {totalHours !== null && <p>Total Hours: {totalHours.toFixed(2)} hours</p>}
-    </div>
+    <>
+      {/* Include the Header component */}
+      <Header />
+      
+      <div className="payrollTab"> {/* Add a class for styling */}
+        <h1>Total Hours</h1>
+        <div className="addTab"> {/* Apply styles similar to AddRecord */}
+
+          <div className="add-inputs">
+            <label htmlFor="employeeID">Employee ID:</label>
+            <input
+              type="text"
+              id="employeeID"
+              value={employeeID}
+              onChange={(e) => setEmployeeID(e.target.value)}
+              pattern="\d*"
+              title="Please enter only numbers"
+            />
+          </div>
+        </div>
+        {totalHours !== null && <p>Total Hours: {totalHours.toFixed(2)} hours</p>}
+      </div>
+
+      {/* Include the Footer component */}
+      <Footer />
+    </>
   );
 };
 
