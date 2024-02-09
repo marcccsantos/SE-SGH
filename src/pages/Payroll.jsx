@@ -9,7 +9,10 @@ import Footer from '../components/Footer';
 
 const Payroll = () => {
   const [employeeID, setEmployeeID] = useState('');
+<<<<<<< Updated upstream
   const [lastName, setLastName] = useState('');
+=======
+>>>>>>> Stashed changes
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [totalHours, setTotalHours] = useState(null);
@@ -17,8 +20,20 @@ const Payroll = () => {
   const [isGeneratingPayroll, setIsGeneratingPayroll] = useState(false);
   const [generateForAllEmployees, setGenerateForAllEmployees] = useState(false);
 
+  const handleGeneratePayroll = () => {
+    // Logic to generate payroll based on employeeID, startDate, and endDate
+    // This function could fetch data and calculate payroll for selected employees and date range
+    console.log('Generate payroll logic goes here');
+  };
+
+  const handleDownloadPayroll = () => {
+    // Logic to download payroll
+    console.log('Download payroll logic goes here');
+  };
+
   useEffect(() => {
     const fetchTotalHours = async () => {
+<<<<<<< Updated upstream
       // Fetch daily time records based on the selected criteria
       const dtrCollection = collection(db, 'daily_time_records');
       let dtrQuery = dtrCollection;
@@ -166,6 +181,64 @@ const Payroll = () => {
         <p>Total Hours: {totalHours.toFixed(2)} hours</p>
       )}
     </div>
+=======
+      // Fetch daily time records for the specified employee and date range
+      // Implement logic to calculate total hours based on the selected criteria
+      console.log('Fetching total hours based on selected criteria');
+    };
+
+    if (employeeID && startDate && endDate) {
+      fetchTotalHours();
+    }
+  }, [employeeID, startDate, endDate]);
+
+  return (
+    <>
+      {/* Include the Header component */}
+      <Header />
+      
+      <div className="payrollTab">
+        <h1>Total Hours</h1>
+        <div className="addTab">
+          <div className="add-inputs">
+            <label htmlFor="employeeID">Employee ID:</label>
+            <input
+              type="text"
+              id="employeeID"
+              value={employeeID}
+              onChange={(e) => setEmployeeID(e.target.value)}
+              pattern="\d*"
+              title="Please enter only numbers"
+            />
+          </div>
+          <div className="add-inputs">
+            <label htmlFor="startDate">Start Date:</label>
+            <input
+              type="date"
+              id="startDate"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+          <div className="add-inputs">
+            <label htmlFor="endDate">End Date:</label>
+            <input
+              type="date"
+              id="endDate"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+          <button onClick={handleGeneratePayroll}>Generate Payroll</button>
+          {totalHours !== null && <p>Total Hours: {totalHours.toFixed(2)} hours</p>}
+          <button onClick={handleDownloadPayroll}>Download</button>
+        </div>
+      </div>
+
+      {/* Include the Footer component */}
+      <Footer />
+    </>
+>>>>>>> Stashed changes
   );
 };
 
