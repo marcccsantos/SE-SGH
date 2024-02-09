@@ -41,7 +41,7 @@ const Login = () => {
         setErrorMsg("Invalid username or password. Please try again.");
         setLoginAttempts(prevAttempts => prevAttempts + 1);
         if (loginAttempts === 2 && waitTime === 0) {
-          setWaitTime(30); 
+          setWaitTime(60); 
           startCountdown(); 
         }
         console.log(loginAttempts)
