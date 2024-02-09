@@ -8,6 +8,9 @@ const Login = () => {
   const [username, setUsername] = useState(''); 
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisibility] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [waitTime, setWaitTime] = useState(0); 
 
   const navigate = useNavigate(); 
  
@@ -34,9 +37,53 @@ const Login = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage)
+        console.log(errorCode, errorMessage);
+        setErrorMsg("Invalid username or password. Please try again.");
+        setLoginAttempts(prevAttempts => prevAttempts + 1);
+        if (loginAttempts === 2 && waitTime === 0) {
+          setWaitTime(30); 
+          startCountdown(); 
+        }
+        console.log(loginAttempts)
       });
   };
+
+  const startCountdown = () => {
+    if (waitTime > 0) {
+      setTimeout(() => {
+        setWaitTime(prevWaitTime => prevWaitTime - 1);
+      }, 1000); 
+    }
+  };
+
+  useEffect(() => {
+    if (waitTime > 0) {
+      const countdownInterval = setInterval(() => {
+        setWaitTime(prevWaitTime => prevWaitTime - 1);
+      }, 1000);
+      return () => clearInterval(countdownInterval); 
+    }
+  }, [waitTime]);
+
+  useEffect(() => {
+    if (loginAttempts === 2 && waitTime === 0 ) {
+      startCountdown();
+    }
+  }, [loginAttempts, waitTime]);
+
+  useEffect(() => {
+    if (loginAttempts === 3 && waitTime > 0) {
+      const interval = setInterval(() => {
+        setErrorMsg(`Please try again in ${waitTime} seconds.`);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }else if (loginAttempts >= 3 && loginAttempts <= 5 && waitTime === 0) {
+      setErrorMsg("Invalid username or password. Please try again.");
+    }else if (loginAttempts >= 6){
+      setErrorMsg("Reset your password.");
+    }
+  }, [loginAttempts, waitTime]);
 
   const handleUsername = (event) => setUsername(event.target.value);
   const handlePassword = (event) => setPassword(event.target.value);
@@ -67,7 +114,7 @@ const Login = () => {
             <input
               type="text"
               placeholder="Enter Username"
-              className="username"
+              className={`username ${errorMsg ? 'error-input' : ''}`} 
               name="username"
               autoComplete="username"
               required
@@ -77,7 +124,7 @@ const Login = () => {
             <input
               type={passwordVisible ? 'text' : 'password'}
               placeholder="Enter Password"
-              className="password"
+              className={`password ${errorMsg ? 'error-input' : ''}`}
               id="input"
               name="password"
               autoComplete="current-password"
@@ -95,9 +142,19 @@ const Login = () => {
               </svg>
             )}
 
-            <button className="login-button" onClick={handleLogin}>
+            <button className="login-button" onClick={handleLogin} disabled={waitTime > 0 || loginAttempts >= 6}>
               LOGIN
             </button>
+
+            {errorMsg && (
+              <p className={
+                errorMsg.includes('Please try again in') ? 'countdown-error' :
+                errorMsg === "Invalid username or password. Please try again." ? 'invalid-credentials' :
+                errorMsg === "Reset your password." ? 'reset' : 'error-message'
+              }>
+                {errorMsg}
+              </p>
+            )}
           </form>
 
           <Link to="/forgot" className="forgot-password">
