@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db, storage, auth } from '../firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
+import './ViewProfile.css'; // Import the CSS file
 
 const ViewProfile = () => {
   const [employeeID, setEmployeeID] = useState('');
@@ -30,11 +31,12 @@ const ViewProfile = () => {
   };
 
   return (
-    <div>
-      <h1>View Employee Profile</h1>
-      <label>
+    <div className="view-profile-container">
+      <h1 className="view-profile-heading">View Employee Profile</h1>
+      <label className="view-profile-label">
         Employee ID:
         <input
+          className="view-profile-input"
           type="text"
           value={employeeID}
           onChange={(e) => setEmployeeID(e.target.value)}
@@ -42,17 +44,17 @@ const ViewProfile = () => {
           title="Please enter only numbers"
         />
       </label>
-      <button onClick={handleFetchData}>Fetch Employee Data</button>
+      <button className="view-profile-button" onClick={handleFetchData}>Fetch Employee Data</button>
 
       {employeeData && (
-        <div>
+        <div className="view-profile-details">
           <h2>Employee Details</h2>
           <p>Employee ID: {employeeData.employeeID}</p>
           <p>Last Name: {employeeData.lastName}</p>
           <p>First Name: {employeeData.firstName}</p>
 
           {imageUrl && (
-            <div>
+            <div className="view-profile-image">
               <h3>Employee Image</h3>
               <img src={imageUrl} alt={`Employee ${employeeID}`} />
             </div>

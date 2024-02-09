@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase'; // Import your Firestore instance
+import Header from '../components/header';
+import Footer from '../components/footer';
+import './ViewRecord.css'; // Import the CSS file
 
 const ViewRecord = () => {
   const [searchInput, setSearchInput] = useState('');
-  const [sortBy, setSortBy] = useState('');
   const [quickFilter, setQuickFilter] = useState('');
-  const [selectedColumns, setSelectedColumns] = useState([]);
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc'); // Default sort order
@@ -24,7 +25,6 @@ const ViewRecord = () => {
       });
       setRecords(results);
       setFilteredRecords(results);
-      setSelectedColumns(Object.keys(results[0] || {}));
     } catch (error) {
       console.error('Error fetching records:', error);
     }
@@ -66,91 +66,105 @@ const ViewRecord = () => {
     setSortOrder(order);
   };
 
-  const handleColumnSelect = (column) => {
-    if (selectedColumns.includes(column)) {
-      setSelectedColumns(selectedColumns.filter((col) => col !== column));
-    } else {
-      setSelectedColumns([...selectedColumns, column]);
-    }
-  };
-
   return (
-    <div>
-      <h1>View Records</h1>
-      <div>
-        <input
-          type="text"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      <div>
-        <select onChange={(e) => setQuickFilter(e.target.value)}>
-          <option value="">Quick Sort</option>
-          <option value="employeeID">Employee ID</option>
-          <option value="lastName">Last Name</option>
-          {/* Add more options for other columns */}
-        </select>
-        <button onClick={() => handleQuickSort(quickFilter)}>Apply Quick Sort</button>
-      </div>
-      <div>
-        <label>
+    <>
+      <Header />
+      <div className="view-record-container">
+        <div className="view-record-search">
           <input
-            type="radio"
-            name="sortOrder"
-            value="asc"
-            checked={sortOrder === 'asc'}
-            onChange={() => handleSortOrderChange('asc')}
+            className="view-record-input"
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search..."
           />
-          Ascending
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="sortOrder"
-            value="desc"
-            checked={sortOrder === 'desc'}
-            onChange={() => handleSortOrderChange('desc')}
-          />
-          Descending
-        </label>
-      </div>
-      <div>
-        {/* Render checkboxes for selecting columns */}
-        {Object.keys(filteredRecords[0] || {}).map((column) => (
-          <label key={column}>
-            <input
-              type="checkbox"
-              checked={selectedColumns.includes(column)}
-              onChange={() => handleColumnSelect(column)}
-            />
-            {column}
-          </label>
-        ))}
-      </div>
-      <div>
-        {/* Display filtered and sorted content in a table */}
-        <table>
-          <thead>
-            <tr>
-              {selectedColumns.map((column) => (
-                <th key={column}>{column}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRecords.map((record, index) => (
-              <tr key={index}>
-                {selectedColumns.map((column) => (
-                  <td key={`${column}-${index}`}>{record[column]}</td>
-                ))}
+          <button className="view-record-button" onClick={handleSearch}>Search</button>
+        </div>
+        <div className="view-record-sort">
+          <select className="view-record-input" onChange={(e) => setQuickFilter(e.target.value)}>
+            <option value="">Quick Sort</option>
+            <option value="employeeID">Employee ID</option>
+            <option value="lastName">Last Name</option>
+            <option value="firstName">First Name</option>
+            <option value="middleName">Middle Name</option>
+            <option value="gender">Gender</option>
+            <option value="birthday">Birthday</option>
+            <option value="address">Address</option>
+            <option value="contactNumber">Contact Number</option>
+            <option value="status">Status</option>
+            <option value="position">Position</option>
+            <option value="designation">Designation</option>
+            <option value="salaryperMonth">SalaryperMonth</option>
+            <option value="department">Department</option>
+            <option value="hireDate">Hire Date</option>
+            <option value="PRC">PRC</option>
+            <option value="PRCExpiry">PRC Expiry</option>
+            <option value="philhealth">philhealth</option>
+            <option value="pagibig">pagibig</option>
+            <option value="sss">sss</option>
+          </select>
+          <select className="view-record-input" onChange={(e) => handleSortOrderChange(e.target.value)}>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Apply Quick Sort</button>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          {/* Display filtered and sorted content in a table */}
+          <table className="view-record-table">
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Gender</th>
+                <th>Birthday</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Status</th>
+                <th>Position</th>
+                <th>Designation</th>
+                <th>SalaryperMonth</th>
+                <th>Department</th>
+                <th>Hire Date</th>
+                <th>PRC</th>
+                <th>PRC Expiry</th>
+                <th>Philhealth</th>
+                <th>Pagibig</th>
+                <th>SSS</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredRecords.map((record, index) => (
+                <tr key={index}>
+                  <td>{record.employeeID || "N/A"}</td>
+                  <td>{record.lastName || "N/A"}</td>
+                  <td>{record.firstName || "N/A"}</td>
+                  <td>{record.middleName || "N/A"}</td>
+                  <td>{record.gender || "N/A"}</td>
+                  <td>{record.birthday || "N/A"}</td>
+                  <td>{record.address || "N/A"}</td>
+                  <td>{record.contactNumber || "N/A"}</td>
+                  <td>{record.status || "N/A"}</td>
+                  <td>{record.position || "N/A"}</td>
+                  <td>{record.designation || "N/A"}</td>
+                  <td>{record.salaryperMonth || "N/A"}</td>
+                  <td>{record.department || "N/A"}</td>
+                  <td>{record.hireDate || "N/A"}</td>
+                  <td>{record.PRC || "N/A"}</td>
+                  <td>{record.PRCExpiry || "N/A"}</td>
+                  <td>{record.philhealth || "N/A"}</td>
+                  <td>{record.pagibig || "N/A"}</td>
+                  <td>{record.sss || "N/A"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
