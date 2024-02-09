@@ -201,6 +201,61 @@ body.loginPage::before {
   position: absolute;
   z-index: 1;
 }
+.error-message {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  margin-top: -10%;
+  margin-left: -11%;
+  position: absolute;
+  font-family: 'Lexend';
+  font-weight:400;
+  font-size: 14px;
+  color: red;
+  text-align: center;
+}
+.countdown-error{
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  margin-top: -10%;
+  margin-left: -8%;
+  position: absolute;
+  font-family: 'Lexend';
+  font-weight:400;
+  font-size: 14px;
+  color: red;
+  text-align: center;
+}
+.invalid-credentials{
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  margin-top: -10%;
+  margin-left: -8%;
+  position: absolute;
+  font-family: 'Lexend';
+  font-weight:400;
+  font-size: 14px;
+  color: red;
+  text-align: center;
+}
+.reset {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  margin-top: -10%;
+  margin-left: -8%;
+  position: absolute;
+  font-family: 'Lexend';
+  font-weight:400;
+  font-size: 14px;
+  color: red;
+  text-align: center;
+}
+.error-input {
+  border-bottom: 2px solid red;
+}
 @media screen and (max-width:1024px) {
   .copyright {
     font-size: 0.781vw;
@@ -231,6 +286,24 @@ body.loginPage::before {
   .stethoscope {
     width: 45%;
   }
+  .error-message {
+    font-size: 1.042vw;
+    margin-left: -17%;
+  }
+  .invalid-credentials{
+    font-size: 1.042vw;
+  }
+  .countdown-error{
+    font-size: 1.042vw;
+    margin-left: -17%;
+  }
+  .reset {
+    font-size: 1.042vw;
+    margin-left: -22%;
+  }
+  .error-input {
+    border-bottom: 2px solid red;
+  }
 }
 @media screen and (min-width:1025px) {
   .bg {
@@ -245,5 +318,24 @@ body.loginPage::before {
   }
   .login-button {
     font-size: 0.75rem;
+  }
+  .error-message {
+    margin-left: -16%;
+    font-size: 0.563rem;
+  }
+  .invalid-credentials{
+    margin-left: -9%;
+    font-size: 0.563rem;
+  }
+  .countdown-error{
+    margin-left: -18%;
+    font-size: 0.5rem;
+  }
+  .reset {
+    margin-left: -20%;
+    font-size: 0.563rem;
+  }
+  .error-input {
+    border-bottom: 2px solid red;
   }
 }
