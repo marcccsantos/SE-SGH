@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { collection, addDoc, query, where, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
-import './DTR.css'; // Import the CSS file
 
 const DTR = () => {
   const [employeeID, setEmployeeID] = useState('');
@@ -94,12 +93,11 @@ const DTR = () => {
   };
 
   return (
-    <div className="dtr-container">
-      <h1 className="dtr-heading">Daily Time Record</h1>
-      <label className="dtr-label">
+    <div>
+      <h1>Daily Time Record</h1>
+      <label>
         Employee ID:
         <input
-          className="dtr-input"
           type="text"
           value={employeeID}
           onChange={(e) => setEmployeeID(e.target.value)}
@@ -108,16 +106,16 @@ const DTR = () => {
         />
       </label>
       <br />
-      <label className="dtr-label">
+      <label>
         Last Name:
-        <input className="dtr-input" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
       </label>
       <br />
-      <button className="dtr-button" onClick={handleTimeIn}>Time In</button>
-      <button className="dtr-button" onClick={handleTimeOut}>Time Out</button>
+      <button onClick={handleTimeIn}>Time In</button>
+      <button onClick={handleTimeOut}>Time Out</button>
 
-      {timeIn && <p className="dtr-success">Time In: {timeIn}</p>}
-      {timeOut && <p className="dtr-success">Time Out: {timeOut}</p>}
+      {timeIn && <p>Time In: {timeIn}</p>}
+      {timeOut && <p>Time Out: {timeOut}</p>}
     </div>
   );
 };
