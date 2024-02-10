@@ -66,18 +66,6 @@ const ViewRecord = () => {
     setSortOrder(order);
   };
 
-  // Function to generate empty cells with the same width as non-empty cells
-  const generateEmptyCells = (record) => {
-    const keys = Object.keys(record);
-    const emptyCells = [];
-
-    for (let i = 0; i < keys.length; i++) {
-      emptyCells.push(<td key={i}>&nbsp;</td>);
-    }
-
-    return emptyCells;
-  };
-
   return (
     <>
       <Header />
@@ -148,15 +136,27 @@ const ViewRecord = () => {
               </tr>
             </thead>
             <tbody>
-              {[...Array(20)].map((_, index) => (
+              {filteredRecords.map((record, index) => (
                 <tr key={index}>
-                  {filteredRecords[index] ? (
-                    Object.values(filteredRecords[index]).map((value, colIndex) => (
-                      <td key={colIndex}>{value}</td>
-                    ))
-                  ) : (
-                    generateEmptyCells(filteredRecords[0])
-                  )}
+                  <td>{record.employeeID || "N/A"}</td>
+                  <td>{record.lastName || "N/A"}</td>
+                  <td>{record.firstName || "N/A"}</td>
+                  <td>{record.middleName || "N/A"}</td>
+                  <td>{record.gender || "N/A"}</td>
+                  <td>{record.birthday || "N/A"}</td>
+                  <td>{record.address || "N/A"}</td>
+                  <td>{record.contactNumber || "N/A"}</td>
+                  <td>{record.status || "N/A"}</td>
+                  <td>{record.position || "N/A"}</td>
+                  <td>{record.designation || "N/A"}</td>
+                  <td>{record.salaryperMonth || "N/A"}</td>
+                  <td>{record.department || "N/A"}</td>
+                  <td>{record.hireDate || "N/A"}</td>
+                  <td>{record.PRC || "N/A"}</td>
+                  <td>{record.PRCExpiry || "N/A"}</td>
+                  <td>{record.philhealth || "N/A"}</td>
+                  <td>{record.pagibig || "N/A"}</td>
+                  <td>{record.sss || "N/A"}</td>
                 </tr>
               ))}
             </tbody>
