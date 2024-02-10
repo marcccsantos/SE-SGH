@@ -2,63 +2,63 @@
 
 /* Style for the container */
 .dtr-container {
-    font-family: Arial, sans-serif;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f0f8ff; /* White background */
-  }
-  
-  /* Style for headings */
-  .dtr-heading {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #228b22; /* Green heading */
-  }
-  
-  /* Style for labels */
-  .dtr-label {
-    display: block;
-    margin-bottom: 10px;
-    color: #ffd700; /* Yellow labels */
-  }
-  
-  /* Style for input fields */
-  .dtr-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #228b22; /* Green border */
-    border-radius: 3px;
-    background-color: #fff; /* White background */
-  }
-  
-  /* Style for buttons */
-  .dtr-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #228b22; /* Green button */
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .dtr-button:hover {
-    background-color: #32cd32; /* Lighter green on hover */
-  }
-  
-  /* Style for success message */
-  .dtr-success {
-    color: #228b22; /* Green success message */
-    margin-top: 10px;
-  }
-  
-  /* Style for error message */
-  .dtr-error {
-    color: #dc3545; /* Red error message */
-    margin-top: 10px;
-  }
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f8ff; /* White background */
+}
+
+/* Style for headings */
+.dtr-heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #228b22; /* Green heading */
+}
+
+/* Style for labels */
+.dtr-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #ffd700; /* Yellow labels */
+}
+
+/* Style for input fields */
+.dtr-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #228b22; /* Green border */
+  border-radius: 3px;
+  background-color: #fff; /* White background */
+}
+
+/* Style for buttons */
+.dtr-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #228b22; /* Green button */
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.dtr-button:hover {
+  background-color: #32cd32; /* Lighter green on hover */
+}
+
+/* Style for success message */
+.dtr-success {
+  color: #228b22; /* Green success message */
+  margin-top: 10px;
+}
+
+/* Style for error message */
+.dtr-error {
+  color: #dc3545; /* Red error message */
+  margin-top: 10px;
+}
