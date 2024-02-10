@@ -44,7 +44,7 @@ function ForgotPassword(){
                 <Link to="/" className="forgot-back">
                   Back to log in
                 </Link>
-                </div>
+              </div>
             </div>
         </div>
     )

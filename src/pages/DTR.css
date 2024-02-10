@@ -1,64 +1,117 @@
-/* DTR.css */
-
-/* Style for the container */
-.dtr-container {
-  font-family: Arial, sans-serif;
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f0f8ff; /* White background */
+body.dtrPage {
+  background-color:#176906;
 }
-
-/* Style for headings */
+.dtr-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+}
 .dtr-heading {
   text-align: center;
   margin-bottom: 20px;
-  color: #228b22; /* Green heading */
 }
-
-/* Style for labels */
-.dtr-label {
-  display: block;
-  margin-bottom: 10px;
-  color: #ffd700; /* Yellow labels */
+.dtr-card{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px;
+  font-family: 'Inter';
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
 }
-
-/* Style for input fields */
+.dtr-form {
+  width: 100%;
+  max-width: 300px;
+}
 .dtr-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #228b22; /* Green border */
-  border-radius: 3px;
-  background-color: #fff; /* White background */
+  width: 95.5%;
+  margin-bottom: 15px;
+  padding: 5px;
+  font-size: 13px;
+  font-family: 'Inter';
 }
-
-/* Style for buttons */
 .dtr-button {
-  display: block;
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #228b22; /* Green button */
-  color: #fff;
-  border: none;
-  border-radius: 3px;
+  margin-bottom: 15px;
+  padding: 5px;
+  font-size: 13px;
+  color: white;
+  background-color: #176906;
+  border: 1px solid #176906;
+  border-radius: 5px;
+  font-family: 'Inter';
   cursor: pointer;
 }
-
 .dtr-button:hover {
-  background-color: #32cd32; /* Lighter green on hover */
+  background-color: #155e06;
+  transition: ease-out;
+  text-decoration: underline;
+}
+.popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
+.popup-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  padding: 30px 40px;
+  font-family: 'Inter';
+  border-radius: 10px;
+}
+.text-popup {
+  margin-top: -5px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+.btn-close {
+  width: 100%;
+  max-width: 70px;
+  padding: 5px;
+  font-size: 13px;
+  color: white;
+  background-color: #176906;
+  border: 1px solid #176906;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Inter';
+}
+@media screen and (max-width:320px) {
+  .dtr-heading {
+    font-size: 24px;
+  }
+  .dtr-card{
+    margin: 20px;
+    padding: 30px;
+  }
+  .dtr-input{
+    width: 93.5%;
+    font-size: 13px;
+  }
+}
+@media screen and (min-width:321px) and (max-width:425px){
+  .dtr-heading {
+    font-size: 24px;
+  }
+  .dtr-card{
+    margin: 20px;
+    padding: 30px;
+  }
+  .dtr-input{
+    width: 95.3%;
+  }
 }
 
-/* Style for success message */
-.dtr-success {
-  color: #228b22; /* Green success message */
-  margin-top: 10px;
-}
-
-/* Style for error message */
-.dtr-error {
-  color: #dc3545; /* Red error message */
-  margin-top: 10px;
-}

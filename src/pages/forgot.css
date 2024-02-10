@@ -23,6 +23,7 @@ body.forgotPage {
     margin-bottom: 15px;
     padding: 5px;
     font-size: 13px;
+    font-family: 'Inter';
     border-radius: 5px;
     border: 1px solid black
 }
@@ -35,12 +36,14 @@ body.forgotPage {
     background-color: #176906;
     border: 1px solid #176906;
     border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Inter';
 }
 .btn-reset:hover {
     background-color: #155e06;
     transition: ease-out;
     text-decoration: underline;
-  }
+}
 .info-forgot {
     width: 100%;
     max-width: 300px;

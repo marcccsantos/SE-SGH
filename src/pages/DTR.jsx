@@ -1,15 +1,15 @@
-// DTR.jsx
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { collection, addDoc, query, where, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
-import './DTR.css'; // Import the CSS file
+import './DTR.css'; 
 
 const DTR = () => {
   const [employeeID, setEmployeeID] = useState('');
   const [lastName, setLastName] = useState('');
   const [timeIn, setTimeIn] = useState(null);
   const [timeOut, setTimeOut] = useState(null);
+  const [showPopupTimeIn, setShowPopupTimeIn] = useState(false);
+  const [showPopupTimeOut, setShowPopupTimeOut] = useState(false);
 
   const handleTimeIn = async () => {
     // Check if the user exists in the employees collection
@@ -49,6 +49,9 @@ const DTR = () => {
       const docRef = await addDoc(dtrCollection, timeInData);
       console.log('Time In recorded:', docRef.id);
       setTimeIn(timeInData.timeIn);
+      handleOpenPopupTimeIn();
+      setEmployeeID('');
+      setLastName('');
     } else {
       console.log('User has already timed in today.');
     }
@@ -90,36 +93,99 @@ const DTR = () => {
       await updateDoc(doc(dtrCollection, docId), timeOutData);
       console.log('Time Out recorded:', docId);
       setTimeOut(timeOutData.timeOut);
+      handleOpenPopupTimeOut();
+      setEmployeeID('');
+      setLastName('');
     } else {
       console.log('User has already timed out today or has not timed in.');
     }
   };
 
+  useEffect(() => {
+    document.body.classList.add('dtrPage');
+
+    return () => {
+      document.body.classList.remove('dtrPage');
+    };
+  }, []); 
+
+  const handleOpenPopupTimeIn = () => {
+    setShowPopupTimeIn(true); 
+    setTimeout(() => {
+      setShowPopupTimeIn(false); 
+    }, 5000);
+  };
+  const handleOpenPopupTimeOut = () => {
+    setShowPopupTimeOut(true); 
+    setTimeout(() => {
+      setShowPopupTimeOut(false); 
+    }, 5000);
+  };
+
+  const handleClosePopupTimeIn = () => {
+    setShowPopupTimeIn(false); 
+    setTimeout(() => {
+      setShowPopupTimeIn(false); 
+    }, 5000);
+  };
+  const handleClosePopupTimeOut = () => {
+    setShowPopupTimeOut(false); 
+    setTimeout(() => {
+      setShowPopupTimeOut(false); 
+    }, 5000);
+  };
+
   return (
     <div className="dtr-container">
-      <h1 className="dtr-heading">Daily Time Record</h1>
-      <label className="dtr-label">
-        Employee ID:
-        <input
-          className="dtr-input"
-          type="text"
-          value={employeeID}
-          onChange={(e) => setEmployeeID(e.target.value)}
-          pattern="\d*"
-          title="Please enter only numbers"
-        />
-      </label>
-      <br />
-      <label className="dtr-label">
-        Last Name:
-        <input className="dtr-input" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-      </label>
-      <br />
-      <button className="dtr-button" onClick={handleTimeIn}>Time In</button>
-      <button className="dtr-button" onClick={handleTimeOut}>Time Out</button>
-
-      {timeIn && <p className="dtr-success">Time In: {timeIn}</p>}
-      {timeOut && <p className="dtr-success">Time Out: {timeOut}</p>}
+      <div className="dtr-card">
+        <h1 className="dtr-heading">Daily Time Record</h1>
+          <div className="dtr-form">
+            <input
+              className="dtr-input"
+              type="text"
+              value={employeeID}
+              onChange={(e) => setEmployeeID(e.target.value)}
+              pattern="\d*"
+              title="Please enter only numbers"
+              placeholder="Employee ID"
+            />
+            <input 
+              className="dtr-input" 
+              type="text" value={lastName} 
+              onChange={(e) => setLastName(e.target.value)} 
+              placeholder="Last Name"  
+            />
+            <button className="dtr-button" onClick={handleTimeIn}>Time In</button>
+            <button className="dtr-button" onClick={handleTimeOut}>Time Out</button>
+          </div>
+       
+      </div>
+      {showPopupTimeIn && (
+        <div className="popup">
+          <div className="popup-content">
+            {timeIn && (
+              <React.Fragment>
+                <h1>Welcome!</h1>
+                <p className="text-popup">Time In: {timeIn}</p>
+              </React.Fragment>
+            )}
+            <button className="btn-close" onClick={handleClosePopupTimeIn}>Close</button>
+          </div>
+        </div>
+      )}
+      {showPopupTimeOut && (
+        <div className="popup">
+          <div className="popup-content">
+            {timeOut && (
+              <React.Fragment>
+                <h1>Thank you</h1>
+                <p className="text-popup">Time Out: {timeOut}</p>
+              </React.Fragment>
+            )}
+            <button className="btn-close" onClick={handleClosePopupTimeOut}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
