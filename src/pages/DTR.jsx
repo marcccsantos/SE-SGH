@@ -142,6 +142,7 @@ const DTR = () => {
           <div className="dtr-form">
             <input
               className="dtr-input"
+              id="employeeID" 
               type="text"
               value={employeeID}
               onChange={(e) => setEmployeeID(e.target.value)}
@@ -151,6 +152,7 @@ const DTR = () => {
             />
             <input 
               className="dtr-input" 
+              id="lastName"
               type="text" value={lastName} 
               onChange={(e) => setLastName(e.target.value)} 
               placeholder="Last Name"  

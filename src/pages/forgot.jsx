@@ -36,6 +36,7 @@ function ForgotPassword(){
                     className="email-forgot"
                     name="email"
                     placeholder="Email Address" 
+                    autoComplete="email" 
                     required
                   />
                   <button className="btn-reset">Send Reset Link</button>

@@ -9,7 +9,7 @@ const header = () => {
             .then(() => console.log("Sign Out"))
             .catch((error) => console.log(error));
     };
-
+ 
     return (  
         <>
             <header>
