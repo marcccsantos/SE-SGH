@@ -19,15 +19,33 @@ const ViewRecord = () => {
   const fetchRecords = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'employees'));
-      const results = [];
-      querySnapshot.forEach((doc) => {
-        results.push(doc.data());
-      });
-      setRecords(results);
-      setFilteredRecords(results);
+      const results = querySnapshot.docs.map(doc => doc.data());
+      const uniqueRecords = filterUniqueRecords(results);
+      const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
+      setRecords(paddedRecords);
+      setFilteredRecords(paddedRecords);
     } catch (error) {
       console.error('Error fetching records:', error);
     }
+  };
+
+  const filterUniqueRecords = (records) => {
+    const uniqueIds = new Set();
+    return records.filter(record => {
+      if (uniqueIds.has(record.employeeID)) {
+        return false; // Duplicate record, filter it out
+      }
+      uniqueIds.add(record.employeeID);
+      return true;
+    });
+  };
+
+  const padRecords = (records, targetLength) => {
+    const paddedRecords = [...records];
+    while (paddedRecords.length < targetLength) {
+      paddedRecords.push({}); // Add empty record
+    }
+    return paddedRecords;
   };
 
   const handleSearch = async () => {
@@ -66,18 +84,6 @@ const ViewRecord = () => {
     setSortOrder(order);
   };
 
-  // Function to generate empty cells with the same width as non-empty cells
-  const generateEmptyCells = (record) => {
-    const keys = Object.keys(record);
-    const emptyCells = [];
-
-    for (let i = 0; i < keys.length; i++) {
-      emptyCells.push(<td key={i} style={{ width: 'calc(100% / 19)' }}>&nbsp;</td>);
-    }
-
-    return emptyCells;
-  };
-
   return (
     <>
       <Header />
@@ -103,17 +109,17 @@ const ViewRecord = () => {
             <option value="birthday">Birthday</option>
             <option value="address">Address</option>
             <option value="contactNumber">Contact Number</option>
-            <option value="status">Status</option>
+            <option value="employmentStatus">Employment Status</option>
             <option value="position">Position</option>
             <option value="designation">Designation</option>
-            <option value="salaryperMonth">SalaryperMonth</option>
+            <option value="salaryPerMonth">Salary Per Month</option>
             <option value="department">Department</option>
-            <option value="hireDate">Hire Date</option>
-            <option value="PRC">PRC</option>
-            <option value="PRCExpiry">PRC Expiry</option>
-            <option value="philhealth">philhealth</option>
-            <option value="pagibig">pagibig</option>
-            <option value="sss">sss</option>
+            <option value="dateHired">Date Hired</option>
+            <option value="prc">PRC</option>
+            <option value="prcExpiry">PRC Expiry</option>
+            <option value="philhealth">Philhealth</option>
+            <option value="pagibig">Pagibig</option>
+            <option value="sss">SSS</option>
           </select>
           <select className="view-record-input" onChange={(e) => handleSortOrderChange(e.target.value)}>
             <option value="asc">Ascending</option>
@@ -134,12 +140,12 @@ const ViewRecord = () => {
                 <th style={{ width: 'calc(100% / 19)' }}>Birthday</th>
                 <th style={{ width: 'calc(100% / 19)' }}>Address</th>
                 <th style={{ width: 'calc(100% / 19)' }}>Contact Number</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Status</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Employment Status</th>
                 <th style={{ width: 'calc(100% / 19)' }}>Position</th>
                 <th style={{ width: 'calc(100% / 19)' }}>Designation</th>
-                <th style={{ width: 'calc(100% / 19)' }}>SalaryperMonth</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Salary Per Month</th>
                 <th style={{ width: 'calc(100% / 19)' }}>Department</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Hire Date</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Date Hired</th>
                 <th style={{ width: 'calc(100% / 19)' }}>PRC</th>
                 <th style={{ width: 'calc(100% / 19)' }}>PRC Expiry</th>
                 <th style={{ width: 'calc(100% / 19)' }}>Philhealth</th>
@@ -148,15 +154,11 @@ const ViewRecord = () => {
               </tr>
             </thead>
             <tbody>
-              {[...Array(20)].map((_, index) => (
-                <tr key={index}>
-                  {filteredRecords[index] ? (
-                    Object.values(filteredRecords[index]).map((value, colIndex) => (
-                      <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{value}</td>
-                    ))
-                  ) : (
-                    generateEmptyCells(filteredRecords[0])
-                  )}
+              {filteredRecords.map((record, rowIndex) => (
+                <tr key={rowIndex} className={Object.values(record).every(value => !value) ? "empty-row" : ""}>
+                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
+                    <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{record[field] || "\u00A0"}</td>
+                  ))}
                 </tr>
               ))}
             </tbody>
