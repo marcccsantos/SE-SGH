@@ -66,6 +66,18 @@ const ViewRecord = () => {
     setSortOrder(order);
   };
 
+  // Function to generate empty cells with the same width as non-empty cells
+  const generateEmptyCells = (record) => {
+    const keys = Object.keys(record);
+    const emptyCells = [];
+
+    for (let i = 0; i < keys.length; i++) {
+      emptyCells.push(<td key={i} style={{ width: 'calc(100% / 19)' }}>&nbsp;</td>);
+    }
+
+    return emptyCells;
+  };
+
   return (
     <>
       <Header />
@@ -114,49 +126,37 @@ const ViewRecord = () => {
           <table className="view-record-table">
             <thead>
               <tr>
-                <th>Employee ID</th>
-                <th>Last Name</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Gender</th>
-                <th>Birthday</th>
-                <th>Address</th>
-                <th>Contact Number</th>
-                <th>Status</th>
-                <th>Position</th>
-                <th>Designation</th>
-                <th>SalaryperMonth</th>
-                <th>Department</th>
-                <th>Hire Date</th>
-                <th>PRC</th>
-                <th>PRC Expiry</th>
-                <th>Philhealth</th>
-                <th>Pagibig</th>
-                <th>SSS</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Employee ID</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Last Name</th>
+                <th style={{ width: 'calc(100% / 19)' }}>First Name</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Middle Name</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Gender</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Birthday</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Address</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Contact Number</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Status</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Position</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Designation</th>
+                <th style={{ width: 'calc(100% / 19)' }}>SalaryperMonth</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Department</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Hire Date</th>
+                <th style={{ width: 'calc(100% / 19)' }}>PRC</th>
+                <th style={{ width: 'calc(100% / 19)' }}>PRC Expiry</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Philhealth</th>
+                <th style={{ width: 'calc(100% / 19)' }}>Pagibig</th>
+                <th style={{ width: 'calc(100% / 19)' }}>SSS</th>
               </tr>
             </thead>
             <tbody>
-              {filteredRecords.map((record, index) => (
+              {[...Array(20)].map((_, index) => (
                 <tr key={index}>
-                  <td>{record.employeeID || "N/A"}</td>
-                  <td>{record.lastName || "N/A"}</td>
-                  <td>{record.firstName || "N/A"}</td>
-                  <td>{record.middleName || "N/A"}</td>
-                  <td>{record.gender || "N/A"}</td>
-                  <td>{record.birthday || "N/A"}</td>
-                  <td>{record.address || "N/A"}</td>
-                  <td>{record.contactNumber || "N/A"}</td>
-                  <td>{record.status || "N/A"}</td>
-                  <td>{record.position || "N/A"}</td>
-                  <td>{record.designation || "N/A"}</td>
-                  <td>{record.salaryperMonth || "N/A"}</td>
-                  <td>{record.department || "N/A"}</td>
-                  <td>{record.hireDate || "N/A"}</td>
-                  <td>{record.PRC || "N/A"}</td>
-                  <td>{record.PRCExpiry || "N/A"}</td>
-                  <td>{record.philhealth || "N/A"}</td>
-                  <td>{record.pagibig || "N/A"}</td>
-                  <td>{record.sss || "N/A"}</td>
+                  {filteredRecords[index] ? (
+                    Object.values(filteredRecords[index]).map((value, colIndex) => (
+                      <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{value}</td>
+                    ))
+                  ) : (
+                    generateEmptyCells(filteredRecords[0])
+                  )}
                 </tr>
               ))}
             </tbody>
