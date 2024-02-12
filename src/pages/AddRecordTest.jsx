@@ -123,7 +123,7 @@ const AddRecordTest = () => {
             </div>
           <p className="support">Supported File Types: .jpg, .png</p>
         </div>
-      <div className="add-inputs">
+        <div className="add-inputs">
           <form onSubmit={handleSubmit}>
             <div className="container">
               <label htmlFor="empID">Employee ID:</label>
@@ -173,7 +173,7 @@ const AddRecordTest = () => {
                   id="address"
                   name="address"
                   onChange={(e) => setAddress(e.target.value)}
-                  required
+                  required 
                   autoComplete="address" 
                 />
               <label htmlFor="email">Email:</label>
