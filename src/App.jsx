@@ -9,6 +9,7 @@ import ViewRecord from "./pages/ViewRecord";
 import ViewProfile from "./pages/ViewProfile";
 import AddRecord from "./pages/AddRecord";
 import AddRecordTest from "./pages/AddRecordTest"; //to be removed\
+import AddRecordFinal from "./pages/AddRecordFinal";
 import ArchiveRecord from "./pages/ArchiveRecord";
 import Payroll from "./pages/Payroll";
 import NotFound from "./pages/not-found";
@@ -64,6 +65,11 @@ const App = () => {
                     <Route path="/AddRecordTest" element={// to be removed
                         <ProtectedRoute user={user}>
                             <AddRecordTest />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/AddRecordFinal" element={// to be removed
+                        <ProtectedRoute user={user}>
+                            <AddRecordFinal />
                         </ProtectedRoute>
                     } />
                     <Route path="/Payroll" element={

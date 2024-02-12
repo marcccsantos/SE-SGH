@@ -28,13 +28,22 @@ const AddRecordTest = () => {
   const [prcExpiry, setPrcExpiry] = useState('');
   const [pagibig, setPagibig] = useState('');
   const [philhealth, setPhilhealth] = useState('');
+  const [sssDeduction, setSssDeduction] = useState('');
+  const [philHealthDeduction, setPhilHealthDeduction] = useState('');
+  const [pagIbigDeduction, setPagIbigDeduction] = useState('');
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
+
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation can be added here if needed
-
+    if (!employeeID || !lastName || !firstName || !middleName) {
+      alert('All fields are required.');
+      return;
+    }
     try {
       // Add the employee data to Firestore
       const employeesCollection = collection(db, 'employees');
@@ -97,6 +106,10 @@ const AddRecordTest = () => {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     const storageRef = ref(storage, `employee_picture/${employeeID}`);
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
     try {
       const snapshot = await uploadBytes(storageRef, file);
       const downloadUrl = await getDownloadURL(snapshot.ref);
@@ -132,7 +145,7 @@ const AddRecordTest = () => {
                   id="empID"
                   value={employeeID}
                   onChange={(e) => setEmployeeID(e.target.value)}
-                  required
+                   
                   autoComplete="given-id"
                 />
               <label htmlFor="lname">Last Name:</label>
@@ -143,7 +156,7 @@ const AddRecordTest = () => {
                   name="lname"
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder=" " 
-                  required
+                   
                   autoComplete="family-name"
                 />
               <label htmlFor="fname">First Name:</label>
@@ -153,7 +166,7 @@ const AddRecordTest = () => {
                   id="fname"
                   name="fname"
                   onChange={(e) => setFirstName(e.target.value)}
-                  required
+                   
                   autoComplete="given-name"
                 />
               <label htmlFor="mname">Middle Name:</label>
@@ -163,7 +176,7 @@ const AddRecordTest = () => {
                   id="mname"
                   name="mname"
                   onChange={(e) => setMiddleName(e.target.value)}
-                  required
+                   
                   autoComplete="additional-name"
                 />
               <label htmlFor="address">Address:</label>
@@ -173,7 +186,7 @@ const AddRecordTest = () => {
                   id="address"
                   name="address"
                   onChange={(e) => setAddress(e.target.value)}
-                  required 
+                    
                   autoComplete="address" 
                 />
               <label htmlFor="email">Email:</label>
@@ -200,7 +213,7 @@ const AddRecordTest = () => {
                   id="birthday" 
                   value={birthday}
                   onChange={(e) => setBirthday(e.target.value)}
-                  required
+                   
                   autoComplete="bday"
                 />
               <label htmlFor="age">Age:</label>
@@ -210,7 +223,7 @@ const AddRecordTest = () => {
                   id="age"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  required
+                   
                   autoComplete="age" 
                 />
               <label htmlFor="sex">Sex:</label>
@@ -228,7 +241,7 @@ const AddRecordTest = () => {
                   name="rate" 
                   id="rate"
                   onChange={(e) => setSalaryPerMonth(e.target.value)}
-                  required
+                   
                   placeholder="₱"
                 />
               <label htmlFor="status">Status:</label>
@@ -246,7 +259,7 @@ const AddRecordTest = () => {
                   id="department"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  required
+                   
                 />
                 <label htmlFor="position">Position: </label>
                 <input
@@ -255,7 +268,7 @@ const AddRecordTest = () => {
                   id="position" 
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
-                  required
+                   
                 />
                 <label htmlFor="hire">Date Hired: </label>
                 <input
@@ -264,7 +277,7 @@ const AddRecordTest = () => {
                   id="hire"
                   value={dateHired}
                   onChange={(e) => setDateHired(e.target.value)}
-                  required
+                   
                 />
               <label htmlFor="tin">T.I.N. #:</label>
                 <input
@@ -273,7 +286,7 @@ const AddRecordTest = () => {
                   id="tin"
                   value={tin}
                   onChange={(e) => setTin(e.target.value)}
-                  required
+                   
                 />
               <label htmlFor="sss">S.S.S. #:</label>
                 <input
@@ -282,7 +295,7 @@ const AddRecordTest = () => {
                   id="sss"
                   value={sss}
                   onChange={(e) => setSss(e.target.value)}
-                  required
+                   
                 />
               <label htmlFor="prc">P.R.C. #:</label>
                 <input
@@ -291,7 +304,7 @@ const AddRecordTest = () => {
                   id="prc"
                   value={prc}
                   onChange={(e) => setPrc(e.target.value)}
-                  required
+                   
                 />
               <label htmlFor="expiry">PRC Expiry: </label>
                 <input
@@ -300,7 +313,7 @@ const AddRecordTest = () => {
                   id="expiry"
                   value={prcExpiry}
                   onChange={(e) => setPrcExpiry(e.target.value)}
-                  required
+                   
                 />
               <label htmlFor="pag-ibig">Pag-IBIG #:</label>
                 <input
@@ -309,7 +322,7 @@ const AddRecordTest = () => {
                   id="pag-ibig"
                   value={pagibig}
                   onChange={(e) => setPagibig(e.target.value)}
-                  required
+                   
                 />
               <label htmlFor="phil">PhilHealth #:</label>
                 <input
@@ -318,13 +331,32 @@ const AddRecordTest = () => {
                   id="phil"
                   value={philhealth}
                   onChange={(e) => setPhilhealth(e.target.value)}
-                  required
+                   
                 />
+                <input 
+                  type="number" 
+                  value={sssDeduction} 
+                  onChange={(e) => setSssDeduction(e.target.value)} 
+                  placeholder="SSS Deduction Percentage" 
+                  min="0" max="100" />
+                <input 
+                  type="number" 
+                  value={philHealthDeduction} 
+                  onChange={(e) => setPhilHealthDeduction(e.target.value)} 
+                  placeholder="PhilHealth Deduction Percentage" 
+                  min="0" max="100" />
+                <input 
+                  type="number" 
+                  value={pagIbigDeduction} 
+                  onChange={(e) => setPagIbigDeduction(e.target.value)} 
+                  placeholder="PagIBIG Deduction Percentage" 
+                  min="0" max="100" />
+                <input type="file" onChange={handleImageChange} />
+                  {imagePreview && <img src={imagePreview} alt="Preview" />}
               <button className="save" type="submit">Save</button>
               <button className="cancel" type="save">Cancel</button>  
             </div>
           </form>
- 
         </div>
       </div>
     <Footer/>

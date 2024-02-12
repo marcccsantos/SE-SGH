@@ -9,8 +9,7 @@ const ViewProfile = () => {
   const [imageUrl, setImageUrl] = useState('');
 
   const handleFetchData = async () => {
-    const employeesCollection = collection(db, 'employees');
-    const employeeQuery = query(employeesCollection, where('employeeID', '==', parseInt(employeeID, 10)));
+    const employeeQuery = query(collection(db, 'employees_active'), where('employeeID', '==', employeeID));
     const employeeSnapshot = await getDocs(employeeQuery);
 
     if (!employeeSnapshot.empty) {
@@ -19,7 +18,7 @@ const ViewProfile = () => {
       setEmployeeData(data);
 
       // Fetch and set the image URL
-      const imageRef = ref(storage, `employee_picture/${employeeID}`);
+      const imageRef = ref(storage, `employees_pictures/${employeeID}`);
       const downloadUrl = await getDownloadURL(imageRef);
       setImageUrl(downloadUrl);
     } else {
