@@ -1,0 +1,133 @@
+/* Import your additional CSS file here */
+
+/* Add styles for the search input */
+.view-record-input {
+  padding: 8px;
+  margin-right: 10px;
+  border-radius: 20px; /* Set border-radius to make it circular */
+}
+
+/* Add styles for the search button */
+.view-record-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Add styles for the table */
+.view-record-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Inter", sans-serif; /* Set font family to Inter */
+}
+
+/* Style for the table header */
+.view-record-table th {
+  background-color: #176906;
+  color: #fff;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  text-transform: uppercase; /* Convert text to uppercase */
+}
+
+/* Style for the first table header row */
+.view-record-table thead tr:first-child th {
+  vertical-align: middle; /* Align vertically in the middle */
+  text-align: center; /* Align horizontally in the center */
+}
+
+/* Style for the table data */
+.view-record-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  text-transform: uppercase; /* Convert text to uppercase */
+}
+
+/* Style for alternating rows */
+.view-record-table tbody tr:nth-child(even) {
+  background-color: #609655; /* Light green */
+}
+
+.view-record-table tbody tr:nth-child(odd) {
+  background-color: #b6d69c; /* Dark green */
+}
+
+/* Style for empty rows */
+.view-record-table tbody tr.empty-row {
+  background-color: #ffcccc; /* Light red */
+}
+
+/* Add your existing CSS styles below */
+
+/* Add styles for the container */
+.view-record-container {
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: "Inter", sans-serif; /* Set font family to Inter */
+}
+
+/* Add styles for the heading */
+.view-record-heading {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Add styles for the search input */
+.view-record-search {
+  margin-bottom: 20px;
+}
+
+.view-record-input {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.view-record-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.view-record-button:hover {
+  background-color: #0056b3;
+}
+
+/* Add styles for the sort section */
+.view-record-sort {
+  margin-bottom: 20px;
+}
+
+.view-record-radio-label {
+  margin-right: 20px;
+}
+
+/* Add styles for the footer */
+.view-record-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Style for the first row */
+.view-record-table thead tr {
+  background-color: #176906; 
+  color: #176906;
+}
+
+.view-record-table tbody tr.empty-row:nth-child(even) {
+  background-color: #fdf4f4; /* Light red */
+}
+
+.view-record-table tbody tr.empty-row:nth-child(odd) {
+  background-color: #7c7a7a; /* Lighter red */
+}
