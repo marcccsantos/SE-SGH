@@ -6,9 +6,29 @@ import { db, storage } from '../firebase'; // Import your Firestore and Storage 
 const AddRecordFinal = () => {
   const [employeeID, setEmployeeID] = useState('');
   const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
+  const [department, setDepartment] = useState('');
+  const [position, setPosition] = useState('');
+  const [dateHired, setDateHired] = useState('');
+  const [status, setStatus] = useState('');
+  const [salaryPerMonth, setSalaryPerMonth] = useState('');
+  const [prc, setPrc] = useState('');
+  const [prcExpiry, setPrcExpiry] = useState('');
+  const [tin, setTin] = useState('');
+  const [sss, setSss] = useState('');
+  const [sssDeduction, setSssDeduction] = useState('');
+  const [philhealth, setPhilhealth] = useState('');
+  const [philhealthDeduction, setPhilhealthDeduction] = useState('');
+  const [pagibig, setPagibig] = useState('');
+  const [pagibigDeduction, setPagibigDeduction] = useState('');
+
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -47,13 +67,32 @@ const AddRecordFinal = () => {
         await uploadBytes(imageRef, image);
         const imageUrl = await getDownloadURL(imageRef);
     
-        // Add record to Firestore database
+        // Add record to Firestore database 
         await addDoc(collection(db, 'employees_active'), {
           employeeID: employeeID.trim(),
           lastName,
+          firstName,
+          middleName,
+          address,
+          email,
+          contactNumber,
           dateOfBirth,
           age: parseInt(age, 10),
           gender,
+          department,
+          position,
+          dateHired,
+          status,
+          salaryPerMonth: parseFloat(salaryPerMonth),
+          prc,
+          prcExpiry,
+          tin,
+          sss,
+          sssDeduction: parseFloat(sssDeduction),
+          philhealth,
+          philhealthDeduction: parseFloat(philhealthDeduction),
+          pagibig,
+          pagibigDeduction: parseFloat(pagibigDeduction),
           imageUrl,
         });
 
@@ -65,9 +104,28 @@ const AddRecordFinal = () => {
     // Reset form fields
     setEmployeeID('');
     setLastName('');
+    setFirstName('');
+    setMiddleName('');
+    setAddress('');
+    setEmail('');
+    setContactNumber('');
     setDateOfBirth('');
     setAge('');
     setGender('');
+    setDepartment('');
+    setPosition('');
+    setDateHired('');
+    setStatus('');
+    setSalaryPerMonth('');
+    setPrc('');
+    setPrcExpiry('');
+    setTin('');
+    setSss('');
+    setSssDeduction('');
+    setPhilhealth('');
+    setPhilhealthDeduction('');
+    setPagibig('');
+    setPagibigDeduction('');
     setImage(null);
     setPreviewImage(null);
   };
@@ -93,12 +151,52 @@ const AddRecordFinal = () => {
         />
       </div>
       <div>
+        <label>First Name:</label>
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Middle Name:</label>
+        <input
+          type="text"
+          value={middleName}
+          onChange={(e) => setMiddleName(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Address:</label>
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Contact Number:</label>
+        <input
+          type="text"
+          value={contactNumber}
+          onChange={(e) => setContactNumber(e.target.value)}
+        />
+      </div>
+      <div>
         <label>Date of Birth:</label>
         <input
           type="date"
           value={dateOfBirth}
           onChange={(e) => setDateOfBirth(e.target.value)}
-          required
         />
       </div>
       <div>
@@ -107,12 +205,11 @@ const AddRecordFinal = () => {
           type="number"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          required
         />
       </div>
       <div>
         <label>Gender:</label>
-        <select value={gender} onChange={(e) => setGender(e.target.value)} required>
+        <select value={gender} onChange={(e) => setGender(e.target.value)} >
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -120,8 +217,120 @@ const AddRecordFinal = () => {
         </select>
       </div>
       <div>
+        <label>Department:</label>
+        <input
+          type="text"
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Position:</label>
+        <input
+          type="text"
+          value={position}
+          onChange={(e) => setPosition(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Date Hired:</label>
+        <input
+          type="date"
+          value={dateHired}
+          onChange={(e) => setDateHired(e.target.value)}
+        />
+      </div>
+      <div>
+      <label>Employment Status:</label>
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="">Select Status</option>
+          <option value="Regular">Regular</option>
+          <option value="Contractual">Contractual</option>
+        </select>
+      </div>
+      <div>
+        <label>Salary Per Month:</label>
+        <input
+          type="number"
+          value={salaryPerMonth}
+          onChange={(e) => setSalaryPerMonth(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>PRC:</label>
+        <input
+          type="text"
+          value={prc}
+          onChange={(e) => setPrc(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>PRC Expiry:</label>
+        <input
+          type="date"
+          value={prcExpiry}
+          onChange={(e) => setPrcExpiry(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>TIN:</label>
+        <input
+          type="text"
+          value={tin}
+          onChange={(e) => setTin(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>SSS:</label>
+        <input
+          type="text"
+          value={sss}
+          onChange={(e) => setSss(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>SSS Deduction:</label>
+        <input
+          type="number"
+          value={sssDeduction}
+          onChange={(e) => setSssDeduction(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Philhealth:</label>
+        <input
+          type="text"
+          value={philhealth}
+          onChange={(e) => setPhilhealth(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Philhealth Deduction:</label>
+        <input
+          type="number"
+          value={philhealthDeduction}
+          onChange={(e) => setPhilhealthDeduction(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Pagibig:</label>
+        <input
+          type="text"
+          value={pagibig}
+          onChange={(e) => setPagibig(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Pagibig Deduction:</label>
+        <input
+          type="number"
+          value={pagibigDeduction}
+          onChange={(e) => setPagibigDeduction(e.target.value)} // dapat 0-100 lang to
+        />
+      </div>
+      <div>
         <label>Upload Image:</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} required />
+        <input type="file" accept="image/*" onChange={handleImageChange}  />
       </div>
       {previewImage && (
         <div>
