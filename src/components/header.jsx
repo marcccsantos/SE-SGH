@@ -17,15 +17,23 @@ const header = () => {
                     <img className="logo-header" src="/logo-1.png" alt="" />
                     <img className="sgh-text" src="/text-sgh.png" alt="" />
                 </div>
-                <nav>
+                <nav className="nav">
                     <ul>
-                        <li><Link to="/search">SEARCH RECORD</Link></li>
-                        <li><Link to="/ViewRecord">VIEW RECORD</Link></li>
-                        <li><Link to="/ViewProfile">VIEW PROFILE</Link></li>
-                        <li><Link to="/AddRecordTest">ADD RECORD</Link></li>
-                        <li><Link to="/ArchiveRecord">ARCHIVE RECORD</Link></li>
-                        <li><Link to="/Payroll">PAYROLL</Link></li>
-                        <li className="logout" onClick={handleLogOut}>LOGOUT</li>
+                        <div className="all-tab">
+                            <div className="tab">
+                                <li><Link to="/search">SEARCH RECORD</Link></li>
+                                <li><Link to="/ViewRecord">VIEW RECORD</Link></li>
+                                <li><Link to="/ViewProfile">VIEW PROFILE</Link></li>
+                                <li><Link to="/AddRecordTest">ADD RECORD</Link></li>
+                                <li><Link to="/ArchiveRecord">ARCHIVE RECORD</Link></li>
+                                <li><Link to="/Payroll">PAYROLL</Link></li>
+                            </div>
+                            <div className="logout">
+                                <li className="logout-btn" onClick={handleLogOut}>LOGOUT</li>
+                            </div>
+                        </div>
+                        
+                        
                     </ul>
                 </nav>
             </header>

@@ -25,7 +25,7 @@ li:hover {
     text-decoration: underline;
     color: white;
 }
-.logout {
+.logout-btn {
     color: #E6CB02;
 }
 nav a {
@@ -47,23 +47,24 @@ nav a {
     width: 100%;
     background-color: #176906;
 }
+.all-tab{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100vw;
+}
+.tab {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.logout{
+    display: flex;
+    justify-content: right;
+    margin-right: 30px;
+}
 
-/*
-@media screen and (max-width:769px) {
-    .logo-header {
-        max-width: 70px;
-    }
-    .sgh-text {
-        max-width: 300px;
-        margin-top: 20px;
-    }
-    nav ul {
-        font-size: 1.198vw;
-        margin-top: -6px;
-        margin-left: 14px;
-    }
-}*/
-@media screen and (max-width:425px) {
+@media screen and (max-width:374px) {
     .logo-header {
         width: 100%;
         max-width: 60px;
@@ -78,6 +79,9 @@ nav a {
         gap: 7px;
         margin-top: -13px;
         margin-left: 23px;
+    }
+    .logout{
+        margin-right: 10px;
     }
 }
 @media screen and (min-width:375px) and (max-width:425px) {
@@ -96,6 +100,9 @@ nav a {
         margin-top: -10px;
         margin-left: 23px;
     }
+    .logout{
+        margin-right: 10px;
+    }
 }
 @media screen and (min-width:426px) and (max-width:768px) {
     .logo-header {
@@ -104,14 +111,17 @@ nav a {
     }
     .sgh-text {
         width: 100%; 
-        max-width: 350px;
+        max-width: 340px;
         margin-top: 26px;
     }
     nav ul {
-        font-size: 7px;
+        font-size: 5.5px;
         gap: 10px;
         margin-top: -10px;
         margin-left: 45px;
+    }
+    .logout{
+        margin-right: 10px;
     }
 }
 @media screen and (min-width:769px) {
