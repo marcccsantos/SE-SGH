@@ -74,8 +74,8 @@ nav a {
         margin-top: 18px;
     }
     nav ul {
-        font-size: 4.5px;
-        gap: 10px;
+        font-size: 4px;
+        gap: 7px;
         margin-top: -13px;
         margin-left: 23px;
     }
@@ -121,7 +121,7 @@ nav a {
     }
     nav ul {
         font-size: 11px;
-        gap: 10px;
+        gap: 13px;
         margin-top: -10px;
         margin-left: 70px;
     }
