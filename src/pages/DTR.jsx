@@ -13,10 +13,10 @@ const DTR = () => {
 
   const handleTimeIn = async () => {
     // Check if the user exists in the employees collection
-    const employeesCollection = collection(db, 'employees');
+    const employeesCollection = collection(db, 'employees_active');
     const employeesQuery = query(
       employeesCollection,
-      where('employeeID', '==', parseInt(employeeID, 10)),
+      where('employeeID', '==', employeeID),
       where('lastName', '==', lastName)
     );
     const employeesSnapshot = await getDocs(employeesQuery);
@@ -32,7 +32,7 @@ const DTR = () => {
     const dateString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     const dtrQuery = query(
       dtrCollection,
-      where('employeeID', '==', parseInt(employeeID, 10)),
+      where('employeeID', '==', employeeID),
       where('date', '==', dateString)
     );
     const dtrSnapshot = await getDocs(dtrQuery);
@@ -40,7 +40,7 @@ const DTR = () => {
     if (dtrSnapshot.empty) {
       // User has not timed in today, proceed with time in
       const timeInData = {
-        employeeID: parseInt(employeeID, 10),
+        employeeID,
         lastName,
         date: dateString,
         timeIn: today.toLocaleTimeString(),
@@ -59,10 +59,10 @@ const DTR = () => {
   
   const handleTimeOut = async () => {
     // Check if the user exists in the employees collection
-    const employeesCollection = collection(db, 'employees');
+    const employeesCollection = collection(db, 'employees_active');
     const employeesQuery = query(
       employeesCollection,
-      where('employeeID', '==', parseInt(employeeID, 10)),
+      where('employeeID', '==', employeeID),
       where('lastName', '==', lastName)
     );
     const employeesSnapshot = await getDocs(employeesQuery);
@@ -78,7 +78,7 @@ const DTR = () => {
     const dateString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     const dtrQuery = query(
       dtrCollection,
-      where('employeeID', '==', parseInt(employeeID, 10)),
+      where('employeeID', '==', employeeID),
       where('date', '==', dateString)
     );
     const dtrSnapshot = await getDocs(dtrQuery);

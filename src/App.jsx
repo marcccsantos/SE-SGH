@@ -12,6 +12,7 @@ import AddRecordTest from "./pages/AddRecordTest"; //to be removed\
 import AddRecordFinal from "./pages/AddRecordFinal";
 import ArchiveRecord from "./pages/ArchiveRecord";
 import Payroll from "./pages/Payroll";
+import PayrollFinal from "./pages/PayrollFinal";
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR"
 import { useEffect, useState } from "react";
@@ -67,7 +68,7 @@ const App = () => {
                             <AddRecordTest />
                         </ProtectedRoute>
                     } />
-                    <Route path="/AddRecordFinal" element={// to be removed
+                    <Route path="/AddRecordFinal" element={// FINAL VERSION
                         <ProtectedRoute user={user}>
                             <AddRecordFinal />
                         </ProtectedRoute>
@@ -75,6 +76,11 @@ const App = () => {
                     <Route path="/Payroll" element={
                         <ProtectedRoute user={user}>
                             <Payroll />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/PayrollFinal" element={ //to be final version
+                        <ProtectedRoute user={user}>
+                            <PayrollFinal />
                         </ProtectedRoute>
                     } />
                     <Route path="/ArchiveRecord" element={
