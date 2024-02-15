@@ -1,64 +1,86 @@
-import React, { useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db, storage, auth } from '../firebase';
-import { ref, getDownloadURL } from 'firebase/storage';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase'; // Import your Firestore instance
 
 const ViewProfile = () => {
-  const [employeeID, setEmployeeID] = useState('');
+  const { employeeID } = useParams();
   const [employeeData, setEmployeeData] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedData, setEditedData] = useState(null);
+  const [documentId, setDocumentId] = useState(null);
 
-  const handleFetchData = async () => {
-    const employeeQuery = query(collection(db, 'employees_active'), where('employeeID', '==', employeeID));
-    const employeeSnapshot = await getDocs(employeeQuery);
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const employeeQuery = query(collection(db, 'employees_active'), where('employeeID', '==', employeeID));
+        const querySnapshot = await getDocs(employeeQuery);
+        if (!querySnapshot.empty) {
+          const docData = querySnapshot.docs[0].data();
+          setEmployeeData(docData);
+          setEditedData({ ...docData }); // Initialize editedData with employeeData
+          setDocumentId(querySnapshot.docs[0].id); // Set the document ID
+        } else {
+          console.error('No employee found with the provided ID');
+        }
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
 
-    if (!employeeSnapshot.empty) {
-      const data = employeeSnapshot.docs[0].data();
-      console.log('Employee data found:', data);
-      setEmployeeData(data);
+    fetchEmployeeData();
+  }, [employeeID]);
 
-      // Fetch and set the image URL
-      const imageRef = ref(storage, `employees_pictures/${employeeID}`);
-      const downloadUrl = await getDownloadURL(imageRef);
-      setImageUrl(downloadUrl);
-    } else {
-      console.log('Employee not found');
-      setEmployeeData(null);
-      setImageUrl(''); // Reset image URL if employee not found
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      const employeeRef = doc(db, 'employees_active', documentId); // Use the stored document ID
+      await updateDoc(employeeRef, editedData);
+      setIsEditing(false);
+      console.log('Employee data updated successfully');
+    } catch (error) {
+      console.error('Error updating employee data:', error);
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditedData({ ...editedData, [name]: value });
+  };
+
+  if (!employeeData) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div>
-      <h1>View Employee Profile</h1>
-      <label>
-        Employee ID:
-        <input
-          type="text"
-          value={employeeID}
-          onChange={(e) => setEmployeeID(e.target.value)}
-          pattern="\d*"
-          title="Please enter only numbers"
-        />
-      </label>
-      <button onClick={handleFetchData}>Fetch Employee Data</button>
+    <form>
+      <div>
+        <label>Employee ID:</label>
+        <input type="text" value={employeeData.employeeID} readOnly />
+      </div>
+      <div>
+        <label>Last Name:</label>
+        <input type="text" value={isEditing ? editedData.lastName : employeeData.lastName} readOnly={!isEditing} name="lastName" onChange={handleChange} />
+      </div>
+      <div>
+        <label>First Name:</label>
+        <input type="text" value={isEditing ? editedData.firstName : employeeData.firstName} readOnly={!isEditing} name="firstName" onChange={handleChange} />
+      </div>
+      {/* Include other input fields for displaying other employee data */}
 
-      {employeeData && (
+      {isEditing ? (
         <div>
-          <h2>Employee Details</h2>
-          <p>Employee ID: {employeeData.employeeID}</p>
-          <p>Last Name: {employeeData.lastName}</p>
-          <p>First Name: {employeeData.firstName}</p>
-
-          {imageUrl && (
-            <div>
-              <h3>Employee Image</h3>
-              <img src={imageUrl} alt={`Employee ${employeeID}`} />
-            </div>
-          )}
+          <button type="button" onClick={handleSave}>Save</button>
+        </div>
+      ) : (
+        <div>
+          <button type="button" onClick={handleEdit}>Edit</button>
         </div>
       )}
-    </div>
+    </form>
   );
 };
 

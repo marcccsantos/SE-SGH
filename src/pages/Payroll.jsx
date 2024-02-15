@@ -4,8 +4,8 @@ import { db } from '../firebase';
 import * as XLSX from 'xlsx';
 import './Payroll.css'; // Import Payroll CSS file
 // Import Header and Footer components
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/header';
+import Footer from '../components/footer';
 
 const Payroll = () => {
   const [employeeID, setEmployeeID] = useState('');
