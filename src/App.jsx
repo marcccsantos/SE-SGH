@@ -48,6 +48,11 @@ const App = () => {
                             <Search />
                         </ProtectedRoute>
                     } />
+                    <Route path="/ViewRecord/:searchQuery" element={
+                        <ProtectedRoute user={user}>
+                            <ViewRecord />
+                        </ProtectedRoute>
+                    } />
                     <Route path="/ViewRecord" element={
                         <ProtectedRoute user={user}>
                             <ViewRecord />

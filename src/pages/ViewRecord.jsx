@@ -4,8 +4,10 @@ import { db } from '../firebase'; // Import your Firestore instance
 import Header from '../components/header';
 import Footer from '../components/footer';
 import './ViewRecord.css'; // Import the CSS file
+import { useParams } from 'react-router-dom';
 
 const ViewRecord = () => {
+  const { searchQuery } = useParams();
   const [searchInput, setSearchInput] = useState('');
   const [quickFilter, setQuickFilter] = useState('');
   const [records, setRecords] = useState([]);
@@ -15,6 +17,31 @@ const ViewRecord = () => {
   useEffect(() => {
     fetchRecords();
   }, []);
+
+  useEffect(() => {
+    const performSearch = async () => {
+        try {
+            if (!searchQuery || searchQuery.trim() === '') {
+                // If searchQuery is empty, reset filteredRecords to show all records
+                setFilteredRecords(records);
+            } else {
+                // Perform search based on searchQuery
+                const results = records.filter((record) =>
+                    Object.values(record).some((value) =>
+                        String(value).toLowerCase().includes(searchQuery.toLowerCase())
+                    )
+                );
+                setFilteredRecords(results);
+            }
+        } catch (error) {
+            console.error('Error searching records:', error);
+        }
+    };
+
+    performSearch();
+}, [searchQuery, records]); // Added 'records' as a dependency
+
+
 
   const fetchRecords = async () => {
     try {
