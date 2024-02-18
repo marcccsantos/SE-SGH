@@ -7,10 +7,11 @@ const NotFound = () => {
 
     return ( 
         <div className="not-found">
+            <img className="broken-hand" src="/broken-hand.png" alt="" />
             <div className="container-not">
-                <h2>Sorry</h2> 
-                <p>That page cannot be found</p>
-                <button onClick={goBack}>Go back</button>
+                <div className="err">404 error </div>
+                <div className="err-text">The page you are looking for was moved, removed, renamed, or might never existed.</div>
+                <button className="button-err" onClick={goBack}>Go Back</button>
             </div>
         </div>
     );

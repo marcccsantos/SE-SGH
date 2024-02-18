@@ -1,12 +1,60 @@
 .not-found{
     display: flex;
-    align-items: center;
+    align-items:center;
     justify-content: center;
     flex-direction: column;
-    border: 1px solid red;
     height: 100vh;
+    background-color: whitesmoke;
 }
 .container-not{
-    border: 1px solid red;
-    padding: 5px;
+        position: relative;
+        padding-top: 10%;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        padding-bottom: 3%;
+    }
+    
+.err{
+    color: #176906;
+    text-align: center;
+    font-weight:bold;
+    font-size: 12vh;
+    padding-top: 2%;
+    padding-bottom: 1%;
+
+}
+.err-text{
+    text-align: center;
+    font-size: 2.5vh;
+    padding: 5%;
+}
+.button-err{
+    border-radius: 12px;
+    background-color: #155e06;
+    border: whitesmoke;
+    color: white;
+    padding: 8px 40px;
+    font-size: 14px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    display: flex;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: relative;
+    top: 10%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.button-err:hover {
+    background-color: #155e06;
+    color: #D7CD23; 
+    text-decoration: underline;
+    transition: ease-out;
+}
+.broken-hand {
+    width: 100%;
+    max-width: 300px;
+    top: 32%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    position: absolute;
 }
