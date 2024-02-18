@@ -1,3 +1,5 @@
+import './not-found.css'; 
+
 const NotFound = () => {
     const goBack = () => {
         window.history.back();
@@ -5,9 +7,11 @@ const NotFound = () => {
 
     return ( 
         <div className="not-found">
-            <h2>Sorry</h2>
-            <p>That page cannot be found</p>
-            <button onClick={goBack}>Go back</button>
+            <div className="container-not">
+                <h2>Sorry</h2> 
+                <p>That page cannot be found</p>
+                <button onClick={goBack}>Go back</button>
+            </div>
         </div>
     );
 }

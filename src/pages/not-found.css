@@ -1,0 +1,12 @@
+.not-found{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid red;
+    height: 100vh;
+}
+.container-not{
+    border: 1px solid red;
+    padding: 5px;
+}
