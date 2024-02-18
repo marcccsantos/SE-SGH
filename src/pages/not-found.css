@@ -8,7 +8,7 @@
 }
 .container-not{
         position: relative;
-        padding-top: 10%;
+        padding-top: 12%;
         padding-bottom: 3%;
     }
     
@@ -17,7 +17,7 @@
     text-align: center;
     font-weight:bold;
     font-size: 12vh;
-    padding-top: 10%;
+    padding-top: 12%;
     padding-bottom: 1%;
 }
 .err-text{
