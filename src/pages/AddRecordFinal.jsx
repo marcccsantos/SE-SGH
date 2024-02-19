@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase'; // Import your Firestore and Storage instances
@@ -8,7 +8,11 @@ const AddRecordFinal = () => {
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
-  const [address, setAddress] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
+  const [barangay, setBarangay] = useState('');
+  const [street, setStreet] = useState('');
+  const [lotNumber, setLotNumber] = useState('');
   const [email, setEmail] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
@@ -28,7 +32,6 @@ const AddRecordFinal = () => {
   const [philhealthDeduction, setPhilhealthDeduction] = useState('');
   const [pagibig, setPagibig] = useState('');
   const [pagibigDeduction, setPagibigDeduction] = useState('');
-
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -44,13 +47,24 @@ const AddRecordFinal = () => {
     }
   };
 
+  useEffect(() => {
+    // Calculate age when date of birth changes
+    if (dateOfBirth) {
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDifference = today.getMonth() - birthDate.getMonth();
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      setAge(age.toString()); // Update age state
+    }
+  }, [dateOfBirth]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!employeeID.trim()) {
-      console.error('Employee ID is required');
-      return;
-    }
+    // Calculate age based on date of birth
 
     // Check if employeeID already exists
     const employeeQuery = query(collection(db, 'employees_active'), where('employeeID', '==', employeeID.trim()));
@@ -73,7 +87,13 @@ const AddRecordFinal = () => {
           lastName,
           firstName,
           middleName,
-          address,
+
+          province,
+          city,
+          barangay,
+          street,
+          lotNumber,
+
           email,
           contactNumber,
           dateOfBirth,
@@ -106,7 +126,13 @@ const AddRecordFinal = () => {
     setLastName('');
     setFirstName('');
     setMiddleName('');
-    setAddress('');
+
+    setProvince('');
+    setCity('');
+    setBarangay('');
+    setStreet('');
+    setLotNumber('');
+
     setEmail('');
     setContactNumber('');
     setDateOfBirth('');
@@ -168,11 +194,43 @@ const AddRecordFinal = () => {
         />
       </div>
       <div>
-        <label>Address:</label>
+        <label>Province:</label>
         <input
           type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          value={province}
+          onChange={(e) => setProvince(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>City:</label>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Barangay:</label>
+        <input
+          type="text"
+          value={barangay}
+          onChange={(e) => setBarangay(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Street:</label>
+        <input
+          type="text"
+          value={street}
+          onChange={(e) => setStreet(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Lot Number:</label>
+        <input
+          type="text"
+          value={lotNumber}
+          onChange={(e) => setLotNumber(e.target.value)}
         />
       </div>
       <div>
@@ -202,9 +260,10 @@ const AddRecordFinal = () => {
       <div>
         <label>Age:</label>
         <input
-          type="number"
+          type="text"
           value={age}
           onChange={(e) => setAge(e.target.value)}
+          disabled // Disable age field
         />
       </div>
       <div>

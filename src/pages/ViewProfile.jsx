@@ -69,6 +69,10 @@ const ViewProfile = () => {
         <label>First Name:</label>
         <input type="text" value={isEditing ? editedData.firstName : employeeData.firstName} readOnly={!isEditing} name="firstName" onChange={handleChange} />
       </div>
+      <div>
+        <label>Age:</label>
+        <input type="text" value={isEditing ? editedData.age : employeeData.age} readOnly={!isEditing} name="age" onChange={handleChange} />
+      </div>
       {/* Include other input fields for displaying other employee data */}
 
       {isEditing ? (
