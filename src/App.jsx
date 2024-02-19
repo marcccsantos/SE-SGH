@@ -53,11 +53,13 @@ const App = () => {
                             <ViewRecord />
                         </ProtectedRoute>
                     } />
-                    <Route path="/ViewProfile" element={
+
+                    <Route path="/ViewProfile/:employeeID" element={
                         <ProtectedRoute user={user}>
                             <ViewProfile />
                         </ProtectedRoute>
-                    } />
+                    }/>
+
                     <Route path="/AddRecord" element={
                         <ProtectedRoute user={user}>
                             <AddRecord  />
