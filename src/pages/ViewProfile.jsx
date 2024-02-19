@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase'; // Import your Firestore instance
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase'; // Import your Firestore and Storage instances
 
 const ViewProfile = () => {
   const { employeeID } = useParams();
@@ -9,6 +10,7 @@ const ViewProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState(null);
   const [documentId, setDocumentId] = useState(null);
+  const [newImage, setNewImage] = useState(null); // New state to hold newly uploaded image
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -37,8 +39,18 @@ const ViewProfile = () => {
 
   const handleSave = async () => {
     try {
-      const employeeRef = doc(db, 'employees_active', documentId); // Use the stored document ID
-      await updateDoc(employeeRef, editedData);
+      // If a new image is uploaded, upload it to Firebase Storage
+      let imageUrl = employeeData.imageUrl; // By default, keep the existing image URL
+      if (newImage) {
+        const filename = `${employeeID.trim()}`;
+        const imageRef = ref(storage, `employees_pictures/${filename}`);
+        await uploadBytes(imageRef, newImage);
+        imageUrl = await getDownloadURL(imageRef); // Update imageUrl with the new URL
+      }
+
+      // Update Firestore document with new data including the image URL
+      const employeeRef = doc(db, 'employees_active', documentId);
+      await updateDoc(employeeRef, { ...editedData, imageUrl });
       setIsEditing(false);
       console.log('Employee data updated successfully');
     } catch (error) {
@@ -49,6 +61,13 @@ const ViewProfile = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedData({ ...editedData, [name]: value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewImage(file); // Store the newly uploaded image
+    }
   };
 
   if (!employeeData) {
@@ -69,11 +88,17 @@ const ViewProfile = () => {
         <label>First Name:</label>
         <input type="text" value={isEditing ? editedData.firstName : employeeData.firstName} readOnly={!isEditing} name="firstName" onChange={handleChange} />
       </div>
-      <div>
-        <label>Age:</label>
-        <input type="text" value={isEditing ? editedData.age : employeeData.age} readOnly={!isEditing} name="age" onChange={handleChange} />
-      </div>
       {/* Include other input fields for displaying other employee data */}
+      
+      {/* Display image */}
+      <div>
+        <label>Image:</label>
+        {isEditing ? (
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+        ) : (
+          <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
+        )}
+      </div>
 
       {isEditing ? (
         <div>
