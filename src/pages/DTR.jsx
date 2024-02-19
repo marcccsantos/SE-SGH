@@ -89,6 +89,13 @@ const DTR = () => {
       const timeOutData = {
         timeOut: today.toLocaleTimeString(),
       };
+
+      const timeInString = dtrSnapshot.docs[0].data().timeIn;
+      const timeInDate = new Date(today.toDateString() + ' ' + timeInString);
+      const timeOutDate = today;
+      const workHours = calculateWorkHours(timeInDate, timeOutDate);
+      
+      timeOutData.totalHours = workHours;
   
       await updateDoc(doc(dtrCollection, docId), timeOutData);
       console.log('Time Out recorded:', docId);
@@ -100,6 +107,39 @@ const DTR = () => {
       console.log('User has already timed out today or has not timed in.');
     }
   };
+
+  const calculateWorkHours = (timeInDate, timeOutDate) => {
+    const workDayStart = new Date(timeInDate);
+    workDayStart.setHours(7, 0, 0); // Set work day start time to 7:00 AM
+    const lunchBreakStart = new Date(timeInDate);
+    lunchBreakStart.setHours(12, 0, 0); // Set lunch break start time to 12:00 PM
+    const lunchBreakEnd = new Date(timeInDate);
+    lunchBreakEnd.setHours(13, 0, 0); // Set lunch break end time to 1:00 PM
+    const workDayEnd = new Date(timeInDate);
+    workDayEnd.setHours(17, 0, 0); // Set work day end time to 5:00 PM
+
+    let workHours = 0;
+
+    if (timeOutDate < workDayStart) {
+      workHours = 0;
+    } else if (timeOutDate <= workDayEnd) {
+      workHours = (timeOutDate - timeInDate) / (1000 * 60 * 60); // Calculate difference in hours
+      if (workHours < 1 && timeInDate.getHours() <= 7 && timeOutDate.getHours() > 7 && timeOutDate.getHours() <= 7.25) {
+        workHours = 1; // Grace period adjustment
+      }
+      if (timeOutDate >= lunchBreakStart && timeOutDate <= lunchBreakEnd) {
+        workHours -= 1; // Subtract 1 hour for lunch break
+      }
+    } else {
+      workHours = (workDayEnd - timeInDate) / (1000 * 60 * 60); // Calculate difference till end of work day
+      if (timeInDate <= lunchBreakStart) {
+        workHours -= 1; // Subtract 1 hour for lunch break if time in was before lunch break
+      }
+    }   
+
+    return Math.round(workHours);
+};
+
 
   useEffect(() => {
     document.body.classList.add('dtrPage');
