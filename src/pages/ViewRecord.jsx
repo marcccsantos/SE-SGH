@@ -13,6 +13,8 @@ const ViewRecord = () => {
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc'); // Default sort order
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
 
   useEffect(() => {
     fetchRecords();
@@ -111,6 +113,25 @@ const ViewRecord = () => {
     setSortOrder(order);
   };
 
+  const handleRowClick = (record) => {
+    setSelectedRecord(record);
+  };
+
+  //TO BE EDITED
+  const handleEdit = () => {
+    // Handle edit action
+    console.log('Editing record:', selectedRecord);
+    // Close modal or perform other actions
+    setSelectedRecord(null);
+  };
+
+  const handleArchive = () => {
+    // Handle archive action
+    console.log('Archiving record:', selectedRecord);
+    // Close modal or perform other actions
+    setSelectedRecord(null);
+  };
+
   return (
     <>
       <Header />
@@ -182,8 +203,11 @@ const ViewRecord = () => {
             </thead>
             <tbody>
               {filteredRecords.map((record, rowIndex) => (
-                <tr key={rowIndex} className={Object.values(record).every(value => !value) ? "empty-row" : ""}>
-                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
+                <tr
+                key={rowIndex}
+                className={Object.values(record).every(value => !value) ? "empty-row" : ""}
+                onClick={() => handleRowClick(record)}
+              >                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
                     <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{record[field] || "\u00A0"}</td>
                   ))}
                 </tr>
@@ -192,6 +216,15 @@ const ViewRecord = () => {
           </table>
         </div>
       </div>
+      {selectedRecord && (
+        <div className="popup-modal">
+          <div className="popup-content">
+            <h2>Options for Record</h2>
+            <button onClick={handleEdit}>Edit</button>
+            <button onClick={handleArchive}>Archive</button>
+          </div>
+        </div>
+      )}
       <Footer />
     </>
   );
