@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
 import { db } from '../firebase'; // Import your Firestore instance
 import Header from '../components/header';
 import Footer from '../components/footer';
 import './ViewRecord.css'; // Import the CSS file
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory
 
 const ViewRecord = () => {
   const { searchQuery } = useParams();
@@ -44,19 +44,23 @@ const ViewRecord = () => {
 }, [searchQuery, records]); // Added 'records' as a dependency
 
 
+const fetchRecords = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'employees_active'));
+    const results = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Include document ID in the data object
+      return { id: doc.id, ...data };
+    });
+    const uniqueRecords = filterUniqueRecords(results);
+    const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
+    setRecords(paddedRecords);
+    setFilteredRecords(paddedRecords);
+  } catch (error) {
+    console.error('Error fetching records:', error);
+  }
+};
 
-  const fetchRecords = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'employees'));
-      const results = querySnapshot.docs.map(doc => doc.data());
-      const uniqueRecords = filterUniqueRecords(results);
-      const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
-      setRecords(paddedRecords);
-      setFilteredRecords(paddedRecords);
-    } catch (error) {
-      console.error('Error fetching records:', error);
-    }
-  };
 
   const filterUniqueRecords = (records) => {
     const uniqueIds = new Set();
@@ -119,17 +123,61 @@ const ViewRecord = () => {
 
   //TO BE EDITED
   const handleEdit = () => {
-    // Handle edit action
-    console.log('Editing record:', selectedRecord);
-    // Close modal or perform other actions
-    setSelectedRecord(null);
+    // Check if a record is selected
+    if (selectedRecord) {
+      // Open ViewProfile page in a new tab with the employeeID of the selected record
+      window.open(`/ViewProfile/${selectedRecord.employeeID}`, '_blank');
+    } else {
+      console.error('No record selected for editing');
+    }
   };
 
-  const handleArchive = () => {
-    // Handle archive action
-    console.log('Archiving record:', selectedRecord);
-    // Close modal or perform other actions
-    setSelectedRecord(null);
+  const handleArchive = async () => {
+    try {
+      // Check if a record is selected
+      if (selectedRecord) {
+        // Get the document ID of the selected record
+        const documentId = selectedRecord.id;
+  
+        console.log('Selected Record:', selectedRecord);
+
+  
+        // Check if the record already exists in the archive
+        const archiveRecordRef = doc(db, 'employees_archive', documentId);
+        const archiveRecordSnapshot = await getDoc(archiveRecordRef);
+        if (archiveRecordSnapshot.exists()) {
+          console.error('Record already exists in the archive.');
+          return;
+        }
+  
+        // Get a reference to the selected record in the active collection
+        const activeRecordRef = doc(db, 'employees_active', documentId);
+        const activeRecordSnapshot = await getDoc(activeRecordRef);
+        
+        // Check if the selected record exists in the active collection
+        if (!activeRecordSnapshot.exists()) {
+          console.error('Selected record does not exist in the current collection.');
+          return;
+        }
+  
+        // Retrieve the data of the selected record
+        const recordData = activeRecordSnapshot.data();
+  
+        // Set the record data in the archive collection using the same document ID
+        await setDoc(archiveRecordRef, recordData);
+  
+        // Delete the record from the active collection
+        await deleteDoc(activeRecordRef);
+  
+        console.log('Record successfully archived.');
+      // Fetch records again to update UI
+      fetchRecords();
+      } else {
+        console.error('No record selected for archiving');
+      }
+    } catch (error) {
+      console.error('Error archiving record:', error);
+    }
   };
 
   return (
