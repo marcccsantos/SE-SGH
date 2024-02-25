@@ -14,7 +14,7 @@ const ViewRecord = () => {
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [sortOrder, setSortOrder] = useState('asc'); // Default sort order
   const [selectedRecord, setSelectedRecord] = useState(null);
-
+  const [showOptions, setShowOptions] = useState(false); // State to control display of options
 
   useEffect(() => {
     fetchRecords();
@@ -22,45 +22,43 @@ const ViewRecord = () => {
 
   useEffect(() => {
     const performSearch = async () => {
-        try {
-            if (!searchQuery || searchQuery.trim() === '') {
-                // If searchQuery is empty, reset filteredRecords to show all records
-                setFilteredRecords(records);
-            } else {
-                // Perform search based on searchQuery
-                const results = records.filter((record) =>
-                    Object.values(record).some((value) =>
-                        String(value).toLowerCase().includes(searchQuery.toLowerCase())
-                    )
-                );
-                setFilteredRecords(results);
-            }
-        } catch (error) {
-            console.error('Error searching records:', error);
+      try {
+        if (!searchQuery || searchQuery.trim() === '') {
+          // If searchQuery is empty, reset filteredRecords to show all records
+          setFilteredRecords(records);
+        } else {
+          // Perform search based on searchQuery
+          const results = records.filter((record) =>
+            Object.values(record).some((value) =>
+              String(value).toLowerCase().includes(searchQuery.toLowerCase())
+            )
+          );
+          setFilteredRecords(results);
         }
+      } catch (error) {
+        console.error('Error searching records:', error);
+      }
     };
 
     performSearch();
-}, [searchQuery, records]); // Added 'records' as a dependency
+  }, [searchQuery, records]); // Added 'records' as a dependency
 
-
-const fetchRecords = async () => {
-  try {
-    const querySnapshot = await getDocs(collection(db, 'employees_active'));
-    const results = querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      // Include document ID in the data object
-      return { id: doc.id, ...data };
-    });
-    const uniqueRecords = filterUniqueRecords(results);
-    const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
-    setRecords(paddedRecords);
-    setFilteredRecords(paddedRecords);
-  } catch (error) {
-    console.error('Error fetching records:', error);
-  }
-};
-
+  const fetchRecords = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'employees_active'));
+      const results = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        // Include document ID in the data object
+        return { id: doc.id, ...data };
+      });
+      const uniqueRecords = filterUniqueRecords(results);
+      const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
+      setRecords(paddedRecords);
+      setFilteredRecords(paddedRecords);
+    } catch (error) {
+      console.error('Error fetching records:', error);
+    }
+  };
 
   const filterUniqueRecords = (records) => {
     const uniqueIds = new Set();
@@ -119,9 +117,15 @@ const fetchRecords = async () => {
 
   const handleRowClick = (record) => {
     setSelectedRecord(record);
+    setShowOptions(true); // Show options when a row is clicked
   };
 
-  //TO BE EDITED
+  const handleOptionsClick = (e) => {
+    // Prevent row click event from being triggered
+    e.stopPropagation();
+    setShowOptions(prevState => !prevState); // Toggle options display
+  };
+
   const handleEdit = () => {
     // Check if a record is selected
     if (selectedRecord) {
@@ -140,7 +144,6 @@ const fetchRecords = async () => {
         const documentId = selectedRecord.id;
   
         console.log('Selected Record:', selectedRecord);
-
   
         // Check if the record already exists in the archive
         const archiveRecordRef = doc(db, 'employees_archive', documentId);
@@ -170,8 +173,8 @@ const fetchRecords = async () => {
         await deleteDoc(activeRecordRef);
   
         console.log('Record successfully archived.');
-      // Fetch records again to update UI
-      fetchRecords();
+        // Fetch records again to update UI
+        fetchRecords();
       } else {
         console.error('No record selected for archiving');
       }
@@ -189,9 +192,7 @@ const fetchRecords = async () => {
             className="view-record-input"
             type="text"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search..."
-          />
+            onChange={(e) => setSearchInput(e.target.value)} placeholder="Search..."/>
           <button className="view-record-button" onClick={handleSearch}>Search</button>
         </div>
         <div className="view-record-sort">
@@ -223,6 +224,7 @@ const fetchRecords = async () => {
           </select>
           <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Apply Quick Sort</button>
         </div>
+        
         <div style={{ overflowX: 'auto' }}>
           {/* Display filtered and sorted content in a table */}
           <table className="view-record-table">
@@ -252,10 +254,11 @@ const fetchRecords = async () => {
             <tbody>
               {filteredRecords.map((record, rowIndex) => (
                 <tr
-                key={rowIndex}
-                className={Object.values(record).every(value => !value) ? "empty-row" : ""}
-                onClick={() => handleRowClick(record)}
-              >                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
+                  key={rowIndex}
+                  className={Object.values(record).every(value => !value) ? "empty-row" : ""}
+                  onClick={() => handleRowClick(record)}
+                >
+                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
                     <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{record[field] || "\u00A0"}</td>
                   ))}
                 </tr>
@@ -263,16 +266,16 @@ const fetchRecords = async () => {
             </tbody>
           </table>
         </div>
-      </div>
-      {selectedRecord && (
-        <div className="popup-modal">
-          <div className="popup-content">
-            <h2>Options for Record</h2>
-            <button onClick={handleEdit}>Edit</button>
-            <button onClick={handleArchive}>Archive</button>
+        {selectedRecord && showOptions && (
+          <div className="options-container">
+            <div className="popup-content">
+              <h2>Options for Record</h2>
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={handleArchive}>Archive</button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <Footer />
     </>
   );
