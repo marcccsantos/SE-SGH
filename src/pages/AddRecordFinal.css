@@ -1,0 +1,117 @@
+.form-container {
+    min-height: 100vh;
+}
+form{
+    display: flex;
+    flex-direction: row;
+}
+.preview {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+}
+.preview-img{
+    width: 100%;
+    max-width: 215px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.upload{
+    margin-left: 69px;
+}
+.upload-img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 350px;
+}
+.info{
+    border: 1px solid red;
+    margin-top: 35px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.field{
+    position: relative;
+    font-size: 14px;
+    font-family: 'Inter';
+    padding-top: 20px;
+    margin-bottom: 5px;
+}
+.field .input{
+    border: none;
+    appearance: none;
+    background: #f2f2f2;
+    padding: 12px;
+    border-radius: 3px;
+    outline:none;
+    font-size: 14px;
+    font-family: 'Inter';
+    width: 100%;
+    max-width: 120px;
+}
+.field .placeholder{
+    position: absolute;
+    left: 12px;
+    top: calc(50% + 10px);
+    transform: translateY(-50%);
+    color: #aaa;
+    transition: 
+        top 0.3s ease,
+        font-size 0.3s ease,
+        color 0.3s ease;
+}
+.field .input:valid + .placeholder,
+.field .input:focus + .placeholder{
+    top: 10px;
+    font-size: 10px;
+    color: #222;
+}
+.text-fields{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.text-fields input[name="empid"] {
+    grid-column: 1;
+    grid-row: 1;
+}
+.text-fields input[name="fname"] {
+    grid-column: 2;
+    grid-row: 1;
+}
+.text-fields input[name="lname"] {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+@media screen and (max-width:425px) {
+    form{
+        display: flex;
+        flex-direction: column;
+    }
+    .field .input{
+        width: 70%;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        font-size: 10px;
+        margin-left: -4px;
+    }
+    .field .placeholder{
+        font-size: 10px;
+        margin-left: -4px;
+        left: 7px;
+    }
+    .field .input:valid + .placeholder,
+    .field .input:focus + .placeholder{
+        top: 10px;
+        font-size: 8px;
+    }
+}
