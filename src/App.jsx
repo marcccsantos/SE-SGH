@@ -15,6 +15,7 @@ import Payroll from "./pages/Payroll";
 import PayrollFinal from "./pages/PayrollFinal";
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR"
+import EmployeeProfile from "./pages/EmployeeProfile"
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -93,6 +94,11 @@ const App = () => {
                     <Route path="/ArchiveRecord" element={
                         <ProtectedRoute user={user}>
                             <ArchiveRecord />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/EmployeeProfile" element={
+                        <ProtectedRoute user={user}>
+                            <EmployeeProfile />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={<NotFound />}/>

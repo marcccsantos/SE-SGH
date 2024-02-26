@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { addDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase'; // Import your Firestore and Storage instances
+import { db, storage, auth } from '../firebase'; // Import your Firestore and Storage instances
 import './AddRecord.css'; 
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
@@ -85,7 +86,7 @@ const AddRecordFinal = () => {
         const imageUrl = await getDownloadURL(imageRef);
     
         // Add record to Firestore database 
-        await addDoc(collection(db, 'employees_active'), {
+        const docRef = await addDoc(collection(db, 'employees_active'), {
           employeeID: employeeID.trim(),
           lastName,
           firstName,
@@ -118,6 +119,16 @@ const AddRecordFinal = () => {
           pagibigDeduction: parseFloat(pagibigDeduction),
           imageUrl,
         });
+
+       // Retrieve the email from the added document
+      const docSnapshot = await getDoc(docRef);
+      const emailUser = docSnapshot.data().email;
+
+      // Create a user with email and a concatenated password
+      const auth = getAuth();
+      const password = `${employeeID.trim()}${lastName}`; // Concatenate employeeID and lastName
+      console.log(password);
+      await createUserWithEmailAndPassword(auth, emailUser, password);
 
       console.log('Record added successfully');
     } catch (error) {
@@ -177,7 +188,7 @@ const AddRecordFinal = () => {
             )}
             </div>
             <div className="upload">
-            <input type="file" accept="image/*" onChange={handleImageChange}  />
+            <input type="file" accept="image/*" onChange={handleImageChange} required />
             </div>
           </div>
 
@@ -296,6 +307,7 @@ const AddRecordFinal = () => {
                           onChange={(e) => setAge(e.target.value)}
                           disabled // Disable age field
                           className="input"
+                          required
                       />
                       <span className={`placeholder ${age ? 'filled' : ''}`}>Age</span>
                     </label>
