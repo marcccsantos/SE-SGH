@@ -177,7 +177,7 @@ const AddRecordFinal = () => {
             )}
             </div>
             <div className="upload">
-            <input type="file" accept="image/*" onChange={handleImageChange}  />
+            <input type="file" accept="image/*" onChange={handleImageChange} required />
             </div>
           </div>
 
