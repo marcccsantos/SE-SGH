@@ -1,19 +1,3 @@
-/* Original styles for the search input */
-.view-record-input {
-  padding: 8px;
-  margin-right: 10px;
-  border-radius: 20px;
-}
-
-/* Original styles for the search button */
-.view-record-button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
 
 /* Original styles for the table */
 .view-record-table {
@@ -61,27 +45,12 @@
   background-color: #D9D9D9;
 }
 
-/* Original styles for the container */
-.view-record-container {
-  margin: auto;
-  padding: 20px;
-  border: 10px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-family: "Inter", sans-serif;
-  min-height: 100vh;
-}
-
 /* Original styles for the heading */
 .view-record-heading {
   margin-top: 0;
   margin-bottom: 20px;
 }
 
-/* Original styles for the sort section */
-.view-record-sort {
-  margin-bottom: 20px;
-}
 
 .view-record-radio-label {
   margin-right: 20px;
@@ -93,19 +62,52 @@
   margin-top: 20px;
 }
 
-/* Revised styles for the search input */
 .view-record-input {
-  width: 40%;
-  margin-left: 36px;
-  margin-top: 3px;
+  width: 60%;
+  padding: 10px;
+  margin-right: 20px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  border-radius: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   color: black;
-  border: 1px solid #000; /* Add border to create an outline */
-  border-radius: 10px; /* Add border radius */
-  padding: 8px; /* Add padding */
+  border: 1px solid transparent;
 }
+/* Revised styles for the search input emp id etc */
+.view-record-input1 {
+    width: 80%;
+    padding: 10px;
+    margin-left: 18px;
+    margin-top: 3px;
+    text-align: center;
+    font-family: 'Inter';
+    font-weight:600;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+    color: black;
+    border: 1px solid transparent;
+}
+.view-record-input2 { /*asc desc*/
+  width: 80%;
+    padding: 10px;
+    margin-left: 18px;
+    margin-top: 3px;
+    text-align: center;
+    font-family: 'Inter';
+    font-weight:600;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+    color: black;
+    border: 1px solid transparent;
+}
+
 
 /* Revised styles for the search input when focused */
 .view-record-input:focus {
@@ -121,8 +123,8 @@
 
 /* Revised styles for the search button */
 .view-record-button {
-  width: 100%;
-  max-width: 50px;
+  width: 70%;
+  max-width: 80px;
   background-color: white;
   border-style: none;
   font-family: 'Inter';
@@ -138,17 +140,29 @@
 
 /* Add styles for the search bar container */
 .view-record-search {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 80%;
+  margin-top: -50px;
+  margin-right: 50px;
+  text-align: center;
+  font-family: 'Inter';
+  font-weight:600;
+  color: black;
+  border: 1px solid transparent;
 }
 
-/* Add styles for the search input */
-.view-record-input {
-  padding: 8px;
-  margin-right: 10px;
-  border-radius: 20px;
-  /* Additional styles if needed */
+/* Original styles for popup content */
+.popup-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Revised styles for the container */
+.view-record-container {
+  position: relative;
+  margin: auto;
+  padding: 75px;;
+  font-family: "Inter", sans-serif;
+  min-height: 100vh;
 }
 
 /* Media queries for responsiveness */
@@ -157,12 +171,6 @@
     width: 70%;
     margin-left: 35px;
     font-size: 1.563vw;
-  }
-  
-  .view-record-button {
-    max-width: 40px;
-    font-size: 1.563vw;
-    margin-top: 10px;
   }
 }
 
@@ -173,10 +181,5 @@
     height: 2px;
     font-size: 1.563vw;
   }
-  
-  .view-record-button {
-    max-width: 40px;
-    font-size: 1.563vw;
-    margin-top: 10px;
-  }
 }
+

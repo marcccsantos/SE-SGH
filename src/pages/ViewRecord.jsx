@@ -119,6 +119,7 @@ const ViewRecord = () => {
     setSelectedRecord(record);
     setShowOptions(true); // Show options when a row is clicked
   };
+  
 
   const handleOptionsClick = (e) => {
     // Prevent row click event from being triggered
@@ -192,12 +193,11 @@ const ViewRecord = () => {
             className="view-record-input"
             type="text"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)} placeholder="Search..."/>
+            onChange={(e) => setSearchInput(e.target.value)} placeholder="Search Record"/>
           <button className="view-record-button" onClick={handleSearch}>Search</button>
         </div>
         <div className="view-record-sort">
-          <select className="view-record-input" onChange={(e) => setQuickFilter(e.target.value)}>
-            <option value="">Quick Sort</option>
+          <select className="view-record-input1" onChange={(e) => setQuickFilter(e.target.value)}>
             <option value="employeeID">Employee ID</option>
             <option value="lastName">Last Name</option>
             <option value="firstName">First Name</option>
@@ -218,11 +218,13 @@ const ViewRecord = () => {
             <option value="pagibig">Pagibig</option>
             <option value="sss">SSS</option>
           </select>
-          <select className="view-record-input" onChange={(e) => handleSortOrderChange(e.target.value)}>
+          </div>
+          <div>
+          <select className="view-record-input2" onChange={(e) => handleSortOrderChange(e.target.value)}>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Apply Quick Sort</button>
+          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Sort</button>
         </div>
         
         <div style={{ overflowX: 'auto' }}>

@@ -190,13 +190,12 @@ const fetchRecords = async () => {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search..."
+            placeholder="Search Archive"
           />
           <button className="view-record-button" onClick={handleSearch}>Search</button>
         </div>
         <div className="view-record-sort">
-          <select className="view-record-input" onChange={(e) => setQuickFilter(e.target.value)}>
-            <option value="">Quick Sort</option>
+          <select className="view-record-input1" onChange={(e) => setQuickFilter(e.target.value)}>
             <option value="employeeID">Employee ID</option>
             <option value="lastName">Last Name</option>
             <option value="firstName">First Name</option>
@@ -217,11 +216,11 @@ const fetchRecords = async () => {
             <option value="pagibig">Pagibig</option>
             <option value="sss">SSS</option>
           </select>
-          <select className="view-record-input" onChange={(e) => handleSortOrderChange(e.target.value)}>
+          <select className="view-record-input2" onChange={(e) => handleSortOrderChange(e.target.value)}>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Apply Quick Sort</button>
+          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Sort</button>
         </div>
         <div style={{ overflowX: 'auto' }}>
           {/* Display filtered and sorted content in a table */}
