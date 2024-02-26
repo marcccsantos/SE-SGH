@@ -51,7 +51,7 @@ form{
 }
 .id-info{
     margin-bottom: 35px;
-}
+} 
 .field{
     position: relative;
     font-size: 14px;
@@ -61,6 +61,9 @@ form{
 }
 .field .input{
     border: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    -moz-appearance:none;
     appearance: none;
     background: #f2f2f2;
     padding: 12px;
@@ -70,6 +73,7 @@ form{
     font-family: 'Inter';
     width: 100%;
     max-width: 170px;
+    margin-bottom: 10px;
 }
 .field .placeholder{
     position: absolute;
@@ -84,7 +88,7 @@ form{
 }
 .field .input:valid + .placeholder,
 .field .input:focus + .placeholder{
-    top: 10px;
+    top: 1px;
     font-size: 10px;
     color: #222;
 }
@@ -253,7 +257,6 @@ input[type=date]:focus::-webkit-datetime-edit {
         padding-top: 11px;
         padding-bottom: 11px;
         font-size: 10px;
-        margin-top: 5px;
     }
     .field {
         margin-right: 0;
@@ -275,7 +278,8 @@ input[type=date]:focus::-webkit-datetime-edit {
     }
     .info,
     .address-info,
-    .employee-info{
+    .employee-info,
+    .id-info{
         display: flex;
         margin: 20px;
     }
@@ -322,11 +326,11 @@ input[type=date]:focus::-webkit-datetime-edit {
     }
     .field .input:disabled + .placeholder.filled {
         font-size: 8px;
-        top: 11px;
+        top: 4px;
     }
     .field .input:valid + .placeholder,
     .field .input:focus + .placeholder{
-        top: 11px;
+        top: 4px;
         color: #222;
     }
     .date .field .placeholder,
@@ -383,11 +387,11 @@ input[type=date]:focus::-webkit-datetime-edit {
     }
     .field .input:disabled + .placeholder.filled {
         font-size: 8px;
-        top: 11px;
+        top: 4px;
     }
     .field .input:valid + .placeholder,
     .field .input:focus + .placeholder{
-        top: 11px;
+        top: 4px;
         color: #222;
     }
 }

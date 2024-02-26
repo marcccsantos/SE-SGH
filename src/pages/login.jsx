@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './login.css'; 
-import { auth } from "../firebase";
+import { auth, db} from "../firebase";
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
@@ -26,13 +27,54 @@ const Login = () => {
     };
   }, []); 
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!username || !password) return;
     signInWithEmailAndPassword(auth, username, password)
-      .then((userCredential) => {
+      .then(async(userCredential) => {
         const user = userCredential.user;
-        console.log(user);
-        navigate('/search');
+        {/*console.log(user);
+        navigate('/search');*/}
+        // Retrieve role information from Firestore
+        try {
+          const querySnapshot = await getDocs(collection(db, 'employees_active'));
+          const results = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            // Check if 'email' matches the provided username
+            if (data && data.email === username) {
+              return { id: doc.id, role: data.role };
+            } else {
+                return null; // Or handle the case where 'role' field is missing
+            }
+          }).filter(Boolean); // Remove null entries
+          console.log('Roles:', results);
+
+          if (results.length > 0) {
+            // If user data exists with matching email/username
+            const userRole = results[0].role;
+            // Perform actions based on user role
+            if (userRole === 'admin') {
+                console.log('User is admin');
+                navigate('/search');
+            } else if (userRole === 'employee') {
+                console.log('User is user');
+                navigate('/EmployeeProfile');
+            } else {
+                console.log('User role not recognized');
+            }
+        } else {
+          setErrorMsg("Invalid username or password. Please try again.");
+          setLoginAttempts(prevAttempts => prevAttempts + 1);
+          if (loginAttempts === 2 && waitTime === 0) {
+            setWaitTime(60); 
+            startCountdown(); 
+          }
+          console.log(loginAttempts)
+          console.log('No user found with the provided email/username');
+        }
+
+        } catch (error) {
+          console.error('Error fetching records:', error);
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
