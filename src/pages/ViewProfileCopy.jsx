@@ -330,14 +330,15 @@ const ViewProfile = () => {
       </div>
 
       {isEditing ? (
-        <div>
-          <button type="button" onClick={handleSave}>Save</button>
-        </div>
-      ) : (
-        <div>
-          <button type="button" onClick={handleEdit}>Edit</button>
-        </div>
-      )}
+  <div>
+    <button type="button" onClick={handleSave}>Save</button>
+    <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
+  </div>
+) : (
+  <div>
+    <button type="button" onClick={handleEdit}>Edit</button>
+  </div>
+)}
     </form>
   );
 };
