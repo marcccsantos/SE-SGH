@@ -4,6 +4,8 @@ import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/fire
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase'; // Import your Firestore and Storage instances
 
+
+
 const ViewProfile = () => {
   const { employeeID } = useParams();
   const [employeeData, setEmployeeData] = useState(null);
@@ -320,16 +322,16 @@ const ViewProfile = () => {
       {/* Display image */}
       <div>
         <label>Image:</label>
-        <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
-        {isEditing && (
+        {isEditing ? (
           <input type="file" accept="image/*" onChange={handleImageChange} />
+        ) : (
+          <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
         )}
       </div>
 
       {isEditing ? (
         <div>
           <button type="button" onClick={handleSave}>Save</button>
-          <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
       ) : (
         <div>

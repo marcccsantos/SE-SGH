@@ -234,8 +234,7 @@ const handleExportToExcel = () => {
   XLSX.writeFile(wb, filename);
 };
 
-
-  return (
+return (
     <div>
       <h1>Payroll Data</h1>
       {/* Date selection */}
