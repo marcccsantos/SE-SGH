@@ -30,8 +30,8 @@ function ForgotPassword(){
         <div className="forgot">
           <div className="forgot-card">
               <h1 className="forgot-text">Forgot Password?</h1>
-              <p className="info-forgot">Please enter your email address below to receive a password reset link.</p>
-              <form onSubmit={(e)=>handleSubmit(e)}>
+              <p className="info-forgot-pass">Please enter your email address below to receive a password reset link.</p>
+              <form className="input-form" onSubmit={(e)=>handleSubmit(e)}>
                   <input 
                     className="email-forgot"
                     name="email"
