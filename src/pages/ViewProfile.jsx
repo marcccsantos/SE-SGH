@@ -118,17 +118,17 @@ const ViewProfile = () => {
         <form>
           
         <div className="upload-img">
-  <div className="preview">
-    {isEditing ? (
-      <>
-        <img src={newImage ? URL.createObjectURL(newImage) : employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-      </>
-    ) : (
-      <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
-    )}
-  </div>
-</div>
+          <div className="preview">
+            {isEditing ? (
+              <>
+                <img src={newImage ? URL.createObjectURL(newImage) : employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
+                <input type="file" accept="image/*" onChange={handleImageChange} />
+              </>
+            ) : (
+              <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
+            )}
+          </div>
+        </div>
 
 
             <div className="form-information">

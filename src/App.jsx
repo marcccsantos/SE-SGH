@@ -101,6 +101,11 @@ const App = () => {
                             <EmployeeProfile />
                         </ProtectedRoute>
                     } />
+                    <Route path="/EmployeeProfile/:userEmployeeID" element={
+                        <ProtectedRoute user={user}>
+                            <EmployeeProfile />
+                        </ProtectedRoute>
+                    } />
                     <Route path="*" element={<NotFound />}/>
                     <Route path="/DTR" element={<DTR />}/>
                 </Routes>
