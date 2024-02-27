@@ -15,7 +15,8 @@ const ViewRecord = () => {
   const [sortOrder, setSortOrder] = useState('asc'); // Default sort order
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
-
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const rowHeight = 50; // Adjust this value based on your row height
   useEffect(() => {
     fetchRecords();
   }, []);
@@ -114,18 +115,19 @@ const ViewRecord = () => {
   const handleSortOrderChange = (order) => {
     setSortOrder(order);
   };
-
-  const handleRowClick = (record) => {
-    setSelectedRecord(record);
-    setShowOptions(true); // Show options when a row is clicked
+  const handleRowClick = (rowIndex) => {
+    const clickedRecord = filteredRecords[rowIndex];
+    // Check if clickedRecord is not empty (i.e., it has at least one value)
+    if (Object.values(clickedRecord).some(value => value !== undefined && value !== null)) {
+      setSelectedRecord(clickedRecord);
+      setSelectedRowIndex(rowIndex);
+    }
   };
-  
 
-  const handleOptionsClick = (e) => {
-    // Prevent row click event from being triggered
-    e.stopPropagation();
-    setShowOptions(prevState => !prevState); // Toggle options display
-  };
+const calculatePopupPosition = () => {
+  const popupTop = selectedRowIndex * rowHeight + 250; // Add or subtract offset as needed
+  return popupTop;
+};
 
   const handleEdit = () => {
     // Check if a record is selected
@@ -255,11 +257,12 @@ const ViewRecord = () => {
             </thead>
             <tbody>
               {filteredRecords.map((record, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className={Object.values(record).every(value => !value) ? "empty-row" : ""}
-                  onClick={() => handleRowClick(record)}
-                >
+             <tr
+             key={rowIndex}
+             className={Object.values(record).every(value => !value) ? "empty-row" : ""}
+             onClick={() => handleRowClick(rowIndex)}
+             style={{ backgroundColor: rowIndex === selectedRowIndex ? '#F9AF40' : '' }}
+           >
                   {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
                     <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{record[field] || "\u00A0"}</td>
                   ))}
@@ -268,15 +271,15 @@ const ViewRecord = () => {
             </tbody>
           </table>
         </div>
-        {selectedRecord && showOptions && (
-          <div className="options-container">
-            <div className="popup-content">
-              <h2>Options for Record</h2>
-              <button onClick={handleEdit}>Edit</button>
-              <button onClick={handleArchive}>Archive</button>
-            </div>
-          </div>
-        )}
+        {selectedRecord && (
+  <div className="options-container" style={{ top: `${calculatePopupPosition()}px` }}>
+    <div className="popup-content">
+      <button onClick={handleEdit}>Edit</button>
+      <button onClick={handleArchive}>Archive</button>
+    </div>
+  </div>
+)}
+
       </div>
       <Footer />
     </>
