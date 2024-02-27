@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './login.css'; 
 import { auth, db} from "../firebase";
 import { collection, getDocs, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const Login = () => {
   const [username, setUsername] = useState(''); 
@@ -27,6 +27,17 @@ const Login = () => {
     };
   }, []); 
 
+  useEffect(() => {
+    // Automatically log out when the Login component mounts
+    handleLogOut();
+  }, []);
+
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => console.log("Sign Out"))
+      .catch((error) => console.log(error));
+  };
+
   const handleLogin = async () => {
     if (!username || !password) return;
     signInWithEmailAndPassword(auth, username, password)
@@ -41,23 +52,21 @@ const Login = () => {
             const data = doc.data();
             // Check if 'email' matches the provided username
             if (data && data.email === username) {
-              return { id: doc.id, role: data.role };
+              return { id: doc.id, role: data.role, employeeID: data.employeeID };
             } else {
                 return null; // Or handle the case where 'role' field is missing
             }
           }).filter(Boolean); // Remove null entries
-          console.log('Roles:', results);
 
           if (results.length > 0) {
             // If user data exists with matching email/username
             const userRole = results[0].role;
+            const userEmployeeID = results[0].employeeID;
             // Perform actions based on user role
             if (userRole === 'admin') {
-                console.log('User is admin');
                 navigate('/search');
             } else if (userRole === 'employee') {
-                console.log('User is user');
-                navigate('/EmployeeProfile');
+                navigate(`/EmployeeProfile/${userEmployeeID}`);
             } else {
                 console.log('User role not recognized');
             }

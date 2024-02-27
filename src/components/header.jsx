@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import './header.css'; 
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
