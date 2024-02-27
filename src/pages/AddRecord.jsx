@@ -180,11 +180,11 @@ const AddRecordFinal = () => {
           <div className="upload-img">
             <div className="preview">
             {previewImage ? (
-                <img className="preview-img" src={previewImage} alt="Preview" style={{ maxWidth: '200px' }} />
+              <img className="preview-img" src={previewImage} alt="Preview" style={{ maxWidth: '200px' }} />
             ):(
-                <div className="preview-img">
-                <img src="add-image.png" alt="Avatar"/>
-                </div>
+              <div className="preview-img">
+              <img src="add-image.png" alt="Avatar"/>
+              </div>
             )}
             </div>
             <div className="upload">

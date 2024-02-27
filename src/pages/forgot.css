@@ -8,6 +8,10 @@ body.forgotPage {
     flex-direction: column;
     height: 100vh;
 }
+.input-form {
+    display: flex;
+    flex-direction: column;
+}
 .forgot-card {
     padding: 40px;
     border-radius: 10px;
@@ -44,7 +48,7 @@ body.forgotPage {
     transition: ease-out;
     text-decoration: underline;
 }
-.info-forgot {
+.info-forgot-pass {
     width: 100%;
     max-width: 300px;
     font-size: 13px;
