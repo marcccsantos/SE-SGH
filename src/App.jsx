@@ -17,6 +17,7 @@ import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR";
 import EmployeeProfile from "./pages/EmployeeProfile";
 import Unauthorized from "./pages/Unauthorized";
+import SearchProfile from "./pages/DefaultViewProfile";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -66,6 +67,15 @@ const App = () => {
             element={
               <ProtectedRoute user={user}>
                 <ViewRecord />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/ViewProfile"
+            element={
+              <ProtectedRoute user={user}>
+                <SearchProfile />
               </ProtectedRoute>
             }
           />
