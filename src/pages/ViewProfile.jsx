@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase'; // Import your Firestore and Storage instances
 import './AddRecord.css'; 
 import Header from '../components/header';
 import Footer from '../components/footer';
+import NotFound from './not-found';
 
 const ViewProfile = () => {
   const { employeeID } = useParams();
@@ -15,6 +16,10 @@ const ViewProfile = () => {
   const [documentId, setDocumentId] = useState(null);
   const [newImage, setNewImage] = useState(null); // New state to hold newly uploaded image
   const [age, setAge] = useState('');
+  const [extras, setExtras] = useState('');
+  const [deductions, setDeductions] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+
 
 
   useEffect(() => {
@@ -107,16 +112,35 @@ const ViewProfile = () => {
   };
 
   if (!employeeData) {
-    return <div>Loading...</div>;
+    return <NotFound/>;
   }
+
+  // Function to handle submission of extras and deductions
+  const submitExtrasAndDeductions = async () => {
+    try {
+      // Create a new document in the "extras_and_deductions" collection
+      await addDoc(collection(db, 'extras_and_deductions'), {
+        date: selectedDate,
+        employeeID,
+        extras: parseFloat(extras), // Convert to number
+        deductions: parseFloat(deductions) // Convert to number
+      });
+      // Clear input fields after submission
+      setSelectedDate('');
+      setExtras('');
+      setDeductions('');
+      console.log('Extras and deductions submitted successfully');
+    } catch (error) {
+      console.error('Error submitting extras and deductions:', error);
+    }
+  };
+
 
   return (
     <>
       <Header />
-
       <div className="form-container">
         <form>
-          
         <div className="upload-img">
           <div className="preview">
             {isEditing ? (
@@ -129,8 +153,6 @@ const ViewProfile = () => {
             )}
           </div>
         </div>
-
-
             <div className="form-information">
               <div className="info">
                 <div className="personal-information">
@@ -572,6 +594,58 @@ const ViewProfile = () => {
                   </label>
                 </div>
               </div>
+
+              <div className="extras-deductions-form">
+          <h2>Submit Extras and Deductions</h2>
+          <div className="text-fields">
+          <label htmlFor="date">Date:</label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                required
+              />
+            <div className="extras">
+              <label className="field">
+                <input
+                  type="number"
+                  name="extras"
+                  id="extras"
+                  value={extras}
+                  onChange={(e) => setExtras(e.target.value)}
+                  className="input"
+                  required
+                />
+                <span className="placeholder">Extras</span>
+              </label>
+            </div>
+            <div className="deductions">
+              <label className="field">
+                <input
+                  type="number"
+                  name="deductions"
+                  id="deductions"
+                  value={deductions}
+                  onChange={(e) => setDeductions(e.target.value)}
+                  className="input"
+                  required
+                />
+                <span className="placeholder">Deductions</span>
+              </label>
+            </div>
+          </div>
+          <div className="submit-extras-deductions">
+            <button type="button" className="submit-btn" onClick={submitExtrasAndDeductions}>
+              Submit
+            </button>
+          </div>
+        </div>
+
+
+
+
               <div className="save-rec">
               {isEditing ? (
                 <div>
@@ -600,8 +674,6 @@ const ViewProfile = () => {
               </div>
             </div>
           </div>
-
-          
         </form>
       </div>
       <Footer />
