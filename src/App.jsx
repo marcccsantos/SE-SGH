@@ -16,6 +16,7 @@ import PayrollFinal from "./pages/PayrollFinal";
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR"
 import EmployeeProfile from "./pages/EmployeeProfile"
+import SearchProfile from "./pages/DefaultViewProfile";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -54,11 +55,18 @@ const App = () => {
                             <ViewRecord />
                         </ProtectedRoute>
                     } />
+
                     <Route path="/ViewRecord" element={
                         <ProtectedRoute user={user}>
                             <ViewRecord />
                         </ProtectedRoute>
                     } />
+
+                    <Route path="/ViewProfile" element={
+                        <ProtectedRoute user={user}>
+                            <SearchProfile />
+                        </ProtectedRoute>
+                    }/>
 
                     <Route path="/ViewProfile/:employeeID" element={
                         <ProtectedRoute user={user}>

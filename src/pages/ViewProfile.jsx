@@ -6,6 +6,7 @@ import { db, storage } from '../firebase'; // Import your Firestore and Storage 
 import './AddRecord.css'; 
 import Header from '../components/header';
 import Footer from '../components/footer';
+import NotFound from './not-found';
 
 const ViewProfile = () => {
   const { employeeID } = useParams();
@@ -111,7 +112,7 @@ const ViewProfile = () => {
   };
 
   if (!employeeData) {
-    return <div>Loading...</div>;
+    return <NotFound/>;
   }
 
   // Function to handle submission of extras and deductions
