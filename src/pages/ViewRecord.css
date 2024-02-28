@@ -197,6 +197,25 @@
   background-color: #e0e0e0;
 }
 
+/* Column Selector CSS */
+
+.column-selector-container {
+  margin-top: 20px;
+}
+
+.column-selector-group {
+  margin-bottom: 10px;
+}
+
+.column-selector-label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.column-selector-checkbox {
+  margin-right: 5px;
+}
+
 
 /* Media queries for responsiveness */
 @media screen and (min-width: 321px) and (max-width: 475px) {

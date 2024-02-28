@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase'; // Import your Firestore instance
 import Header from '../components/header';
 import Footer from '../components/footer';
 import './ViewRecord.css'; // Import the CSS file
-import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory
+import { useParams } from 'react-router-dom'; // Import useParams only, since useHistory is not used
 
 const ViewRecord = () => {
   const { searchQuery } = useParams();
@@ -16,7 +16,9 @@ const ViewRecord = () => {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [selectedColumns, setSelectedColumns] = useState([]); // State to store selected columns
   const rowHeight = 50; // Adjust this value based on your row height
+
   useEffect(() => {
     fetchRecords();
   }, []);
@@ -56,6 +58,7 @@ const ViewRecord = () => {
       const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
       setRecords(paddedRecords);
       setFilteredRecords(paddedRecords);
+      setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
     } catch (error) {
       console.error('Error fetching records:', error);
     }
@@ -115,6 +118,7 @@ const ViewRecord = () => {
   const handleSortOrderChange = (order) => {
     setSortOrder(order);
   };
+
   const handleRowClick = (rowIndex) => {
     const clickedRecord = filteredRecords[rowIndex];
     // Check if clickedRecord is not empty (i.e., it has at least one value)
@@ -124,10 +128,10 @@ const ViewRecord = () => {
     }
   };
 
-const calculatePopupPosition = () => {
-  const popupTop = selectedRowIndex * rowHeight + 250; // Add or subtract offset as needed
-  return popupTop;
-};
+  const calculatePopupPosition = () => {
+    const popupTop = selectedRowIndex * rowHeight + 250; // Add or subtract offset as needed
+    return popupTop;
+  };
 
   const handleEdit = () => {
     // Check if a record is selected
@@ -145,9 +149,9 @@ const calculatePopupPosition = () => {
       if (selectedRecord) {
         // Get the document ID of the selected record
         const documentId = selectedRecord.id;
-  
+
         console.log('Selected Record:', selectedRecord);
-  
+
         // Check if the record already exists in the archive
         const archiveRecordRef = doc(db, 'employees_archive', documentId);
         const archiveRecordSnapshot = await getDoc(archiveRecordRef);
@@ -155,26 +159,26 @@ const calculatePopupPosition = () => {
           console.error('Record already exists in the archive.');
           return;
         }
-  
+
         // Get a reference to the selected record in the active collection
         const activeRecordRef = doc(db, 'employees_active', documentId);
         const activeRecordSnapshot = await getDoc(activeRecordRef);
-        
+
         // Check if the selected record exists in the active collection
         if (!activeRecordSnapshot.exists()) {
           console.error('Selected record does not exist in the current collection.');
           return;
         }
-  
+
         // Retrieve the data of the selected record
         const recordData = activeRecordSnapshot.data();
-  
+
         // Set the record data in the archive collection using the same document ID
         await setDoc(archiveRecordRef, recordData);
-  
+
         // Delete the record from the active collection
         await deleteDoc(activeRecordRef);
-  
+
         console.log('Record successfully archived.');
         // Fetch records again to update UI
         fetchRecords();
@@ -183,6 +187,26 @@ const calculatePopupPosition = () => {
       }
     } catch (error) {
       console.error('Error archiving record:', error);
+    }
+  };
+
+  const handleColumnSelect = (groupName, groupColumns) => {
+    if (selectedColumns.some(col => groupColumns.includes(col))) {
+      // If any column from the group is already selected, deselect all from the group
+      setSelectedColumns(selectedColumns.filter(col => !groupColumns.includes(col)));
+    } else {
+      // If none of the columns from the group are selected, select all from the group
+      setSelectedColumns([...selectedColumns, ...groupColumns]);
+    }
+  };
+
+  const handleShowAllToggle = (event) => {
+    if (event.target.checked) {
+      // If "Show All" is checked, select all columns
+      setSelectedColumns(Object.keys(paddedRecords[0] || {}));
+    } else {
+      // If "Show All" is unchecked, deselect all columns
+      setSelectedColumns([]);
     }
   };
 
@@ -195,17 +219,25 @@ const calculatePopupPosition = () => {
             className="view-record-input"
             type="text"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)} placeholder="Search Record"/>
-          <button className="view-record-button" onClick={handleSearch}>Search</button>
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search Record"
+          />
+          <button className="view-record-button" onClick={handleSearch}>
+            Search
+          </button>
         </div>
+  
         <div className="view-record-sort">
-          <select className="view-record-input1" onChange={(e) => setQuickFilter(e.target.value)}>
-            <option value="employeeID">Employee ID</option>
+          <select
+            className="view-record-input1"
+            onChange={(e) => setQuickFilter(e.target.value)}
+          >
+             <option value="employeeID">Employee ID</option>
             <option value="lastName">Last Name</option>
             <option value="firstName">First Name</option>
             <option value="middleName">Middle Name</option>
             <option value="gender">Gender</option>
-            <option value="birthday">Birthday</option>
+            <option value="dateOfBirth">Birthday</option>
             <option value="address">Address</option>
             <option value="contactNumber">Contact Number</option>
             <option value="employmentStatus">Employment Status</option>
@@ -220,66 +252,182 @@ const calculatePopupPosition = () => {
             <option value="pagibig">Pagibig</option>
             <option value="sss">SSS</option>
           </select>
-          </div>
-          <div>
-          <select className="view-record-input2" onChange={(e) => handleSortOrderChange(e.target.value)}>
+        </div>
+  
+        <div>
+          <select
+            className="view-record-input2"
+            onChange={(e) => handleSortOrderChange(e.target.value)}
+          >
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Sort</button>
+          <button
+            className="view-record-button"
+            onClick={() => handleQuickSort(quickFilter)}
+          >
+            Sort
+          </button>
         </div>
-        
+        <div>
+           
+           <label>
+           Personal Information
+             <input
+               type="checkbox"
+               checked={
+                 selectedColumns.includes('employeeID') ||
+                 selectedColumns.includes('lasttName') ||
+                 selectedColumns.includes('firstName') ||
+                 selectedColumns.includes('middleName') ||
+                 selectedColumns.includes('contactNumber') ||
+                 selectedColumns.includes('email') ||
+                 selectedColumns.includes('dateOfBirth') ||
+                 selectedColumns.includes('age') ||
+                 selectedColumns.includes('gender')
+               }
+               onChange={() =>
+                 handleColumnSelect('personal', [
+                   'employeeID',
+                   'lastName',
+                   'firstName',
+                   'middleName',
+                   'contactNumber',
+                   'email',
+                   'dateOfBirth',
+                   'age',
+                   'gender',
+                 ])
+               }
+             />
+
+           </label>
+           <label>
+           Address Information
+             <input
+               type="checkbox"
+               checked={
+                 selectedColumns.includes('previewImage') ||
+                 selectedColumns.includes('street') ||
+                 selectedColumns.includes('city') ||
+                 selectedColumns.includes('province') ||
+                 selectedColumns.includes('barangay') ||
+                 selectedColumns.includes('lotNumber')
+               }
+               onChange={() =>
+                 handleColumnSelect('address', [
+                   'previewImage',
+                   'street',
+                   'city',
+                   'province',
+                   'barangay',
+                   'lotNumber',
+                 ])
+               }
+             />
+
+           </label>
+           <label>
+           Employment Information
+             <input
+               type="checkbox"
+               checked={
+                 selectedColumns.includes('department') ||
+                 selectedColumns.includes('position') ||
+                 selectedColumns.includes('dateHired') ||
+                 selectedColumns.includes('salaryPerMonth')
+               }
+               onChange={() =>
+                 handleColumnSelect('employment', [
+                   'department',
+                   'position',
+                   'dateHired',
+                   'salaryPerMonth',
+                 ])
+               }
+             />
+
+           </label>
+           <label>
+           Government IDs and Benefits
+             <input
+               type="checkbox"
+               checked={
+                 selectedColumns.includes('tin') ||
+                 selectedColumns.includes('prc') ||
+                 selectedColumns.includes('prcExpiry') ||
+                 selectedColumns.includes('sss') ||
+                 selectedColumns.includes('sssDeduction') ||
+                 selectedColumns.includes('philhealth') ||
+                 selectedColumns.includes('philhealthDeduction') ||
+                 selectedColumns.includes('pagibig') ||
+                 selectedColumns.includes('pagibigDeduction')
+               }
+               onChange={() =>
+                 handleColumnSelect('government', [
+                   'tin',
+                   'prc',
+                   'prcExpiry',
+                   'sss',
+                   'sssDeduction',
+                   'philhealth',
+                   'philhealthDeduction',
+                   'pagibig',
+                   'pagibigDeduction',
+                 ])
+               }
+             />
+
+           </label>
+         </div>
         <div style={{ overflowX: 'auto' }}>
-          {/* Display filtered and sorted content in a table */}
           <table className="view-record-table">
             <thead>
               <tr>
-                <th style={{ width: 'calc(100% / 19)' }}>Employee ID</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Last Name</th>
-                <th style={{ width: 'calc(100% / 19)' }}>First Name</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Middle Name</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Gender</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Birthday</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Address</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Contact Number</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Employment Status</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Position</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Designation</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Salary Per Month</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Department</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Date Hired</th>
-                <th style={{ width: 'calc(100% / 19)' }}>PRC</th>
-                <th style={{ width: 'calc(100% / 19)' }}>PRC Expiry</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Philhealth</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Pagibig</th>
-                <th style={{ width: 'calc(100% / 19)' }}>SSS</th>
+                {selectedColumns.map((column) => (
+                  // Exclude 'id', 'imageurl', and 'role' from being rendered in the table headers
+        (column !== 'id' && column !== 'imageUrl' && column !== 'role' && column !== 'status'  && column !== 'previewImage') &&
+                  <th key={column}>{column}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {filteredRecords.map((record, rowIndex) => (
-             <tr
-             key={rowIndex}
-             className={Object.values(record).every(value => !value) ? "empty-row" : ""}
-             onClick={() => handleRowClick(rowIndex)}
-             style={{ backgroundColor: rowIndex === selectedRowIndex ? '#F9AF40' : '' }}
-           >
-                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
-                    <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{record[field] || "\u00A0"}</td>
+                <tr
+                  key={rowIndex}
+                  className={
+                    Object.values(record).every((value) => !value)
+                      ? 'empty-row'
+                      : ''
+                  }
+                  onClick={() => handleRowClick(rowIndex)}
+                  style={{
+                    backgroundColor:
+                      rowIndex === selectedRowIndex ? '#F9AF40' : '',
+                  }}
+                >
+                  {selectedColumns.map((field, colIndex) => (
+                    // Render table data cells only for columns other than 'id', 'imageurl', and 'role'
+          (field !== 'id' && field !== 'imageUrl' && field !== 'role' && field !== 'status'  && field !== 'previewImage') &&
+                    <td key={colIndex}>{record[field] || '\u00A0'}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+  
         {selectedRecord && (
-  <div className="options-container" style={{ top: `${calculatePopupPosition()}px` }}>
-    <div className="popup-content">
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={handleArchive}>Archive</button>
-    </div>
-  </div>
-)}
-
+          <div
+            className="options-container"
+            style={{ top: `${calculatePopupPosition()}px` }}
+          >
+            <div className="popup-content">
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={handleArchive}>Archive</button>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </>
