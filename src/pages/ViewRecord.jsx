@@ -16,7 +16,72 @@ const ViewRecord = () => {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
-  const [selectedColumns, setSelectedColumns] = useState([]); // State to store selected columns
+  const [selectedColumns, setSelectedColumns] = useState([]); 
+  const [columnVisibility, setColumnVisibility] = useState({
+    employeeID: true,
+    lastName: true,
+    firstName: true,
+    middleName: true,
+    contactNumber: true,
+    email: true,
+    dateOfBirth: true,
+    age: true,
+    gender: true,
+    street: true,
+    city: true,
+    province: true,
+    barangay: true,
+    lotNumber: true,
+    department: true,
+    position: true,
+    dateHired: true,
+    salaryPerMonth: true,
+    tin: true,
+    prc: true,
+    prcExpiry: true,
+    sss: true,
+    sssDeduction: true,
+    philhealth: true,
+    philhealthDeduction: true,
+    pagibig: true,
+    pagibigDeduction: true,
+    id: false, // Hide ID column
+    status: false, // Hide STATUS column
+    role: false, // Hide ROLE column
+    imageUrl: false // Hide IMAGEURL column
+  });
+
+  const staticColumnOrder = [
+    'employeeID',
+    'lastName',
+    'firstName',
+    'middleName',
+    'contactNumber',
+    'email',
+    'dateOfBirth',
+    'age',
+    'gender',
+    'street',
+    'city',
+    'province',
+    'barangay',
+    'lotNumber',
+    'department',
+    'position',
+    'dateHired',
+    'salaryPerMonth',
+    'tin',
+    'prc',
+    'prcExpiry',
+    'sss',
+    'sssDeduction',
+    'philhealth',
+    'philhealthDeduction',
+    'pagibig',
+    'pagibigDeduction'
+  ];
+
+
   const rowHeight = 50; // Adjust this value based on your row height
 
   useEffect(() => {
@@ -59,6 +124,12 @@ const ViewRecord = () => {
       setRecords(paddedRecords);
       setFilteredRecords(paddedRecords);
       setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
+      // Initialize column visibility state
+      const initialColumnVisibility = {};
+      Object.keys(paddedRecords[0] || {}).forEach(column => {
+        initialColumnVisibility[column] = true;
+      });
+      setColumnVisibility(initialColumnVisibility);
     } catch (error) {
       console.error('Error fetching records:', error);
     }
@@ -189,27 +260,80 @@ const ViewRecord = () => {
       console.error('Error archiving record:', error);
     }
   };
-
+  
   const handleColumnSelect = (groupName, groupColumns) => {
-    if (selectedColumns.some(col => groupColumns.includes(col))) {
-      // If any column from the group is already selected, deselect all from the group
-      setSelectedColumns(selectedColumns.filter(col => !groupColumns.includes(col)));
+    const allGroupColumnsSelected = groupColumns.every(col => selectedColumns.includes(col));
+    let updatedColumns = [];
+  
+    if (allGroupColumnsSelected) {
+      // If all columns in the group are selected, deselect them
+      updatedColumns = selectedColumns.filter(col => !groupColumns.includes(col));
     } else {
-      // If none of the columns from the group are selected, select all from the group
-      setSelectedColumns([...selectedColumns, ...groupColumns]);
+      // Otherwise, select all columns in the group
+      updatedColumns = [...selectedColumns, ...groupColumns];
     }
+  
+    setSelectedColumns(updatedColumns);
   };
 
-  const handleShowAllToggle = (event) => {
-    if (event.target.checked) {
-      // If "Show All" is checked, select all columns
-      setSelectedColumns(Object.keys(paddedRecords[0] || {}));
-    } else {
-      // If "Show All" is unchecked, deselect all columns
-      setSelectedColumns([]);
-    }
+  const handleColumnToggle = (column) => {
+    setColumnVisibility(prevVisibility => ({
+      ...prevVisibility,
+      [column]: !prevVisibility[column]
+    }));
   };
+  
+  const columnSelectors = [
+    {
+      label: 'Personal Information',
+      columns: [
+        'employeeID',
+        'lastName',
+        'firstName',
+        'middleName',
+        'contactNumber',
+        'email',
+        'dateOfBirth',
+        'age',
+        'gender'
+      ]
+    },
+    {
+      label: 'Address Information',
+      columns: [
+        'street',
+        'city',
+        'province',
+        'barangay',
+        'lotNumber'
+      ]
+    },
+    {
+      label: 'Employment Information',
+      columns: [
+        'department',
+        'position',
+        'dateHired',
+        'salaryPerMonth'
+      ]
+    },
+    {
+      label: 'Government IDs and Benefits',
+      columns: [
+        'tin',
+        'prc',
+        'prcExpiry',
+        'sss',
+        'sssDeduction',
+        'philhealth',
+        'philhealthDeduction',
+        'pagibig',
+        'pagibigDeduction'
+      ]
+    }
+  ];
 
+  
   return (
     <>
       <Header />
@@ -232,7 +356,7 @@ const ViewRecord = () => {
             className="view-record-input1"
             onChange={(e) => setQuickFilter(e.target.value)}
           >
-             <option value="employeeID">Employee ID</option>
+            <option value="employeeID">Employee ID</option>
             <option value="lastName">Last Name</option>
             <option value="firstName">First Name</option>
             <option value="middleName">Middle Name</option>
@@ -270,124 +394,29 @@ const ViewRecord = () => {
           </button>
         </div>
         <div>
-           
-           <label>
-           Personal Information
-             <input
-               type="checkbox"
-               checked={
-                 selectedColumns.includes('employeeID') ||
-                 selectedColumns.includes('lasttName') ||
-                 selectedColumns.includes('firstName') ||
-                 selectedColumns.includes('middleName') ||
-                 selectedColumns.includes('contactNumber') ||
-                 selectedColumns.includes('email') ||
-                 selectedColumns.includes('dateOfBirth') ||
-                 selectedColumns.includes('age') ||
-                 selectedColumns.includes('gender')
-               }
-               onChange={() =>
-                 handleColumnSelect('personal', [
-                   'employeeID',
-                   'lastName',
-                   'firstName',
-                   'middleName',
-                   'contactNumber',
-                   'email',
-                   'dateOfBirth',
-                   'age',
-                   'gender',
-                 ])
-               }
-             />
-
-           </label>
-           <label>
-           Address Information
-             <input
-               type="checkbox"
-               checked={
-                 selectedColumns.includes('previewImage') ||
-                 selectedColumns.includes('street') ||
-                 selectedColumns.includes('city') ||
-                 selectedColumns.includes('province') ||
-                 selectedColumns.includes('barangay') ||
-                 selectedColumns.includes('lotNumber')
-               }
-               onChange={() =>
-                 handleColumnSelect('address', [
-                   'previewImage',
-                   'street',
-                   'city',
-                   'province',
-                   'barangay',
-                   'lotNumber',
-                 ])
-               }
-             />
-
-           </label>
-           <label>
-           Employment Information
-             <input
-               type="checkbox"
-               checked={
-                 selectedColumns.includes('department') ||
-                 selectedColumns.includes('position') ||
-                 selectedColumns.includes('dateHired') ||
-                 selectedColumns.includes('salaryPerMonth')
-               }
-               onChange={() =>
-                 handleColumnSelect('employment', [
-                   'department',
-                   'position',
-                   'dateHired',
-                   'salaryPerMonth',
-                 ])
-               }
-             />
-
-           </label>
-           <label>
-           Government IDs and Benefits
-             <input
-               type="checkbox"
-               checked={
-                 selectedColumns.includes('tin') ||
-                 selectedColumns.includes('prc') ||
-                 selectedColumns.includes('prcExpiry') ||
-                 selectedColumns.includes('sss') ||
-                 selectedColumns.includes('sssDeduction') ||
-                 selectedColumns.includes('philhealth') ||
-                 selectedColumns.includes('philhealthDeduction') ||
-                 selectedColumns.includes('pagibig') ||
-                 selectedColumns.includes('pagibigDeduction')
-               }
-               onChange={() =>
-                 handleColumnSelect('government', [
-                   'tin',
-                   'prc',
-                   'prcExpiry',
-                   'sss',
-                   'sssDeduction',
-                   'philhealth',
-                   'philhealthDeduction',
-                   'pagibig',
-                   'pagibigDeduction',
-                 ])
-               }
-             />
-
-           </label>
-         </div>
+          {columnSelectors.map((group, index) => (
+            <div key={index}>
+              <label>
+                {group.label}
+                <input
+                  type="checkbox"
+                  checked={!group.columns.some(col => !columnVisibility[col])}
+                  onChange={() => {
+                    group.columns.forEach(col => handleColumnToggle(col))
+                  }}
+                />
+              </label>
+            </div>
+          ))}
+        </div>
         <div style={{ overflowX: 'auto' }}>
           <table className="view-record-table">
             <thead>
               <tr>
-                {selectedColumns.map((column) => (
-                  // Exclude 'id', 'imageurl', and 'role' from being rendered in the table headers
-        (column !== 'id' && column !== 'imageUrl' && column !== 'role' && column !== 'status'  && column !== 'previewImage') &&
-                  <th key={column}>{column}</th>
+                {staticColumnOrder.map((column, index) => (
+                  columnVisibility[column] && (
+                    <th key={index}>{column.toUpperCase()}</th>
+                  )
                 ))}
               </tr>
             </thead>
@@ -405,11 +434,11 @@ const ViewRecord = () => {
                     backgroundColor:
                       rowIndex === selectedRowIndex ? '#F9AF40' : '',
                   }}
-                >
-                  {selectedColumns.map((field, colIndex) => (
-                    // Render table data cells only for columns other than 'id', 'imageurl', and 'role'
-          (field !== 'id' && field !== 'imageUrl' && field !== 'role' && field !== 'status'  && field !== 'previewImage') &&
-                    <td key={colIndex}>{record[field] || '\u00A0'}</td>
+                  >
+                  {staticColumnOrder.map((column, index) => (
+                    columnVisibility[column] && (
+                      <td key={index}>{record[column] || '\u00A0'}</td>
+                    )
                   ))}
                 </tr>
               ))}
