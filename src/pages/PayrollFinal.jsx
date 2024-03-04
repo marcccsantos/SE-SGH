@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import './PayrollFinal.css'; 
+import Header from '../components/header';
+import Footer from '../components/footer';
 import * as XLSX from 'xlsx';
 
 
@@ -235,88 +238,91 @@ const handleExportToExcel = () => {
 };
 
 return (
-    <div>
-      <h1>Payroll Data</h1>
-      {/* Date selection */}
-      <div>
-        <label>Start Date:</label>
-        <input type="date" value={startDate} onChange={(e) => handleDateChange(e, "start")} />
-      </div>
-      <div>
-        <label>End Date:</label>
-        <input type="date" value={endDate} onChange={(e) => handleDateChange(e, "end")} />
-      </div>
-      {/* Checkbox for generating all employees */}
-      <div>
-        <input type="checkbox" checked={generateAllEmployees} onChange={() => {
-          setGenerateAllEmployees(!generateAllEmployees);
-          setEmployeeID(""); // Reset employee ID when toggling generate all employees
-        }} />
-        <label>Generate All Employees</label>
-      </div>
-      {/* Input for specific employee ID */}
-      <div>
-        <label>Employee ID:</label>
-        <input type="text" value={employeeID} onChange={(e) => {
-          setEmployeeID(e.target.value);
-          setGenerateAllEmployees(false); // Disable generate all employees when specifying employee ID
-        }} disabled={generateAllEmployees} />
-      </div>
-      {/* "Generate Payroll" button */}
-      <button onClick={handleGeneratePayroll}>Generate Payroll</button>
-      {/* Display payroll table */}
-      {showTable && (
-        <table>
-          {/* Table headers */}
-          <thead>
-            <tr>
-              <th>Employee ID</th>
-              <th>Last Name</th>
-              <th>Salary Per Month</th>
-              <th>Extras</th>
-              <th>Deductions</th>
-              <th>Total Hours</th>
-              <th>Gross Pay</th>
-              <th>Pag-IBIG</th>
-              <th>PhilHealth</th>
-              <th>SSS</th>
-              <th>Net Pay</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payrollData.map((data, index) => (
-              <tr key={index}>
-                <td>{data.employeeID}</td>
-                <td>{data.lastName}</td>
-                <td>{data.salaryPerMonth}</td>
-                <td>{data.extras}</td>
-                <td>{data.deductions}</td>
-                <td>{data.totalHours}</td>
-                <td>{data.grossPay}</td>
-                <td>{data.pagibigDeduction}</td>
-                <td>{data.philhealthDeduction}</td>
-                <td>{data.sssDeduction}</td>
-                <td>{data.netPay}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {/* Additional information below the table */}
-      {showTable && payrollData.length > 0 && (
-        <div>
-          <p>Total number of employees: {payrollData.length}</p>
-          {generateAllEmployees && (
-            <p>Total Gross Pay: {calculateTotals(payrollData).totalGrossPay.toFixed(2)}</p>
-          )}
-          <p>Total Net Pay: {calculateTotals(payrollData).totalNetPay.toFixed(2)}</p>
-        </div>
-      )}
-      {/* Export to Excel button */}
-      {exportable && (
-        <button onClick={handleExportToExcel}>Export to Excel</button>
-      )}
+  <>
+  <Header />
+ <div className="payroll-container">
+  <h1 className="payroll-title">Payroll Data</h1>
+  {/* Date selection */}
+  <div className="date-selection">
+    <label htmlFor="start-date" className="date-label">Start Date:</label>
+    <input type="date" id="start-date" value={startDate} onChange={(e) => handleDateChange(e, "start")} className="date-input" />
+  </div>
+  <div className="date-selection">
+    <label htmlFor="end-date" className="date-label">End Date:</label>
+    <input type="date" id="end-date" value={endDate} onChange={(e) => handleDateChange(e, "end")} className="date-input" />
+  </div>
+  {/* Checkbox for generating all employees */}
+  <label>Generate All Employees</label>
+    <div className="generate-all-employees">
+      <input type="checkbox" checked={generateAllEmployees} onChange={() => {
+        setGenerateAllEmployees(!generateAllEmployees);
+        setEmployeeID(""); // Reset employee ID when toggling generate all employees
+      }} className="generate-all-checkbox" />
     </div>
+  {/* Input for specific employee ID */}
+  <div className="employee-id-input">
+    <label htmlFor="employee-id" className="employee-id-label">Employee ID:</label>
+    <input type="text" id="employee-id" value={employeeID} onChange={(e) => {
+      setEmployeeID(e.target.value);
+      setGenerateAllEmployees(false); // Disable generate all employees when specifying employee ID
+    }} className="employee-id-input-field" disabled={generateAllEmployees} />
+  </div>
+  {/* "Generate Payroll" button */}
+  <button onClick={handleGeneratePayroll} className="generate-payroll-button">Generate Payroll</button>
+  {/* Display payroll table */}
+  {showTable && (
+    <table className="payroll-table">
+      {/* Table headers */}
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Last Name</th>
+          <th>Salary Per Month</th>
+          <th>Extras</th>
+          <th>Deductions</th>
+          <th>Total Hours</th>
+          <th>Gross Pay</th>
+          <th>Pag-IBIG</th>
+          <th>PhilHealth</th>
+          <th>SSS</th>
+          <th>Net Pay</th>
+        </tr>
+      </thead>
+      <tbody>
+        {payrollData.map((data, index) => (
+          <tr key={index}>
+            <td>{data.employeeID}</td>
+            <td>{data.lastName}</td>
+            <td>{data.salaryPerMonth}</td>
+            <td>{data.extras}</td>
+            <td>{data.deductions}</td>
+            <td>{data.totalHours}</td>
+            <td>{data.grossPay}</td>
+            <td>{data.pagibigDeduction}</td>
+            <td>{data.philhealthDeduction}</td>
+            <td>{data.sssDeduction}</td>
+            <td>{data.netPay}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+  {/* Additional information below the table */}
+  {showTable && payrollData.length > 0 && (
+    <div className="additional-info">
+      <p>Total number of employees: {payrollData.length}</p>
+      {generateAllEmployees && (
+        <p>Total Gross Pay: {calculateTotals(payrollData).totalGrossPay.toFixed(2)}</p> )}
+      <p>Total Net Pay: {calculateTotals(payrollData).totalNp.toFixed(2)}</p>
+    </div>
+  )}
+  {/* Export to Excel button */}
+  {exportable && (
+    <button onClick={handleExportToExcel} className="export-to-excel-button">Export to Excel</button>
+  )}
+</div>
+    <Footer />
+  </>
   );
 };
 
