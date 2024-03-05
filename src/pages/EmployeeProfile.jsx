@@ -14,6 +14,11 @@ const EmployeeProfile = () => {
 
   const [employeeData, setEmployeeData] = useState(null);
 
+  const handleNavigateToPayroll = () => {
+    // Assuming loggedInEmployeeID is available in the component's state
+    navigate("/EmployeePayroll", { state: { loggedInEmployeeID } });
+  };
+
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
@@ -45,6 +50,8 @@ const EmployeeProfile = () => {
   return employeeData ? (
     <>
       <Header />
+      <button onClick={handleNavigateToPayroll}>Go to Employee Payroll</button>
+
       <div className="form-container">
         <form>
           <div className="upload-img">

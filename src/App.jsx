@@ -16,6 +16,7 @@ import PayrollFinal from "./pages/PayrollFinal";
 import NotFound from "./pages/not-found";
 import DTR from "./pages/DTR";
 import EmployeeProfile from "./pages/EmployeeProfile";
+import EmployeePayRoll from "./pages/EmployeePayroll";
 import Unauthorized from "./pages/Unauthorized";
 import SearchProfile from "./pages/DefaultViewProfile";
 import { useEffect, useState } from "react";
@@ -145,6 +146,14 @@ const App = () => {
             element={
               <ProtectedRoute user={user}>
                 <EmployeeProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/EmployeePayroll"
+            element={
+              <ProtectedRoute user={user}>
+                <EmployeePayRoll />
               </ProtectedRoute>
             }
           />
