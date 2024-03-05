@@ -313,7 +313,7 @@ return (
       <p>Total number of employees: {payrollData.length}</p>
       {generateAllEmployees && (
         <p>Total Gross Pay: {calculateTotals(payrollData).totalGrossPay.toFixed(2)}</p> )}
-      <p>Total Net Pay: {calculateTotals(payrollData).totalNp.toFixed(2)}</p>
+      <p>Total Net Pay: {calculateTotals(payrollData).totalNetPay.toFixed(2)}</p>
     </div>
   )}
   {/* Export to Excel button */}
