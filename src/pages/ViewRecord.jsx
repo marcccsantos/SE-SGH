@@ -18,8 +18,6 @@ const ViewRecord = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [selectedColumns, setSelectedColumns] = useState([]); 
   const [columnVisibility, setColumnVisibility] = useState({
-    employeeID: true,
-    lastName: true,
     firstName: true,
     middleName: true,
     contactNumber: true,
@@ -261,20 +259,7 @@ const ViewRecord = () => {
     }
   };
   
-  const handleColumnSelect = (groupName, groupColumns) => {
-    const allGroupColumnsSelected = groupColumns.every(col => selectedColumns.includes(col));
-    let updatedColumns = [];
-  
-    if (allGroupColumnsSelected) {
-      // If all columns in the group are selected, deselect them
-      updatedColumns = selectedColumns.filter(col => !groupColumns.includes(col));
-    } else {
-      // Otherwise, select all columns in the group
-      updatedColumns = [...selectedColumns, ...groupColumns];
-    }
-  
-    setSelectedColumns(updatedColumns);
-  };
+
 
   const handleColumnToggle = (column) => {
     setColumnVisibility(prevVisibility => ({
@@ -287,8 +272,6 @@ const ViewRecord = () => {
     {
       label: 'Personal Information',
       columns: [
-        'employeeID',
-        'lastName',
         'firstName',
         'middleName',
         'contactNumber',
