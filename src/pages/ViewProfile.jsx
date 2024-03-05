@@ -449,6 +449,20 @@ const ViewProfile = () => {
                       <span className="placeholder">Salary</span>
                     </label>
                   </div>
+                  <div className='role'>
+                    <label className="field" >
+                      <input
+                          type="text"
+                          name="role"
+                          id="role"
+                          value={employeeData.role} 
+                          readOnly
+                          className="input"
+                          required
+                      />
+                      <span className="placeholder">System Role</span>
+                    </label>
+                  </div>
                 </div>
               </div>
 

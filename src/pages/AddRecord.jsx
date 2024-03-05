@@ -30,6 +30,7 @@ const AddRecordFinal = () => {
   const [prc, setPrc] = useState('');
   const [prcExpiry, setPrcExpiry] = useState('');
   const [tin, setTin] = useState('');
+  const [role, setRole] = useState('');
   const [sss, setSss] = useState('');
   const [sssDeduction, setSssDeduction] = useState('');
   const [philhealth, setPhilhealth] = useState('');
@@ -108,6 +109,7 @@ const AddRecordFinal = () => {
           dateHired,
           status,
           salaryPerMonth: parseFloat(salaryPerMonth),
+          role,
           prc,
           prcExpiry,
           tin,
@@ -157,6 +159,7 @@ const AddRecordFinal = () => {
     setDateHired('');
     setStatus('');
     setSalaryPerMonth('');
+    setRole('');
     setPrc('');
     setPrcExpiry('');
     setTin('');
@@ -472,6 +475,23 @@ const AddRecordFinal = () => {
                         required
                       />
                       <span className="placeholder">Salary</span>
+                    </label>
+                  </div>
+                  <div className="role">
+                    <label className="field">
+                        <select 
+                          name="role" 
+                          id="role" 
+                          value={gender} 
+                          onChange={(e) => setGender(e.target.value)} 
+                          className="input" 
+                          required
+                        >
+                            <option value="employee">Employee</option>
+                            <option value="admin">Admin</option>
+
+                        </select>
+                        <span className="placeholder">System Role</span>
                     </label>
                   </div>
                 </div>

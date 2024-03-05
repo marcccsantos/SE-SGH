@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase'; // Import your Firestore instance
 import Header from '../components/header';
 import Footer from '../components/footer';
 import './ViewRecord.css'; // Import the CSS file
-import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory
+import { useParams } from 'react-router-dom'; // Import useParams only, since useHistory is not used
 
 const ViewRecord = () => {
   const { searchQuery } = useParams();
@@ -15,6 +15,74 @@ const ViewRecord = () => {
   const [sortOrder, setSortOrder] = useState('asc'); // Default sort order
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [selectedColumns, setSelectedColumns] = useState([]); 
+  const [columnVisibility, setColumnVisibility] = useState({
+    employeeID: true,
+    lastName: true,
+    firstName: true,
+    middleName: true,
+    contactNumber: true,
+    email: true,
+    dateOfBirth: true,
+    age: true,
+    gender: true,
+    street: true,
+    city: true,
+    province: true,
+    barangay: true,
+    lotNumber: true,
+    department: true,
+    position: true,
+    dateHired: true,
+    salaryPerMonth: true,
+    tin: true,
+    prc: true,
+    prcExpiry: true,
+    sss: true,
+    sssDeduction: true,
+    philhealth: true,
+    philhealthDeduction: true,
+    pagibig: true,
+    pagibigDeduction: true,
+    id: false, // Hide ID column
+    status: false, // Hide STATUS column
+    role: false, // Hide ROLE column
+    imageUrl: false // Hide IMAGEURL column
+  });
+
+  const staticColumnOrder = [
+    'employeeID',
+    'lastName',
+    'firstName',
+    'middleName',
+    'contactNumber',
+    'email',
+    'dateOfBirth',
+    'age',
+    'gender',
+    'street',
+    'city',
+    'province',
+    'barangay',
+    'lotNumber',
+    'department',
+    'position',
+    'dateHired',
+    'salaryPerMonth',
+    'tin',
+    'prc',
+    'prcExpiry',
+    'sss',
+    'sssDeduction',
+    'philhealth',
+    'philhealthDeduction',
+    'pagibig',
+    'pagibigDeduction'
+  ];
+
+
+  const rowHeight = 50; // Adjust this value based on your row height
 
   useEffect(() => {
     fetchRecords();
@@ -55,6 +123,13 @@ const ViewRecord = () => {
       const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
       setRecords(paddedRecords);
       setFilteredRecords(paddedRecords);
+      setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
+      // Initialize column visibility state
+      const initialColumnVisibility = {};
+      Object.keys(paddedRecords[0] || {}).forEach(column => {
+        initialColumnVisibility[column] = true;
+      });
+      setColumnVisibility(initialColumnVisibility);
     } catch (error) {
       console.error('Error fetching records:', error);
     }
@@ -115,15 +190,18 @@ const ViewRecord = () => {
     setSortOrder(order);
   };
 
-  const handleRowClick = (record) => {
-    setSelectedRecord(record);
-    setShowOptions(true); // Show options when a row is clicked
+  const handleRowClick = (rowIndex) => {
+    const clickedRecord = filteredRecords[rowIndex];
+    // Check if clickedRecord is not empty (i.e., it has at least one value)
+    if (Object.values(clickedRecord).some(value => value !== undefined && value !== null)) {
+      setSelectedRecord(clickedRecord);
+      setSelectedRowIndex(rowIndex);
+    }
   };
 
-  const handleOptionsClick = (e) => {
-    // Prevent row click event from being triggered
-    e.stopPropagation();
-    setShowOptions(prevState => !prevState); // Toggle options display
+  const calculatePopupPosition = () => {
+    const popupTop = selectedRowIndex * rowHeight + 250; // Add or subtract offset as needed
+    return popupTop;
   };
 
   const handleEdit = () => {
@@ -142,9 +220,9 @@ const ViewRecord = () => {
       if (selectedRecord) {
         // Get the document ID of the selected record
         const documentId = selectedRecord.id;
-  
+
         console.log('Selected Record:', selectedRecord);
-  
+
         // Check if the record already exists in the archive
         const archiveRecordRef = doc(db, 'employees_archive', documentId);
         const archiveRecordSnapshot = await getDoc(archiveRecordRef);
@@ -152,26 +230,26 @@ const ViewRecord = () => {
           console.error('Record already exists in the archive.');
           return;
         }
-  
+
         // Get a reference to the selected record in the active collection
         const activeRecordRef = doc(db, 'employees_active', documentId);
         const activeRecordSnapshot = await getDoc(activeRecordRef);
-        
+
         // Check if the selected record exists in the active collection
         if (!activeRecordSnapshot.exists()) {
           console.error('Selected record does not exist in the current collection.');
           return;
         }
-  
+
         // Retrieve the data of the selected record
         const recordData = activeRecordSnapshot.data();
-  
+
         // Set the record data in the archive collection using the same document ID
         await setDoc(archiveRecordRef, recordData);
-  
+
         // Delete the record from the active collection
         await deleteDoc(activeRecordRef);
-  
+
         console.log('Record successfully archived.');
         // Fetch records again to update UI
         fetchRecords();
@@ -182,7 +260,80 @@ const ViewRecord = () => {
       console.error('Error archiving record:', error);
     }
   };
+  
+  const handleColumnSelect = (groupName, groupColumns) => {
+    const allGroupColumnsSelected = groupColumns.every(col => selectedColumns.includes(col));
+    let updatedColumns = [];
+  
+    if (allGroupColumnsSelected) {
+      // If all columns in the group are selected, deselect them
+      updatedColumns = selectedColumns.filter(col => !groupColumns.includes(col));
+    } else {
+      // Otherwise, select all columns in the group
+      updatedColumns = [...selectedColumns, ...groupColumns];
+    }
+  
+    setSelectedColumns(updatedColumns);
+  };
 
+  const handleColumnToggle = (column) => {
+    setColumnVisibility(prevVisibility => ({
+      ...prevVisibility,
+      [column]: !prevVisibility[column]
+    }));
+  };
+  
+  const columnSelectors = [
+    {
+      label: 'Personal Information',
+      columns: [
+        'employeeID',
+        'lastName',
+        'firstName',
+        'middleName',
+        'contactNumber',
+        'email',
+        'dateOfBirth',
+        'age',
+        'gender'
+      ]
+    },
+    {
+      label: 'Address Information',
+      columns: [
+        'street',
+        'city',
+        'province',
+        'barangay',
+        'lotNumber'
+      ]
+    },
+    {
+      label: 'Employment Information',
+      columns: [
+        'department',
+        'position',
+        'dateHired',
+        'salaryPerMonth'
+      ]
+    },
+    {
+      label: 'Government IDs and Benefits',
+      columns: [
+        'tin',
+        'prc',
+        'prcExpiry',
+        'sss',
+        'sssDeduction',
+        'philhealth',
+        'philhealthDeduction',
+        'pagibig',
+        'pagibigDeduction'
+      ]
+    }
+  ];
+
+  
   return (
     <>
       <Header />
@@ -192,18 +343,25 @@ const ViewRecord = () => {
             className="view-record-input"
             type="text"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)} placeholder="Search..."/>
-          <button className="view-record-button" onClick={handleSearch}>Search</button>
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search Record"
+          />
+          <button className="view-record-button" onClick={handleSearch}>
+            Search
+          </button>
         </div>
+  
         <div className="view-record-sort">
-          <select className="view-record-input" onChange={(e) => setQuickFilter(e.target.value)}>
-            <option value="">Quick Sort</option>
+          <select
+            className="view-record-input1"
+            onChange={(e) => setQuickFilter(e.target.value)}
+          >
             <option value="employeeID">Employee ID</option>
             <option value="lastName">Last Name</option>
             <option value="firstName">First Name</option>
             <option value="middleName">Middle Name</option>
             <option value="gender">Gender</option>
-            <option value="birthday">Birthday</option>
+            <option value="dateOfBirth">Birthday</option>
             <option value="address">Address</option>
             <option value="contactNumber">Contact Number</option>
             <option value="employmentStatus">Employment Status</option>
@@ -218,58 +376,82 @@ const ViewRecord = () => {
             <option value="pagibig">Pagibig</option>
             <option value="sss">SSS</option>
           </select>
-          <select className="view-record-input" onChange={(e) => handleSortOrderChange(e.target.value)}>
+        </div>
+  
+        <div>
+          <select
+            className="view-record-input2"
+            onChange={(e) => handleSortOrderChange(e.target.value)}
+          >
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-          <button className="view-record-button" onClick={() => handleQuickSort(quickFilter)}>Apply Quick Sort</button>
+          <button
+            className="view-record-button"
+            onClick={() => handleQuickSort(quickFilter)}
+          >
+            Sort
+          </button>
         </div>
-        
+        <div>
+          {columnSelectors.map((group, index) => (
+            <div key={index}>
+              <label>
+                {group.label}
+                <input
+                  type="checkbox"
+                  checked={!group.columns.some(col => !columnVisibility[col])}
+                  onChange={() => {
+                    group.columns.forEach(col => handleColumnToggle(col))
+                  }}
+                />
+              </label>
+            </div>
+          ))}
+        </div>
         <div style={{ overflowX: 'auto' }}>
-          {/* Display filtered and sorted content in a table */}
           <table className="view-record-table">
             <thead>
               <tr>
-                <th style={{ width: 'calc(100% / 19)' }}>Employee ID</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Last Name</th>
-                <th style={{ width: 'calc(100% / 19)' }}>First Name</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Middle Name</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Gender</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Birthday</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Address</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Contact Number</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Employment Status</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Position</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Designation</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Salary Per Month</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Department</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Date Hired</th>
-                <th style={{ width: 'calc(100% / 19)' }}>PRC</th>
-                <th style={{ width: 'calc(100% / 19)' }}>PRC Expiry</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Philhealth</th>
-                <th style={{ width: 'calc(100% / 19)' }}>Pagibig</th>
-                <th style={{ width: 'calc(100% / 19)' }}>SSS</th>
+                {staticColumnOrder.map((column, index) => (
+                  columnVisibility[column] && (
+                    <th key={index}>{column.toUpperCase()}</th>
+                  )
+                ))}
               </tr>
             </thead>
             <tbody>
               {filteredRecords.map((record, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={Object.values(record).every(value => !value) ? "empty-row" : ""}
-                  onClick={() => handleRowClick(record)}
-                >
-                  {[ 'employeeID', 'lastName', 'firstName', 'middleName', 'gender', 'birthday', 'address', 'contactNumber', 'employmentStatus', 'position', 'designation', 'salaryPerMonth', 'department', 'dateHired', 'prc', 'prcExpiry', 'philhealth', 'pagibig', 'sss' ].map((field, colIndex) => (
-                    <td key={colIndex} style={{ width: 'calc(100% / 19)' }}>{record[field] || "\u00A0"}</td>
+                  className={
+                    Object.values(record).every((value) => !value)
+                      ? 'empty-row'
+                      : ''
+                  }
+                  onClick={() => handleRowClick(rowIndex)}
+                  style={{
+                    backgroundColor:
+                      rowIndex === selectedRowIndex ? '#F9AF40' : '',
+                  }}
+                  >
+                  {staticColumnOrder.map((column, index) => (
+                    columnVisibility[column] && (
+                      <td key={index}>{record[column] || '\u00A0'}</td>
+                    )
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {selectedRecord && showOptions && (
-          <div className="options-container">
+  
+        {selectedRecord && (
+          <div
+            className="options-container"
+            style={{ top: `${calculatePopupPosition()}px` }}
+          >
             <div className="popup-content">
-              <h2>Options for Record</h2>
               <button onClick={handleEdit}>Edit</button>
               <button onClick={handleArchive}>Archive</button>
             </div>

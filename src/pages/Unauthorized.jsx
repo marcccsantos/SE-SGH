@@ -1,18 +1,21 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./not-found.css";
 
-const NotFound = () => {
+const Unauthorized = () => {
+  const navigate = useNavigate();
+
   const goBack = () => {
-    window.history.back();
+    navigate(-2); // Go back to the previous page
   };
 
   return (
     <div className="not-found">
       <img className="broken-hand" src="/broken-hand.png" alt="" />
       <div className="container-not">
-        <div className="err">404 error </div>
+        <div className="err">401 Unauthorized </div>
         <div className="err-text">
-          The page you are looking for was moved, removed, renamed, or might
-          never existed.
+          Sorry, but you are not authorized to view this page.
         </div>
         <button className="button-err" onClick={goBack}>
           Go Back
@@ -22,4 +25,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default Unauthorized;
