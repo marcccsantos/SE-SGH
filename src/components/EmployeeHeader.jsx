@@ -1,14 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import React, { useEffect } from "react";
 import "./header.css";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 
 const header = () => {
+  const { userEmployeeID } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const loggedInEmployeeID =
+    location.state && location.state.loggedInEmployeeID;
+
   const handleLogOut = () => {
     signOut(auth)
       .then(() => console.log("Sign Out"))
       .catch((error) => console.log(error));
+  };
+
+  const handleNavigateToPayroll = () => {
+    navigate(`/EmployeePayroll/${userEmployeeID}`, {
+      state: { loggedInEmployeeID },
+    });
+  };
+
+  const handleNavigateToProfile = () => {
+    navigate(`/EmployeeProfile/${userEmployeeID}`, {
+      state: { loggedInEmployeeID },
+    });
   };
 
   return (
@@ -23,22 +41,10 @@ const header = () => {
             <div className="all-tab">
               <div className="tab">
                 <li>
-                  <Link to="/search">SEARCH RECORD</Link>
+                  <span onClick={handleNavigateToProfile}>PROFILE</span>
                 </li>
                 <li>
-                  <Link to="/ViewRecord">VIEW RECORD</Link>
-                </li>
-                <li>
-                  <Link to="/ViewProfile">VIEW PROFILE</Link>
-                </li>
-                <li>
-                  <Link to="/AddRecord">ADD RECORD</Link>
-                </li>
-                <li>
-                  <Link to="/ArchiveRecord">ARCHIVE RECORD</Link>
-                </li>
-                <li>
-                  <Link to="/PayrollFinal">PAYROLL</Link>
+                  <span onClick={handleNavigateToPayroll}>PAYROLL</span>
                 </li>
               </div>
               <div className="logout">

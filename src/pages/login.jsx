@@ -73,8 +73,10 @@ const Login = () => {
             const userRole = results[0].role;
             const userEmployeeID = results[0].employeeID;
             const loggedInEmployeeID = results[0].employeeID;
+
             // Perform actions based on user role
             if (userRole === "admin") {
+              console.log(userRole);
               navigate("/search");
             } else if (userRole === "employee") {
               navigate(`/EmployeeProfile/${userEmployeeID}`, {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import Header from "../components/header";
-import Footer from '../components/footer';
+import Header from "../components/EmployeeHeader";
+import Footer from "../components/footer";
 
 import { db } from "../firebase";
 
@@ -10,14 +10,10 @@ const EmployeeProfile = () => {
   const { userEmployeeID } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const loggedInEmployeeID = location.state && location.state.loggedInEmployeeID;
+  const loggedInEmployeeID =
+    location.state && location.state.loggedInEmployeeID;
 
   const [employeeData, setEmployeeData] = useState(null);
-
-  const handleNavigateToPayroll = () => {
-    // Assuming loggedInEmployeeID is available in the component's state
-    navigate("/EmployeePayroll", { state: { loggedInEmployeeID } });
-  };
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -50,13 +46,15 @@ const EmployeeProfile = () => {
   return employeeData ? (
     <>
       <Header />
-      <button onClick={handleNavigateToPayroll}>Go to Employee Payroll</button>
-
       <div className="form-container">
         <form>
           <div className="upload-img">
             <div className="preview">
-              <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
+              <img
+                src={employeeData.imageUrl}
+                alt="Employee"
+                style={{ maxWidth: "200px" }}
+              />
             </div>
           </div>
           <div className="form-information">
@@ -65,8 +63,8 @@ const EmployeeProfile = () => {
                 <h1>Personal Information</h1>
               </div>
               <div className="text-fields">
-                <div className='empid'>
-                  <label className="field" >
+                <div className="empid">
+                  <label className="field">
                     <input
                       type="text"
                       name="empid"
@@ -330,8 +328,8 @@ const EmployeeProfile = () => {
                     <span className="placeholder">Salary</span>
                   </label>
                 </div>
-                <div className='role'>
-                  <label className="field" >
+                <div className="role">
+                  <label className="field">
                     <input
                       type="text"
                       name="role"
@@ -484,7 +482,7 @@ const EmployeeProfile = () => {
       </div>
       <Footer />
     </>
-  ): null;
+  ) : null;
 };
 
 export default EmployeeProfile;
