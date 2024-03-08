@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
-import * as XLSX from 'xlsx';
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import * as XLSX from "xlsx";
+import Header from "../components/EmployeeHeader";
+import Footer from "../components/footer";
+import "./PayrollFinal.css";
 
 const EmployeePayroll = () => {
+  const { userEmployeeID } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
-  const loggedInEmployeeID = location.state && location.state.loggedInEmployeeID;
+  const loggedInEmployeeID =
+    location.state && location.state.loggedInEmployeeID;
   const [payrollData, setPayrollData] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null); 
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [showTable, setShowTable] = useState(false);
   const [generateAllEmployees, setGenerateAllEmployees] = useState(false);
-  const [employeeID, setEmployeeID] = useState(loggedInEmployeeID || ''); // Set initial state to loggedInEmployeeID or ''
+  const [employeeID, setEmployeeID] = useState(loggedInEmployeeID || ""); // Set initial state to loggedInEmployeeID or ''
   const [exportable, setExportable] = useState(false);
+  const [employeeData, setEmployeeData] = useState(null);
 
   const calculateTotals = (data) => {
     let totalGrossPay = 0;
@@ -34,46 +41,53 @@ const EmployeePayroll = () => {
   const handleGeneratePayroll = async () => {
     try {
       if (!startDate || !endDate) {
-        console.error('Please select both start and end dates.');
+        console.error("Please select both start and end dates.");
         return;
       }
 
-    // Check if neither checkbox for generating all employees is checked
-    if (!generateAllEmployees) {
+      // Check if neither checkbox for generating all employees is checked
+      if (!generateAllEmployees) {
         // If employeeID is empty, return an error
         if (!employeeID) {
-          console.error('Please specify an Employee ID.');
+          console.error("Please specify an Employee ID.");
           return;
         }
       }
 
       let employeesQuery;
       if (generateAllEmployees) {
-        employeesQuery = collection(db, 'employees_active');
+        employeesQuery = collection(db, "employees_active");
       } else {
-        employeesQuery = query(collection(db, 'employees_active'), where("employeeID", "==", employeeID));
+        employeesQuery = query(
+          collection(db, "employees_active"),
+          where("employeeID", "==", employeeID)
+        );
       }
 
       const employeesSnapshot = await getDocs(employeesQuery);
-      const activeEmployeesData = employeesSnapshot.docs.map(doc => doc.data());
+      const activeEmployeesData = employeesSnapshot.docs.map((doc) =>
+        doc.data()
+      );
 
       if (generateAllEmployees && activeEmployeesData.length === 0) {
-        console.error('No active employees found.');
+        console.error("No active employees found.");
         return;
       }
 
-      const extrasQuery = query(collection(db, 'extras_and_deductions'));
+      const extrasQuery = query(collection(db, "extras_and_deductions"));
       const extrasSnapshot = await getDocs(extrasQuery);
-      const extrasData = extrasSnapshot.docs.map(doc => doc.data());
+      const extrasData = extrasSnapshot.docs.map((doc) => doc.data());
 
       let recordsQuery;
       if (generateAllEmployees) {
-        recordsQuery = query(collection(db, 'daily_time_records'), 
+        recordsQuery = query(
+          collection(db, "daily_time_records"),
           where("date", ">=", startDate),
           where("date", "<=", endDate)
         );
       } else {
-        recordsQuery = query(collection(db, 'daily_time_records'), 
+        recordsQuery = query(
+          collection(db, "daily_time_records"),
           where("date", ">=", startDate),
           where("date", "<=", endDate),
           where("employeeID", "==", loggedInEmployeeID)
@@ -81,13 +95,17 @@ const EmployeePayroll = () => {
       }
 
       const recordsSnapshot = await getDocs(recordsQuery);
-      const recordsData = recordsSnapshot.docs.map(doc => doc.data());
+      const recordsData = recordsSnapshot.docs.map((doc) => doc.data());
 
       const payrollData = {};
 
       recordsSnapshot.forEach((doc) => {
         const data = doc.data();
-        if (typeof data.employeeID === 'string' && data.timeIn && data.timeOut) {
+        if (
+          typeof data.employeeID === "string" &&
+          data.timeIn &&
+          data.timeOut
+        ) {
           const employeeID = data.employeeID;
           if (!payrollData[employeeID]) {
             payrollData[employeeID] = {
@@ -95,14 +113,14 @@ const EmployeePayroll = () => {
               lastName: data.lastName,
               hoursWorked: 0,
               totalExtras: 0,
-              totalDeductions: 0
+              totalDeductions: 0,
             };
           }
           payrollData[employeeID].hoursWorked += data.totalHours || 0;
         }
       });
 
-      extrasData.forEach(item => {
+      extrasData.forEach((item) => {
         const employeeID = item.employeeID;
         if (payrollData[employeeID]) {
           payrollData[employeeID].totalExtras += item.extras || 0;
@@ -110,24 +128,48 @@ const EmployeePayroll = () => {
         }
       });
 
-      const processedData = Object.values(payrollData).map(employee => {
-        const salaryPerMonth = activeEmployeesData.find(item => item.employeeID === employee.employeeID)?.salaryPerMonth || 0;
-        const hourlyBasic = (salaryPerMonth / (18 * 8)) || 0;
-       
-        const grossPay = (hourlyBasic * employee.hoursWorked) || 0;
+      const processedData = Object.values(payrollData).map((employee) => {
+        const salaryPerMonth =
+          activeEmployeesData.find(
+            (item) => item.employeeID === employee.employeeID
+          )?.salaryPerMonth || 0;
+        const hourlyBasic = salaryPerMonth / (18 * 8) || 0;
 
-        const pagibigDeductionPercentage = activeEmployeesData.find(item => item.employeeID === employee.employeeID)?.pagibigDeduction || 0;
+        const grossPay = hourlyBasic * employee.hoursWorked || 0;
+
+        const pagibigDeductionPercentage =
+          activeEmployeesData.find(
+            (item) => item.employeeID === employee.employeeID
+          )?.pagibigDeduction || 0;
         const pagibigDeduction = grossPay * (pagibigDeductionPercentage / 100);
-        
-        const philhealthDeductionPercentage = activeEmployeesData.find(item => item.employeeID === employee.employeeID)?.philhealthDeduction || 0;
-        const philhealthDeduction = grossPay * (philhealthDeductionPercentage / 100);
-        
-        const sssDeductionPercentage = activeEmployeesData.find(item => item.employeeID === employee.employeeID)?.sssDeduction || 0;
+
+        const philhealthDeductionPercentage =
+          activeEmployeesData.find(
+            (item) => item.employeeID === employee.employeeID
+          )?.philhealthDeduction || 0;
+        const philhealthDeduction =
+          grossPay * (philhealthDeductionPercentage / 100);
+
+        const sssDeductionPercentage =
+          activeEmployeesData.find(
+            (item) => item.employeeID === employee.employeeID
+          )?.sssDeduction || 0;
         const sssDeduction = grossPay * (sssDeductionPercentage / 100);
 
-        const netPay = grossPay + employee.totalExtras - employee.totalDeductions - pagibigDeduction - philhealthDeduction - sssDeduction;
+        const netPay =
+          grossPay +
+          employee.totalExtras -
+          employee.totalDeductions -
+          pagibigDeduction -
+          philhealthDeduction -
+          sssDeduction;
 
-        console.log("Employee ID:", employee.employeeID, "Salary Per Month:", salaryPerMonth);
+        console.log(
+          "Employee ID:",
+          employee.employeeID,
+          "Salary Per Month:",
+          salaryPerMonth
+        );
         return {
           employeeID: employee.employeeID,
           lastName: employee.lastName,
@@ -135,19 +177,23 @@ const EmployeePayroll = () => {
           extras: employee.totalExtras,
           deductions: employee.totalDeductions,
           totalHours: employee.hoursWorked.toFixed(2),
-          grossPay: isNaN(grossPay) ? 'N/A' : grossPay.toFixed(2),
-          pagibigDeduction: isNaN(pagibigDeduction) ? 'N/A' : pagibigDeduction.toFixed(2),
-          philhealthDeduction: isNaN(philhealthDeduction) ? 'N/A' : philhealthDeduction.toFixed(2),
-          sssDeduction: isNaN(sssDeduction) ? 'N/A' : sssDeduction.toFixed(2),
-          netPay: isNaN(netPay) ? 'N/A' : netPay.toFixed(2) 
+          grossPay: isNaN(grossPay) ? "N/A" : grossPay.toFixed(2),
+          pagibigDeduction: isNaN(pagibigDeduction)
+            ? "N/A"
+            : pagibigDeduction.toFixed(2),
+          philhealthDeduction: isNaN(philhealthDeduction)
+            ? "N/A"
+            : philhealthDeduction.toFixed(2),
+          sssDeduction: isNaN(sssDeduction) ? "N/A" : sssDeduction.toFixed(2),
+          netPay: isNaN(netPay) ? "N/A" : netPay.toFixed(2),
         };
       });
 
       setPayrollData(processedData);
       setShowTable(true);
-      setExportable(true); 
+      setExportable(true);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -164,45 +210,67 @@ const EmployeePayroll = () => {
     const filename = `Payroll_Summary_Report_${startDate}_to_${endDate}.xlsx`;
     const exportData = [];
 
-    exportData.push([`Payroll Summary Report for ${startDate} up to ${endDate}`]);
+    exportData.push([
+      `Payroll Summary Report for ${startDate} up to ${endDate}`,
+    ]);
     exportData.push([]);
 
     const headers = [
-      'Employee ID', 'Last Name', 'Salary Per Month', 'Extras', 'Deductions',
-      'Total Hours', 'Gross Pay', 'Pag-IBIG', 'PhilHealth', 'SSS', 'Net Pay'
+      "Employee ID",
+      "Last Name",
+      "Salary Per Month",
+      "Extras",
+      "Deductions",
+      "Total Hours",
+      "Gross Pay",
+      "Pag-IBIG",
+      "PhilHealth",
+      "SSS",
+      "Net Pay",
     ];
     exportData.push(headers);
 
-    payrollData.forEach(item => {
+    payrollData.forEach((item) => {
       exportData.push([
-        item.employeeID, item.lastName, item.salaryPerMonth, item.extras,
-        item.deductions, item.totalHours, item.grossPay, item.pagibigDeduction,
-        item.philhealthDeduction, item.sssDeduction, item.netPay
+        item.employeeID,
+        item.lastName,
+        item.salaryPerMonth,
+        item.extras,
+        item.deductions,
+        item.totalHours,
+        item.grossPay,
+        item.pagibigDeduction,
+        item.philhealthDeduction,
+        item.sssDeduction,
+        item.netPay,
       ]);
     });
 
     const totals = calculateTotals(payrollData);
-    exportData.push(['Total Employees', payrollData.length]);
-    exportData.push(['Total Gross Pay', totals.totalGrossPay.toFixed(2)]);
-    exportData.push(['Total Net Pay', totals.totalNetPay.toFixed(2)]);
+    exportData.push(["Total Employees", payrollData.length]);
+    exportData.push(["Total Gross Pay", totals.totalGrossPay.toFixed(2)]);
+    exportData.push(["Total Net Pay", totals.totalNetPay.toFixed(2)]);
 
     const ws = XLSX.utils.aoa_to_sheet(exportData);
 
-    const headerCellStyle = { font: { bold: true }, fill: { fgColor: { rgb: "FFFF00" } } };
+    const headerCellStyle = {
+      font: { bold: true },
+      fill: { fgColor: { rgb: "FFFF00" } },
+    };
     const dataCellStyle = { font: { sz: 12 } };
 
-    const range = XLSX.utils.decode_range(ws['!ref']); 
-    for(let C = range.s.c; C <= range.e.c; ++C) {
-      const address = XLSX.utils.encode_col(C) + "3"; 
-      if(!ws[address]) continue; 
+    const range = XLSX.utils.decode_range(ws["!ref"]);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const address = XLSX.utils.encode_col(C) + "3";
+      if (!ws[address]) continue;
       ws[address].s = headerCellStyle;
     }
 
-    for(let R = range.s.r; R <= range.e.r; ++R) {
-      for(let C = range.s.c; C <= range.e.c; ++C) {
-        if(R < 3) continue; 
-        const cellRef = XLSX.utils.encode_cell({r: R, c: C});
-        if(ws[cellRef]) ws[cellRef].s = dataCellStyle;
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        if (R < 3) continue;
+        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+        if (ws[cellRef]) ws[cellRef].s = dataCellStyle;
       }
     }
 
@@ -212,78 +280,167 @@ const EmployeePayroll = () => {
     XLSX.writeFile(wb, filename);
   };
 
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const employeeQuery = query(
+          collection(db, "employees_active"),
+          where("employeeID", "==", loggedInEmployeeID)
+        );
+        const querySnapshot = await getDocs(employeeQuery);
+        if (!querySnapshot.empty) {
+          const docData = querySnapshot.docs[0].data();
+          setEmployeeData(docData);
+        } else {
+          console.error("No employee found with the provided ID");
+          navigate("/Unauthorized");
+        }
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+      }
+    };
+
+    if (userEmployeeID !== loggedInEmployeeID) {
+      console.log("Unauthorized");
+      navigate("/Unauthorized");
+    } else {
+      fetchEmployeeData();
+    }
+  }, [loggedInEmployeeID, navigate, userEmployeeID]);
+
   return (
-    <div>
-      <h1>Employee Payroll</h1>
-      <div>
-        <label>Start Date:</label>
-        <input type="date" value={startDate} onChange={(e) => handleDateChange(e, "start")} />
-      </div>
-      <div>
-        <label>End Date:</label>
-        <input type="date" value={endDate} onChange={(e) => handleDateChange(e, "end")} />
-      </div>
-      <div>
-        <input type="checkbox" checked={generateAllEmployees} onChange={() => {
-          setGenerateAllEmployees(!generateAllEmployees);
-          setEmployeeID("");
-        }} />
-        <label>Generate All Employees</label>
-      </div>
-      <div>
-        <label>Employee ID:</label>
-        <input type="text" value={loggedInEmployeeID} readOnly/>
-      </div>
-      <button onClick={handleGeneratePayroll}>Generate Payroll</button>
-      {showTable && (
-        <table>
-          <thead>
-            <tr>
-              <th>Employee ID</th>
-              <th>Last Name</th>
-              <th>Salary Per Month</th>
-              <th>Extras</th>
-              <th>Deductions</th>
-              <th>Total Hours</th>
-              <th>Gross Pay</th>
-              <th>Pag-IBIG</th>
-              <th>PhilHealth</th>
-              <th>SSS</th>
-              <th>Net Pay</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payrollData.map((data, index) => (
-              <tr key={index}>
-                <td>{data.employeeID}</td>
-                <td>{data.lastName}</td>
-                <td>{data.salaryPerMonth}</td>
-                <td>{data.extras}</td>
-                <td>{data.deductions}</td>
-                <td>{data.totalHours}</td>
-                <td>{data.grossPay}</td>
-                <td>{data.pagibigDeduction}</td>
-                <td>{data.philhealthDeduction}</td>
-                <td>{data.sssDeduction}</td>
-                <td>{data.netPay}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {showTable && payrollData.length > 0 && (
-        <div>
-          <p>Total number of employees: {payrollData.length}</p>
-          {generateAllEmployees && (
-            <p>Total Gross Pay: {calculateTotals(payrollData).totalGrossPay.toFixed(2)}</p>
-          )}
-          <p>Total Net Pay: {calculateTotals(payrollData).totalNetPay.toFixed(2)}</p>
+    <>
+      <Header />
+      <div className="payroll-container">
+        <h1 className="payroll-title">Payroll Data</h1>
+        {/* Date selection */}
+        <div className="date-selection">
+          <label htmlFor="start-date" className="date-label">
+            Start Date:
+          </label>
+          <input
+            type="date"
+            id="start-date"
+            value={startDate}
+            onChange={(e) => handleDateChange(e, "start")}
+            className="date-input"
+          />
         </div>
-      )}
-      {exportable && (
-        <button onClick={handleExportToExcel}>Export to Excel</button>
-      )}
-    </div>
+        <div className="date-selection">
+          <label htmlFor="end-date" className="date-label">
+            End Date:
+          </label>
+          <input
+            type="date"
+            id="end-date"
+            value={endDate}
+            onChange={(e) => handleDateChange(e, "end")}
+            className="date-input"
+          />
+        </div>
+        {/* Checkbox for generating all employees */}
+        <label>Generate All Employees</label>
+        <div className="generate-all-employees">
+          <input
+            type="checkbox"
+            checked={generateAllEmployees}
+            onChange={() => {
+              setGenerateAllEmployees(!generateAllEmployees);
+              setEmployeeID(""); // Reset employee ID when toggling generate all employees
+            }}
+            className="generate-all-checkbox"
+          />
+        </div>
+        {/* Input for specific employee ID */}
+        <div className="employee-id-input">
+          <label htmlFor="employee-id" className="employee-id-label">
+            Employee ID:
+          </label>
+          <input
+            type="text"
+            id="employee-id"
+            value={employeeID}
+            onChange={(e) => {
+              setEmployeeID(e.target.value);
+              setGenerateAllEmployees(false); // Disable generate all employees when specifying employee ID
+            }}
+            className="employee-id-input-field"
+            disabled={generateAllEmployees}
+          />
+        </div>
+        {/* "Generate Payroll" button */}
+        <button
+          onClick={handleGeneratePayroll}
+          className="generate-payroll-button"
+        >
+          Generate Payroll
+        </button>
+        {/* Display payroll table */}
+        {showTable && (
+          <table className="payroll-table">
+            {/* Table headers */}
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Last Name</th>
+                <th>Salary Per Month</th>
+                <th>Extras</th>
+                <th>Deductions</th>
+                <th>Total Hours</th>
+                <th>Gross Pay</th>
+                <th>Pag-IBIG</th>
+                <th>PhilHealth</th>
+                <th>SSS</th>
+                <th>Net Pay</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payrollData.map((data, index) => (
+                <tr key={index}>
+                  <td>{data.employeeID}</td>
+                  <td>{data.lastName}</td>
+                  <td>{data.salaryPerMonth}</td>
+                  <td>{data.extras}</td>
+                  <td>{data.deductions}</td>
+                  <td>{data.totalHours}</td>
+                  <td>{data.grossPay}</td>
+                  <td>{data.pagibigDeduction}</td>
+                  <td>{data.philhealthDeduction}</td>
+                  <td>{data.sssDeduction}</td>
+                  <td>{data.netPay}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {/* Additional information below the table */}
+        {showTable && payrollData.length > 0 && (
+          <div className="additional-info">
+            <p>Total number of employees: {payrollData.length}</p>
+            {generateAllEmployees && (
+              <p>
+                Total Gross Pay:{" "}
+                {calculateTotals(payrollData).totalGrossPay.toFixed(2)}
+              </p>
+            )}
+            <p>
+              Total Net Pay:{" "}
+              {calculateTotals(payrollData).totalNetPay.toFixed(2)}
+            </p>
+          </div>
+        )}
+        {/* Export to Excel button */}
+        {exportable && (
+          <button
+            onClick={handleExportToExcel}
+            className="export-to-excel-button"
+          >
+            Export to Excel
+          </button>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 };
 

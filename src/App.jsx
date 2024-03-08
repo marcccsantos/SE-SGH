@@ -150,7 +150,7 @@ const App = () => {
             }
           />
           <Route
-            path="/EmployeePayroll"
+            path="/EmployeePayroll/:userEmployeeID"
             element={
               <ProtectedRoute user={user}>
                 <EmployeePayRoll />

@@ -1,0 +1,129 @@
+.search-prof {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: -35px;
+  min-height: 100vh;
+}
+
+.container-search-prof {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #176906;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  margin-top: -100px;
+}
+
+.searchForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+
+.sgh-logo-profile {
+  border: 1px solid black;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.sgh-search-prof {
+  width: 100%;
+  max-width: 250px;
+  margin-top: 30px;
+  padding: 10px 50px;
+}
+
+.container-input {
+  position: relative;
+}
+
+.input-id {
+  width: 190px;
+  padding: 10px 0px 10px 40px;
+  border-radius: 9999px;
+  border: solid 1px #333;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  opacity: 0.8;
+}
+
+.container-input svg {
+  position: absolute;
+  top: 45%;
+  left: 10px;
+  transform: translate(0, -50%);
+}
+
+.input-id:focus {
+  opacity: 1;
+  width: 210px;
+}
+
+@media screen and (min-width: 2560px) {
+  .search-input {
+    font-size: 0.43vw;
+  }
+}
+
+@media screen and (min-width: 321px) and (max-width: 475px) {
+  .logo-search {
+    width: 70%;
+    max-width: 120px;
+  }
+  .sgh-search {
+    width: 70%;
+    max-width: 100px;
+    margin-top: -15px;
+  }
+  .search-input {
+    width: 70%;
+    margin-left: 35px;
+    font-size: 1.563vw;
+  }
+  .search-box {
+    width: 70%;
+    max-width: 500px;
+  }
+  .btn-search {
+    max-width: 40px;
+    font-size: 1.563vw;
+    margin-top: 10px;
+  }
+}
+@media screen and (max-width: 320px) {
+  .logo-search {
+    width: 70%;
+    max-width: 120px;
+  }
+  .sgh-search {
+    width: 70%;
+    max-width: 100px;
+    margin-top: -15px;
+  }
+  .search-icon {
+    max-width: 9px;
+  }
+  .search-box {
+    width: 48%;
+    max-width: 500px;
+  }
+  .search-input {
+    width: 50%;
+    margin-top: 5px;
+    height: 2px;
+    font-size: 1.563vw;
+  }
+  .btn-search {
+    max-width: 40px;
+    font-size: 1.563vw;
+    margin-top: 10px;
+  }
+}
