@@ -26,11 +26,12 @@ const AddRecordFinal = () => {
   const [position, setPosition] = useState('');
   const [dateHired, setDateHired] = useState('');
   const [status, setStatus] = useState('');
+  const [role, setRole] = useState('');
+  const [shift, setShift] = useState('');
   const [salaryPerMonth, setSalaryPerMonth] = useState('');
   const [prc, setPrc] = useState('');
   const [prcExpiry, setPrcExpiry] = useState('');
   const [tin, setTin] = useState('');
-  const [role, setRole] = useState('');
   const [sss, setSss] = useState('');
   const [sssDeduction, setSssDeduction] = useState('');
   const [philhealth, setPhilhealth] = useState('');
@@ -110,6 +111,7 @@ const AddRecordFinal = () => {
           status,
           salaryPerMonth: parseFloat(salaryPerMonth),
           role,
+          shift,
           prc,
           prcExpiry,
           tin,
@@ -160,6 +162,7 @@ const AddRecordFinal = () => {
     setStatus('');
     setSalaryPerMonth('');
     setRole('');
+    setShift('');
     setPrc('');
     setPrcExpiry('');
     setTin('');
@@ -482,8 +485,8 @@ const AddRecordFinal = () => {
                         <select 
                           name="role" 
                           id="role" 
-                          value={gender} 
-                          onChange={(e) => setGender(e.target.value)} 
+                          value={role} 
+                          onChange={(e) => setRole(e.target.value)} 
                           className="input" 
                           required
                         >
@@ -492,6 +495,24 @@ const AddRecordFinal = () => {
 
                         </select>
                         <span className="placeholder">System Role</span>
+                    </label>
+                  </div>
+                  <div className="shift">
+                    <label className="field">
+                        <select 
+                          name="shift" 
+                          id="shift" 
+                          value={shift} 
+                          onChange={(e) => setShift(e.target.value)} 
+                          className="input" 
+                          required
+                        >
+                            <option value=""></option>
+                            <option value="7-5">7:00AM - 5:00PM</option>
+                            <option value="5-7">5:00PM - 7:00AM</option>
+                            <option value="8-5">8:00AM - 5:00PM</option>
+                        </select>
+                        <span className="placeholder">Shift Schedule</span>
                     </label>
                   </div>
                 </div>

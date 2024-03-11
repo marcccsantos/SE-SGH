@@ -334,7 +334,11 @@ const EmployeeProfile = () => {
                       type="text"
                       name="role"
                       id="role"
-                      value={employeeData.role}
+                      value={
+                        employeeData.role === 'admin' ? 'Admin' :
+                        employeeData.role === 'employee' ? 'Employee' :
+                        employeeData.role // Default value if none of the conditions match
+                      } 
                       readOnly
                       className="input"
                       required
@@ -342,6 +346,25 @@ const EmployeeProfile = () => {
                     <span className="placeholder">System Role</span>
                   </label>
                 </div>
+                <div className="shift">
+                    <label className="field">
+                        <input 
+                          type="text"
+                          name="shift" 
+                          id="shift" 
+                          value={
+                            employeeData.shift === '7-5' ? '7:00AM to 5:00PM' :
+                            employeeData.shift === '5-7' ? '5:00PM to 7:00AM' :
+                            employeeData.shift === '8-5' ? '8:00AM to 5:00PM' :
+                            employeeData.shift // Default value if none of the conditions match
+                          } 
+                          readOnly
+                          className="input" 
+                          required
+                        />
+                        <span className="placeholder">Shift Schedule</span>
+                    </label>
+                  </div>
               </div>
             </div>
             <div className="id-info">
