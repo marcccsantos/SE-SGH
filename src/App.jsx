@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { ProtectedRoute } from "./components/protectedRoute";
@@ -29,8 +24,6 @@ import { useEffect, useState } from "react";
 const App = () => {
   const [user, setUser] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
-  const storedUserRole = localStorage.getItem("userRole");
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -48,15 +41,12 @@ const App = () => {
     return <h2>Loading...</h2>;
   }
 
-  if (storedUserRole !== "admin") {
-    localStorage.removeItem("userRole");
-  }
-
-  // Define routes based on user roles
-  const adminRoutes = (
-    <>
-      {storedUserRole === "admin" ? (
-        <>
+  return (
+    <div className="app">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/forgot" element={<Forgot />} />
           <Route
             path="/search"
             element={
@@ -151,42 +141,22 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-        </>
-      ) : (
-        <Route path="*" element={<Navigate to="/Unauthorized" />} />
-      )}
-    </>
-  );
-
-  const employeeRoutes = (
-    <>
-      <Route
-        path="/EmployeeProfile/:userEmployeeID"
-        element={
-          <ProtectedRoute user={user}>
-            <EmployeeProfile />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/EmployeePayroll/:userEmployeeID"
-        element={
-          <ProtectedRoute user={user}>
-            <EmployeePayRoll />
-          </ProtectedRoute>
-        }
-      />
-    </>
-  );
-
-  return (
-    <div className="app">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/forgot" element={<Forgot />} />
-          {adminRoutes}
-          {employeeRoutes}
+          <Route
+            path="/EmployeeProfile/:userEmployeeID"
+            element={
+              <ProtectedRoute user={user}>
+                <EmployeeProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/EmployeePayroll/:userEmployeeID"
+            element={
+              <ProtectedRoute user={user}>
+                <EmployeePayRoll />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
           <Route path="/Unauthorized" element={<Unauthorized />} />
           <Route path="/DTR" element={<DTR />} />

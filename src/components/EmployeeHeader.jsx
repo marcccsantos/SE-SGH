@@ -12,9 +12,6 @@ const header = () => {
     location.state && location.state.loggedInEmployeeID;
 
   const handleLogOut = () => {
-    localStorage.removeItem("userRole");
-    localStorage.setItem("userRole", "admin");
-
     signOut(auth)
       .then(() => console.log("Sign Out"))
       .catch((error) => console.log(error));

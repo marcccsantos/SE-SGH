@@ -33,9 +33,6 @@ const Login = () => {
   }, []);
 
   const handleLogOut = () => {
-    localStorage.removeItem("userRole");
-    localStorage.setItem("userRole", "admin");
-
     signOut(auth)
       .then(() => console.log("Sign Out"))
       .catch((error) => console.log(error));
@@ -78,16 +75,10 @@ const Login = () => {
             const loggedInEmployeeID = results[0].employeeID;
 
             // Perform actions based on user role
-
             if (userRole === "admin") {
-              localStorage.setItem("userRole", userRole);
-              const storedUserRole = localStorage.getItem("userRole");
-              console.log(storedUserRole);
+              console.log(userRole);
               navigate("/search");
             } else if (userRole === "employee") {
-              localStorage.setItem("userRole", userRole);
-              const storedUserRole = localStorage.getItem("userRole");
-              console.log(storedUserRole);
               navigate(`/EmployeeProfile/${userEmployeeID}`, {
                 state: { loggedInEmployeeID },
               });

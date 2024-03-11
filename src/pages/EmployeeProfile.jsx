@@ -41,7 +41,7 @@ const EmployeeProfile = () => {
     } else {
       fetchEmployeeData();
     }
-  }, [loggedInEmployeeID, userEmployeeID]);
+  }, [loggedInEmployeeID, navigate, userEmployeeID]);
 
   return employeeData ? (
     <>

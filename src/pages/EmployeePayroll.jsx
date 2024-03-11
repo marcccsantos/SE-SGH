@@ -22,34 +22,6 @@ const EmployeePayroll = () => {
   const [exportable, setExportable] = useState(false);
   const [employeeData, setEmployeeData] = useState(null);
 
-  useEffect(() => {
-    const fetchEmployeeData = async () => {
-      try {
-        const employeeQuery = query(
-          collection(db, "employees_active"),
-          where("employeeID", "==", loggedInEmployeeID)
-        );
-        const querySnapshot = await getDocs(employeeQuery);
-        if (!querySnapshot.empty) {
-          const docData = querySnapshot.docs[0].data();
-          setEmployeeData(docData);
-        } else {
-          console.error("No employee found with the provided ID");
-          navigate("/Unauthorized");
-        }
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
-
-    if (userEmployeeID !== loggedInEmployeeID) {
-      console.log("Unauthorized");
-      navigate("/Unauthorized");
-    } else {
-      fetchEmployeeData();
-    }
-  }, [loggedInEmployeeID, navigate, userEmployeeID]);
-
   const calculateTotals = (data) => {
     let totalGrossPay = 0;
     let totalNetPay = 0;
