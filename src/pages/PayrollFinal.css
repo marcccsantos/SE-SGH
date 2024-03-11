@@ -11,6 +11,7 @@ body {
 .payroll-container {
   max-width: 1200px;
   width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 58px 20px;
   display: flex;
@@ -33,13 +34,12 @@ body {
   margin-bottom: 15px;
 }
 
-.generate-all-employees{
+.generate-all-employees {
   font-size: 1.2rem;
   font-weight: bold;
   color: #333;
   margin-bottom: 0;
 }
-
 
 .date-label,
 .employee-id-label {
@@ -77,8 +77,8 @@ body {
 
 .generate-payroll-button:hover,
 .export-to-excel-button:hover {
-  background-color: #444; 
-  color: #fff; 
+  background-color: #444;
+  color: #fff;
 }
 
 .payroll-table {
@@ -126,7 +126,6 @@ body {
     width: 10%;
   }
 }
-
 
 .generate-all-checkbox {
   margin-right: 10px;
@@ -176,4 +175,3 @@ body {
   color: #fff;
   transform: translateY(-50%);
 }
-

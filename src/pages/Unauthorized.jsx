@@ -6,7 +6,7 @@ const Unauthorized = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate(-2); // Go back to the previous page
+    navigate(-3); // Go back to the previous page
   };
 
   return (
