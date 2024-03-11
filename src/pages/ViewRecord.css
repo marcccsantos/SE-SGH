@@ -1,5 +1,3 @@
-
-/* Original styles for the table */
 .view-record-table {
   width: 100%;
   border-collapse: separate;
@@ -8,7 +6,6 @@
   table-layout: auto;
 }
 
-/* Original style for the table header */
 .view-record-table th {
   background-color: #176906;
   color: #fff;
@@ -19,7 +16,6 @@
   white-space: nowrap;
 }
 
-/* Original style for the table data */
 .view-record-table td {
   padding: 8px;
   text-align: left;
@@ -27,7 +23,6 @@
   border: none;
 }
 
-/* Original style for alternating rows */
 .view-record-table tbody tr:nth-child(even) {
   background-color: #609655;
 }
@@ -36,7 +31,6 @@
   background-color: #b6d69c;
 }
 
-/* Original style for empty rows */
 .view-record-table tbody tr.empty-row:nth-child(even) {
   background-color: #4B4B4B;
 }
@@ -45,7 +39,6 @@
   background-color: #D9D9D9;
 }
 
-/* Original styles for the heading */
 .view-record-heading {
   margin-top: 0;
   margin-bottom: 20px;
@@ -56,91 +49,69 @@
   margin-right: 20px;
 }
 
-/* Original styles for the footer */
 .view-record-footer {
   text-align: center;
   margin-top: 20px;
 }
 
-.view-record-input {
+/* .view-record-input {
   width: 60%;
+  height: 100%;
+  max-height: 50px;
   padding: 10px;
-  margin-right: -250px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
-  margin-top: 10px;
-  margin-bottom: 5px;
   border-radius: 100px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   color: black;
   border: 1px solid transparent;
-}
-/* Revised styles for the search input emp id etc */
-.view-record-input1 {
-    width: 80%;
-    padding: 10px;
-    margin-left: 18px;
-    margin-top: 3px;
-    text-align: center;
-    font-family: 'Inter';
-    font-weight:600;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-    color: black;
-    border: 1px solid transparent;
-}
-.view-record-input2 { /*asc desc*/
-  width: 80%;
-    padding: 10px;
-    margin-left: 18px;
-    margin-top: 3px;
-    text-align: center;
-    font-family: 'Inter';
-    font-weight:600;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-    color: black;
-    border: 1px solid transparent;
-}
+} */
+/* .view-record-input1 {
+  width: 50%;
+  padding: 10px;
+  margin-top: 20px; 
+  margin-bottom: 5px; 
+  text-align: center;
+  font-family: 'Inter';
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;
+} */
 
+/* .view-record-input2 { 
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-family: 'Inter';
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;
+} */
 
-/* Revised styles for the search input when focused */
+/*
 .view-record-input:focus {
   outline: none;
   border: 1px solid transparent;
 }
 
-/* Revised placeholder styles for the search input */
 .view-record-input::placeholder {
   color: black;
   font-weight: 600;
-}
+}*/
 
-/* Revised styles for the search button */
-.view-record-button {
-  width: 70%;
-  max-width: 80px;
-  background-color: white;
-  border-style: none;
-  font-family: 'Inter';
-  padding: 3px;
-  margin-top: 20px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-  font-weight: 600;
-  color: black;
-}
+/* 
+} */
 
-
-/* Add styles for the search bar container */
+/*
 .view-record-search {
-  width: 80%;
   margin-top: -50px;
   margin-right: 250px;
   text-align: center;
@@ -148,22 +119,23 @@
   font-weight:600;
   color: black;
   border: 1px solid transparent;
-}
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}*/
 
-/* Original styles for popup content */
 .popup-content {
   display: flex;
   justify-content: space-between;
 }
-
-/* Revised styles for the container */
+/*
 .view-record-container {
   position: relative;
   margin: auto;
   padding: 75px;;
   font-family: "Inter", sans-serif;
   min-height: 100vh;
-}
+}*/
 
 .options-container {
   position: absolute;
@@ -197,7 +169,6 @@
   background-color: #e0e0e0;
 }
 
-/* Column Selector CSS */
 
 .column-selector-container {
   margin-top: 20px;
@@ -214,10 +185,81 @@
 
 .column-selector-checkbox {
   margin-right: 5px;
+  
 }
 
+.checkbox-wrapper-3 input[type="checkbox"] {
+  visibility: hidden;
+  display: none;
+}
 
-/* Media queries for responsiveness */
+.checkbox-wrapper-3 .toggle {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 20px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-3 .toggle:before {
+  content: "";
+  position: relative;
+  top: 3px;
+  left: 3px;
+  width: 34px;
+  height: 14px;
+  display: block;
+  background: #9A9999;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.checkbox-wrapper-3 .toggle span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
+  transition: all 0.2s ease;
+}
+
+.checkbox-wrapper-3 .toggle span:before {
+  content: "";
+  position: absolute;
+  display: block;
+  margin: -18px;
+  width: 56px;
+  height: 56px;
+  background: rgba(79, 46, 220, 0.5);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 1;
+  pointer-events: none;
+}
+
+.checkbox-wrapper-3 #cbx-3:checked + .toggle:before {
+  background: #947ADA;
+}
+
+.checkbox-wrapper-3 #cbx-3:checked + .toggle span {
+  background: #4F2EDC;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+
+.checkbox-wrapper-3 #cbx-3:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
 @media screen and (min-width: 321px) and (max-width: 475px) {
   .view-record-input {
     width: 70%;
@@ -235,3 +277,81 @@
   }
 }
 
+
+.view-record-container{
+  position: relative;
+  margin: auto;
+  padding: 0 75px;
+  font-family: "Inter", sans-serif;
+  min-height: 100vh;
+}
+.view-record-search{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+.view-record-input{
+  width: 100%;
+  max-width: 500px;
+  margin-right: 5px;
+  margin-top: 5px;
+  padding: 4px;
+  text-align: center;
+  font-family: 'Inter';
+  font-weight: 600;
+  border-radius: 100px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;;
+}
+.view-record-input1{
+  margin-bottom: 10px;
+  padding: 5px;
+  text-align: center;
+  font-family: 'Inter';
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;
+}
+.view-record-input2{
+  width: 60%;
+  margin-right: 45px; 
+  margin-bottom: 10px;
+  padding: 5px;
+  text-align: center;
+  font-family: 'Inter';
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;
+}
+.view-record-sort{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 50px;
+  margin-top: 20px;
+}
+.view-record-button{
+  width: 100%;
+  max-width: 70px;
+}
+.view-record-button {
+  width: 70%;
+  max-width: 80px;
+  background-color: white;
+  border-style: none;
+  font-family: 'Inter';
+  padding: 3px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  color: black;
