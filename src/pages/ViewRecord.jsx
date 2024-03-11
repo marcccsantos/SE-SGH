@@ -321,49 +321,7 @@ const ViewRecord = () => {
     <>
       <Header />
       <div className="view-record-container">
-
         <div className="view-record-search">
-          <div className="view-record-sort">
-            <select
-              className="view-record-input1"
-              onChange={(e) => setQuickFilter(e.target.value)}
-            >
-              <option value="employeeID">Employee ID</option>
-              <option value="lastName">Last Name</option>
-              <option value="firstName">First Name</option>
-              <option value="middleName">Middle Name</option>
-              <option value="gender">Gender</option>
-              <option value="dateOfBirth">Birthday</option>
-              <option value="address">Address</option>
-              <option value="contactNumber">Contact Number</option>
-              <option value="employmentStatus">Employment Status</option>
-              <option value="position">Position</option>
-              <option value="designation">Designation</option>
-              <option value="salaryPerMonth">Salary Per Month</option>
-              <option value="department">Department</option>
-              <option value="dateHired">Date Hired</option>
-              <option value="prc">PRC</option>
-              <option value="prcExpiry">PRC Expiry</option>
-              <option value="philhealth">Philhealth</option>
-              <option value="pagibig">Pagibig</option>
-              <option value="sss">SSS</option>
-            </select>
-
-            <select
-              className="view-record-input2"
-              onChange={(e) => handleSortOrderChange(e.target.value)}
-            >
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
-            </select>
-            <button
-              className="view-record-button"
-              onClick={() => handleQuickSort(quickFilter)}
-            >
-              Sort
-            </button>
-        </div>
-
           <input
             className="view-record-input"
             type="text"
@@ -374,29 +332,65 @@ const ViewRecord = () => {
           <button className="view-record-button" onClick={handleSearch}>
             Search
           </button>
-       
+        </div>
   
-    
+        <div className="view-record-sort">
+          <select
+            className="view-record-input1"
+            onChange={(e) => setQuickFilter(e.target.value)}
+          >
+            <option value="employeeID">Employee ID</option>
+            <option value="lastName">Last Name</option>
+            <option value="firstName">First Name</option>
+            <option value="middleName">Middle Name</option>
+            <option value="gender">Gender</option>
+            <option value="dateOfBirth">Birthday</option>
+            <option value="address">Address</option>
+            <option value="contactNumber">Contact Number</option>
+            <option value="employmentStatus">Employment Status</option>
+            <option value="position">Position</option>
+            <option value="designation">Designation</option>
+            <option value="salaryPerMonth">Salary Per Month</option>
+            <option value="department">Department</option>
+            <option value="dateHired">Date Hired</option>
+            <option value="prc">PRC</option>
+            <option value="prcExpiry">PRC Expiry</option>
+            <option value="philhealth">Philhealth</option>
+            <option value="pagibig">Pagibig</option>
+            <option value="sss">SSS</option>
+          </select>
+        </div>
+  
+        <div>
+          <select
+            className="view-record-input2"
+            onChange={(e) => handleSortOrderChange(e.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+          <button
+            className="view-record-button"
+            onClick={() => handleQuickSort(quickFilter)}
+          >
+            Sort
+          </button>
         </div>
         <div>
-        {columnSelectors.map((group, index) => (
-  <div key={index} className="checkbox-wrapper-3">
-    <input
-      type="checkbox"
-      id={`cbx-${index}`}
-      checked={group.columns.every(col => columnVisibility[col])}
-      onChange={() => {
-        const newColumnVisibility = { ...columnVisibility };
-        group.columns.forEach(col => {
-          newColumnVisibility[col] = !newColumnVisibility[col];
-        });
-        setColumnVisibility(newColumnVisibility);
-      }}
-    />
-    <label htmlFor={`cbx-${index}`} className="toggle"><span></span></label>
-    <label>{group.label}</label>
-  </div>
-))}
+          {columnSelectors.map((group, index) => (
+            <div key={index}>
+              <label>
+                {group.label}
+                <input
+                  type="checkbox"
+                  checked={!group.columns.some(col => !columnVisibility[col])}
+                  onChange={() => {
+                    group.columns.forEach(col => handleColumnToggle(col))
+                  }}
+                />
+              </label>
+            </div>
+          ))}
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table className="view-record-table">
@@ -446,7 +440,7 @@ const ViewRecord = () => {
             </div>
           </div>
         )}
-        </div>
+      </div>
       <Footer />
     </>
   );
