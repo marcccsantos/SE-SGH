@@ -61,84 +61,101 @@ const DTR = () => {
     // Check if the user exists in the employees collection
     const employeesCollection = collection(db, 'employees_active');
     const employeesQuery = query(
-      employeesCollection,
-      where('employeeID', '==', employeeID),
-      where('lastName', '==', lastName)
+        employeesCollection,
+        where('employeeID', '==', employeeID),
+        where('lastName', '==', lastName)
     );
     const employeesSnapshot = await getDocs(employeesQuery);
-  
+
     if (employeesSnapshot.empty) {
-      console.log('User does not exist.');
-      return;
+        console.log('User does not exist.');
+        return;
     }
-  
+
     // Check if the user has already timed out today
     const dtrCollection = collection(db, 'daily_time_records');
     const today = new Date();
     const dateString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     const dtrQuery = query(
-      dtrCollection,
-      where('employeeID', '==', employeeID),
-      where('date', '==', dateString)
+        dtrCollection,
+        where('employeeID', '==', employeeID),
+        where('date', '==', dateString)
     );
     const dtrSnapshot = await getDocs(dtrQuery);
-  
+
     if (!dtrSnapshot.empty && !dtrSnapshot.docs[0].data().timeOut) {
-      // User has not timed out today, proceed with time out
-      const docId = dtrSnapshot.docs[0].id;
-      const timeOutData = {
-        timeOut: today.toLocaleTimeString(),
-      };
+        // User has not timed out today, proceed with time out
+        const docId = dtrSnapshot.docs[0].id;
+        const timeOutData = {
+            timeOut: today.toLocaleTimeString(),
+        };
 
-      const timeInString = dtrSnapshot.docs[0].data().timeIn;
-      const timeInDate = new Date(today.toDateString() + ' ' + timeInString);
-      const timeOutDate = today;
-      const workHours = calculateWorkHours(timeInDate, timeOutDate);
-      
-      timeOutData.totalHours = workHours;
-  
-      await updateDoc(doc(dtrCollection, docId), timeOutData);
-      console.log('Time Out recorded:', docId);
-      setTimeOut(timeOutData.timeOut);
-      handleOpenPopupTimeOut();
-      setEmployeeID('');
-      setLastName('');
+        const timeInString = dtrSnapshot.docs[0].data().timeIn;
+        const timeInDate = new Date(today.toDateString() + ' ' + timeInString);
+        const timeOutDate = today;
+        const workHours = calculateWorkHours(timeInDate, timeOutDate);
+
+        timeOutData.totalHours = workHours;
+
+        await updateDoc(doc(dtrCollection, docId), timeOutData);
+        console.log('Time Out recorded:', docId);
+        setTimeOut(timeOutData.timeOut);
+        handleOpenPopupTimeOut();
+        setEmployeeID('');
+        setLastName('');
+    } else if (!dtrSnapshot.empty && dtrSnapshot.docs[0].data().timeOut) {
+        // User has already timed out today, check for overnight shift
+        const docId = dtrSnapshot.docs[0].id;
+        const timeOutData = {
+            timeOut: today.toLocaleTimeString(),
+        };
+
+        const timeInString = dtrSnapshot.docs[0].data().timeIn;
+        const timeInDate = new Date(today.toDateString() + ' ' + timeInString);
+        const timeOutDate = today;
+        const workHours = calculateWorkHours(timeInDate, timeOutDate);
+
+        timeOutData.totalHours = workHours;
+
+        await updateDoc(doc(dtrCollection, docId), timeOutData);
+        console.log('Time Out recorded for overnight shift:', docId);
+        setTimeOut(timeOutData.timeOut);
+        handleOpenPopupTimeOut();
+        setEmployeeID('');
+        setLastName('');
     } else {
-      console.log('User has already timed out today or has not timed in.');
+        console.log('User has already timed out today or has not timed in.');
     }
-  };
-
-  const calculateWorkHours = (timeInDate, timeOutDate) => {
-    const workDayStart = new Date(timeInDate);
-    workDayStart.setHours(7, 0, 0); // Set work day start time to 7:00 AM
-    const lunchBreakStart = new Date(timeInDate);
-    lunchBreakStart.setHours(12, 0, 0); // Set lunch break start time to 12:00 PM
-    const lunchBreakEnd = new Date(timeInDate);
-    lunchBreakEnd.setHours(13, 0, 0); // Set lunch break end time to 1:00 PM
-    const workDayEnd = new Date(timeInDate);
-    workDayEnd.setHours(17, 0, 0); // Set work day end time to 5:00 PM
-
-    let workHours = 0;
-
-    if (timeOutDate < workDayStart) {
-      workHours = 0;
-    } else if (timeOutDate <= workDayEnd) {
-      workHours = (timeOutDate - timeInDate) / (1000 * 60 * 60); // Calculate difference in hours
-      if (workHours < 1 && timeInDate.getHours() <= 7 && timeOutDate.getHours() > 7 && timeOutDate.getHours() <= 7.25) {
-        workHours = 1; // Grace period adjustment
-      }
-      if (timeOutDate >= lunchBreakStart && timeOutDate <= lunchBreakEnd) {
-        workHours -= 1; // Subtract 1 hour for lunch break
-      }
-    } else {
-      workHours = (workDayEnd - timeInDate) / (1000 * 60 * 60); // Calculate difference till end of work day
-      if (timeInDate <= lunchBreakStart) {
-        workHours -= 1; // Subtract 1 hour for lunch break if time in was before lunch break
-      }
-    }   
-
-    return Math.round(workHours);
 };
+
+const calculateWorkHours = (timeInDate, timeOutDate) => {
+  const workDayStart = new Date(timeInDate);
+  workDayStart.setHours(7, 0, 0); // Set work day start time to 7:00 AM
+  const workDayEnd = new Date(timeInDate);
+  workDayEnd.setHours(7, 0, 0); // Set work day end time to 7:00 AM of the next day
+
+  let workHours = 0;
+
+  // Calculate work hours for the first day
+  if (timeOutDate <= workDayEnd) {
+      workHours += (timeOutDate - timeInDate) / (1000 * 60 * 60); // Calculate difference in hours
+  } else {
+      // User worked past midnight
+      const firstDayEnd = new Date(timeInDate);
+      firstDayEnd.setHours(23, 59, 59); // Set the end of the first day to 11:59:59 PM
+      workHours += (firstDayEnd - timeInDate) / (1000 * 60 * 60); // Calculate work hours for the first day
+  }
+
+  // Calculate work hours for the second day (if applicable)
+  if (timeOutDate > workDayEnd) {
+      const secondDayStart = new Date(timeOutDate);
+      secondDayStart.setHours(0, 0, 0); // Set the start of the second day to 12:00:00 AM
+      workHours += (timeOutDate - secondDayStart) / (1000 * 60 * 60); // Calculate work hours for the second day
+  }
+
+  return Math.round(workHours);
+};
+
 
 
   useEffect(() => {
