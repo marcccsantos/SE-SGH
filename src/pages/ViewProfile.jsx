@@ -764,9 +764,9 @@ const ViewProfile = () => {
             {logs.map((log, index) => (
               <tr key={index}>
                 <td>{log.date}</td>
-                <td>{log.extras}</td>
+                <td>{isNaN(log.extras) ? '' : log.extras}</td>
                 <td>{log.extrasReason}</td>
-                <td>{log.deductions}</td>
+                <td>{isNaN(log.deductions) ? '' : log.deductions}</td>
                 <td>{log.deductionsReason}</td>
               </tr>
             ))}
