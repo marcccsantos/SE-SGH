@@ -15,47 +15,93 @@ const DTR = () => {
     // Check if the user exists in the employees collection
     const employeesCollection = collection(db, 'employees_active');
     const employeesQuery = query(
-      employeesCollection,
-      where('employeeID', '==', employeeID),
-      where('lastName', '==', lastName)
+        employeesCollection,
+        where('employeeID', '==', employeeID),
+        where('lastName', '==', lastName)
     );
     const employeesSnapshot = await getDocs(employeesQuery);
-  
+
     if (employeesSnapshot.empty) {
-      console.log('User does not exist.');
-      return;
+        console.log('User does not exist.');
+        return;
     }
-  
+
+    const employeeData = employeesSnapshot.docs[0].data();
+
+    // Retrieve shift information
+    const shift = employeeData.shift;
+
+    // Get current time
+    const currentTime = new Date();
+
+    // Determine the shift start time based on the shift type
+    let shiftStart;
+
+    switch (shift) {
+        case "7-5":
+            shiftStart = new Date(currentTime);
+            shiftStart.setHours(7, 0, 0); // Set shift start time to 7:00 AM
+            break;
+        case "5-7":
+            shiftStart = new Date(currentTime);
+            shiftStart.setHours(17, 0, 0); // Set shift start time to 5:00 PM
+            break;
+        case "8-5":
+            shiftStart = new Date(currentTime);
+            shiftStart.setHours(8, 0, 0); // Set shift start time to 8:00 AM
+            break;
+        default:
+            console.log('Invalid shift type.');
+            return;
+    }
+
+    // Calculate grace period end time (15 minutes after the shift start)
+    const gracePeriodEndTime = new Date(shiftStart.getTime() + 15 * 60 * 1000); // 15 minutes in milliseconds
+
     // Check if the user has already timed in today
     const dtrCollection = collection(db, 'daily_time_records');
     const today = new Date();
     const dateString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     const dtrQuery = query(
-      dtrCollection,
-      where('employeeID', '==', employeeID),
-      where('date', '==', dateString)
+        dtrCollection,
+        where('employeeID', '==', employeeID),
+        where('date', '==', dateString)
     );
     const dtrSnapshot = await getDocs(dtrQuery);
-  
+
     if (dtrSnapshot.empty) {
-      // User has not timed in today, proceed with time in
-      const timeInData = {
-        employeeID,
-        lastName,
-        date: dateString,
-        timeIn: today.toLocaleTimeString(),
-      };
-  
-      const docRef = await addDoc(dtrCollection, timeInData);
-      console.log('Time In recorded:', docRef.id);
-      setTimeIn(timeInData.timeIn);
-      handleOpenPopupTimeIn();
-      setEmployeeID('');
-      setLastName('');
+        // User has not timed in today, proceed with time in
+        const timeInData = {
+            employeeID,
+            lastName,
+            date: dateString,
+            timeIn: today.toLocaleTimeString(),
+        };
+
+        // Check for late arrival
+        if (currentTime > gracePeriodEndTime) {
+            const lateArrivalMinutes = Math.round((currentTime - gracePeriodEndTime) / (1000 * 60)); // Round off to nearest minute
+            const deductionsData = {
+                employeeID,
+                date: dateString,
+                deductions: lateArrivalMinutes,
+                deductionsReason: 'Late arrival',
+            };
+            // Log deductions to 'extras_and_deductions' collection
+            await addDoc(collection(db, 'extras_and_deductions'), deductionsData);
+        }
+
+        const docRef = await addDoc(dtrCollection, timeInData);
+        console.log('Time In recorded:', docRef.id);
+        setTimeIn(timeInData.timeIn);
+        handleOpenPopupTimeIn();
+        setEmployeeID('');
+        setLastName('');
     } else {
-      console.log('User has already timed in today.');
+        console.log('User has already timed in today.');
     }
-  };
+};
+
   
   const handleTimeOut = async () => {
     // Check if the user exists in the employees collection
@@ -109,37 +155,22 @@ const DTR = () => {
   };
 
   const calculateWorkHours = (timeInDate, timeOutDate) => {
-    const workDayStart = new Date(timeInDate);
-    workDayStart.setHours(7, 0, 0); // Set work day start time to 7:00 AM
-    const lunchBreakStart = new Date(timeInDate);
-    lunchBreakStart.setHours(12, 0, 0); // Set lunch break start time to 12:00 PM
-    const lunchBreakEnd = new Date(timeInDate);
-    lunchBreakEnd.setHours(13, 0, 0); // Set lunch break end time to 1:00 PM
-    const workDayEnd = new Date(timeInDate);
-    workDayEnd.setHours(17, 0, 0); // Set work day end time to 5:00 PM
+    // Calculate the time difference in milliseconds
+    let timeDifference = timeOutDate - timeInDate;
 
-    let workHours = 0;
+    // Check if time out is earlier (indicating an overnight shift)
+    if (timeDifference < 0) {
+        // Add 24 hours to the time difference
+        timeDifference += 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    }
 
-    if (timeOutDate < workDayStart) {
-      workHours = 0;
-    } else if (timeOutDate <= workDayEnd) {
-      workHours = (timeOutDate - timeInDate) / (1000 * 60 * 60); // Calculate difference in hours
-      if (workHours < 1 && timeInDate.getHours() <= 7 && timeOutDate.getHours() > 7 && timeOutDate.getHours() <= 7.25) {
-        workHours = 1; // Grace period adjustment
-      }
-      if (timeOutDate >= lunchBreakStart && timeOutDate <= lunchBreakEnd) {
-        workHours -= 1; // Subtract 1 hour for lunch break
-      }
-    } else {
-      workHours = (workDayEnd - timeInDate) / (1000 * 60 * 60); // Calculate difference till end of work day
-      if (timeInDate <= lunchBreakStart) {
-        workHours -= 1; // Subtract 1 hour for lunch break if time in was before lunch break
-      }
-    }   
+    // Convert milliseconds to hours and minus 1 hour for break
+    const workHours = (timeDifference / (1000 * 60 * 60)) - 1 ;
 
-    return Math.round(workHours);
+
+    // Rounds up the hours
+    return Math.ceil(workHours);
 };
-
 
   useEffect(() => {
     document.body.classList.add('dtrPage');
