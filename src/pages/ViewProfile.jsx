@@ -18,9 +18,10 @@ const ViewProfile = () => {
   const [age, setAge] = useState('');
   const [extras, setExtras] = useState('');
   const [deductions, setDeductions] = useState('');
+  const [extrasReason, setExtrasReason] = useState(''); // Add state for extrasReason
+  const [deductionsReason, setDeductionsReason] = useState(''); // Add state for deductionsReason
   const [selectedDate, setSelectedDate] = useState('');
-
-
+  const [logs, setLogs] = useState([]);
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -30,9 +31,11 @@ const ViewProfile = () => {
         if (!querySnapshot.empty) {
           const docData = querySnapshot.docs[0].data();
           setEmployeeData(docData);
-          setEditedData({ ...docData }); // Initialize editedData with employeeData
-          setDocumentId(querySnapshot.docs[0].id); // Set the document ID
-
+          // Fetch logs data here
+          const logsQuery = query(collection(db, 'extras_and_deductions'), where('employeeID', '==', employeeID));
+          const logsSnapshot = await getDocs(logsQuery);
+          const logsData = logsSnapshot.docs.map((doc) => doc.data());
+          setLogs(logsData);
         } else {
           console.error('No employee found with the provided ID');
         }
@@ -118,17 +121,26 @@ const ViewProfile = () => {
   // Function to handle submission of extras and deductions
   const submitExtrasAndDeductions = async () => {
     try {
+      if (!selectedDate || (extras === '' && deductions === '')) {
+        console.error('Date and at least one of Extras or Deductions are required.');
+        return;
+      }
+      
       // Create a new document in the "extras_and_deductions" collection
       await addDoc(collection(db, 'extras_and_deductions'), {
         date: selectedDate,
         employeeID,
         extras: parseFloat(extras), // Convert to number
-        deductions: parseFloat(deductions) // Convert to number
+        deductions: parseFloat(deductions), // Convert to number
+        extrasReason, // Include extras reason
+        deductionsReason // Include deductions reason
       });
       // Clear input fields after submission
       setSelectedDate('');
       setExtras('');
       setDeductions('');
+      setExtrasReason('');
+      setDeductionsReason('');
       console.log('Extras and deductions submitted successfully');
     } catch (error) {
       console.error('Error submitting extras and deductions:', error);
@@ -455,12 +467,35 @@ const ViewProfile = () => {
                           type="text"
                           name="role"
                           id="role"
-                          value={employeeData.role} 
+                          value={
+                            employeeData.role === 'admin' ? 'Admin' :
+                            employeeData.role === 'employee' ? 'Employee' :
+                            employeeData.role // Default value if none of the conditions match
+                          } 
                           readOnly
                           className="input"
                           required
                       />
                       <span className="placeholder">System Role</span>
+                    </label>
+                  </div>
+                  <div className='shift'>
+                    <label className="field" >
+                      <input
+                          type="text"
+                          name="shift"
+                          id="shift"
+                          value={
+                            employeeData.shift === '7-5' ? '7:00AM to 5:00PM' :
+                            employeeData.shift === '5-7' ? '5:00PM to 7:00AM' :
+                            employeeData.shift === '8-5' ? '8:00AM to 5:00PM' :
+                            employeeData.shift // Default value if none of the conditions match
+                          } 
+                          readOnly
+                          className="input"
+                          required
+                      />
+                      <span className="placeholder">Shift Schedule</span>
                     </label>
                   </div>
                 </div>
@@ -610,55 +645,78 @@ const ViewProfile = () => {
               </div>
 
               <div className="extras-deductions-form">
-          <h2>Submit Extras and Deductions</h2>
-          <div className="text-fields">
-          <label htmlFor="date">Date:</label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                required
-              />
-            <div className="extras">
-              <label className="field">
-                <input
-                  type="number"
-                  name="extras"
-                  id="extras"
-                  value={extras}
-                  onChange={(e) => setExtras(e.target.value)}
-                  className="input"
-                  required
-                />
-                <span className="placeholder">Extras</span>
-              </label>
-            </div>
-            <div className="deductions">
-              <label className="field">
-                <input
-                  type="number"
-                  name="deductions"
-                  id="deductions"
-                  value={deductions}
-                  onChange={(e) => setDeductions(e.target.value)}
-                  className="input"
-                  required
-                />
-                <span className="placeholder">Deductions</span>
-              </label>
-            </div>
-          </div>
-          <div className="submit-extras-deductions">
-            <button type="button" className="submit-btn" onClick={submitExtrasAndDeductions}>
-              Submit
-            </button>
-          </div>
-        </div>
-
-
-
+                <h2>Submit Extras and Deductions</h2>
+                <div className="text-fields">
+                  <label htmlFor="date">Date:</label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    required
+                  />
+                  <div className="extras">
+                    <label className="field">
+                      <input
+                        type="number"
+                        name="extras"
+                        id="extras"
+                        value={extras}
+                        onChange={(e) => setExtras(e.target.value)}
+                        className="input"
+                        required
+                      />
+                      <span className="placeholder">Extras</span>
+                    </label>
+                    {/* Add extras reason input */}
+                    <label className="field">
+                      <input
+                        type="text"
+                        name="extrasReason"
+                        id="extrasReason"
+                        value={extrasReason}
+                        onChange={(e) => setExtrasReason(e.target.value)}
+                        className="input"
+                        required
+                      />
+                      <span className="placeholder">Reason for Extras</span>
+                    </label>
+                  </div>
+                  <div className="deductions">
+                    <label className="field">
+                      <input
+                        type="number"
+                        name="deductions"
+                        id="deductions"
+                        value={deductions}
+                        onChange={(e) => setDeductions(e.target.value)}
+                        className="input"
+                        required
+                      />
+                      <span className="placeholder">Deductions</span>
+                    </label>
+                    {/* Add deductions reason input */}
+                    <label className="field">
+                      <input
+                        type="text"
+                        name="deductionsReason"
+                        id="deductionsReason"
+                        value={deductionsReason}
+                        onChange={(e) => setDeductionsReason(e.target.value)}
+                        className="input"
+                        required
+                      />
+                      <span className="placeholder">Reason for Deductions</span>
+                    </label>
+                  </div>
+                </div>
+                <div className="submit-extras-deductions">
+                  <button type="button" className="submit-btn" onClick={submitExtrasAndDeductions}>
+                    Submit
+                  </button>
+                </div>
+              </div>
 
               <div className="save-rec">
               {isEditing ? (
@@ -689,6 +747,31 @@ const ViewProfile = () => {
             </div>
           </div>
         </form>
+      </div>
+      <div className="logs-container">
+        <h2>Extras and Deductions Logs</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Extras</th>
+              <th>Extras Reason</th>
+              <th>Deductions</th>
+              <th>Deductions Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log, index) => (
+              <tr key={index}>
+                <td>{log.date}</td>
+                <td>{isNaN(log.extras) ? '' : log.extras}</td>
+                <td>{log.extrasReason}</td>
+                <td>{isNaN(log.deductions) ? '' : log.deductions}</td>
+                <td>{log.deductionsReason}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <Footer />
     </>
