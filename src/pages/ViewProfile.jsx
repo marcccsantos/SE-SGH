@@ -142,7 +142,7 @@ const ViewProfile = () => {
   };
 
   if (!employeeData) {
-    return <NotFound />;
+    return;
   }
 
   // Function to handle submission of extras and deductions
