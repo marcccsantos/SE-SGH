@@ -166,7 +166,7 @@ const header = () => {
               <img src={profileImage} alt="Profile" className="header-img-2" />
             )}{" "}
             {!profileImage && <CgProfile className="header-img-2" />}
-            <p>
+            <p className="icon-name-mobile">
               {toTitleCase(firstName)} {toTitleCase(lastName)}
             </p>
             <ul>
