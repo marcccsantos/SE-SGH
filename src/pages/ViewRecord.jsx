@@ -17,9 +17,8 @@ const ViewRecord = () => {
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [selectedColumns, setSelectedColumns] = useState([]); 
+  const [popupTimeout, setPopupTimeout] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState({
-    employeeID: true,
-    lastName: true,
     firstName: true,
     middleName: true,
     contactNumber: true,
@@ -81,8 +80,7 @@ const ViewRecord = () => {
     'pagibigDeduction'
   ];
 
-
-  const rowHeight = 50; // Adjust this value based on your row height
+  const rowHeight = 100; // Adjust this value based on your row height
 
   useEffect(() => {
     fetchRecords();
@@ -110,6 +108,42 @@ const ViewRecord = () => {
 
     performSearch();
   }, [searchQuery, records]); // Added 'records' as a dependency
+
+  useEffect(() => {
+    handleQuickSort(quickFilter);
+  }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
+
+  useEffect(() => {
+    let timeoutId;
+
+    const handleTimeout = () => {
+      setShowOptions(false); // Hide popup content
+    };
+
+    const resetTimeout = () => {
+      clearTimeout(timeoutId); // Clear previous timeout
+      timeoutId = setTimeout(handleTimeout, 5000); // Set new timeout
+    };
+
+    const handleDocumentClick = (event) => {
+      if (!event.target.classList.contains('popup-content')) {
+        resetTimeout(); // Reset timeout when clicking outside the popup content
+      }
+    };
+
+    if (selectedRecord) {
+      // Initialize timeout on component mount or when selectedRecord changes
+      resetTimeout();
+    }
+
+    // Set timeout for popup content to disappear when selectedRecord changes or component unmounts
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [selectedRecord]);
 
   const fetchRecords = async () => {
     try {
@@ -173,13 +207,16 @@ const ViewRecord = () => {
 
   const handleQuickSort = (column) => {
     const sortedRecords = [...filteredRecords].sort((a, b) => {
+      const valueA = typeof a[column] === 'string' ? a[column].toLowerCase() : a[column];
+      const valueB = typeof b[column] === 'string' ? b[column].toLowerCase() : b[column];
+
       if (sortOrder === 'asc') {
-        if (a[column] < b[column]) return -1;
-        if (a[column] > b[column]) return 1;
+        if (valueA < valueB) return -1;
+        if (valueA > valueB) return 1;
         return 0;
       } else {
-        if (a[column] > b[column]) return -1;
-        if (a[column] < b[column]) return 1;
+        if (valueA > valueB) return -1;
+        if (valueA < valueB) return 1;
         return 0;
       }
     });
@@ -196,8 +233,27 @@ const ViewRecord = () => {
     if (Object.values(clickedRecord).some(value => value !== undefined && value !== null)) {
       setSelectedRecord(clickedRecord);
       setSelectedRowIndex(rowIndex);
-    }
+      // Start the countdown
+      startCountdown();
+    } 
   };
+
+
+  const startCountdown = () => {
+    clearTimeout(popupTimeout); // Clear existing timeout
+    const timeout = setTimeout(() => {
+      setSelectedRecord(null); // Hide the popup
+    }, 5000); // 5 seconds timeout
+    setPopupTimeout(timeout); // Save the timeout ID
+  };
+
+  // Effect to clear the countdown when the component unmounts or a new row is clicked
+  useEffect(() => {
+    return () => {
+      clearTimeout(popupTimeout); // Clear the timeout
+    };
+  }, [popupTimeout]);
+
 
   const calculatePopupPosition = () => {
     const popupTop = selectedRowIndex * rowHeight + 250; // Add or subtract offset as needed
@@ -261,20 +317,7 @@ const ViewRecord = () => {
     }
   };
   
-  const handleColumnSelect = (groupName, groupColumns) => {
-    const allGroupColumnsSelected = groupColumns.every(col => selectedColumns.includes(col));
-    let updatedColumns = [];
-  
-    if (allGroupColumnsSelected) {
-      // If all columns in the group are selected, deselect them
-      updatedColumns = selectedColumns.filter(col => !groupColumns.includes(col));
-    } else {
-      // Otherwise, select all columns in the group
-      updatedColumns = [...selectedColumns, ...groupColumns];
-    }
-  
-    setSelectedColumns(updatedColumns);
-  };
+
 
   const handleColumnToggle = (column) => {
     setColumnVisibility(prevVisibility => ({
@@ -282,13 +325,13 @@ const ViewRecord = () => {
       [column]: !prevVisibility[column]
     }));
   };
+
+  
   
   const columnSelectors = [
     {
-      label: 'Personal Information',
+      label: 'Personal',
       columns: [
-        'employeeID',
-        'lastName',
         'firstName',
         'middleName',
         'contactNumber',
@@ -299,7 +342,7 @@ const ViewRecord = () => {
       ]
     },
     {
-      label: 'Address Information',
+      label: 'Address',
       columns: [
         'street',
         'city',
@@ -309,7 +352,7 @@ const ViewRecord = () => {
       ]
     },
     {
-      label: 'Employment Information',
+      label: 'Employment',
       columns: [
         'department',
         'position',
@@ -318,7 +361,7 @@ const ViewRecord = () => {
       ]
     },
     {
-      label: 'Government IDs and Benefits',
+      label: 'GovIDs',
       columns: [
         'tin',
         'prc',
@@ -338,77 +381,83 @@ const ViewRecord = () => {
     <>
       <Header />
       <div className="view-record-container">
-        <div className="view-record-search">
-          <input
-            className="view-record-input"
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search Record"
-          />
-          <button className="view-record-button" onClick={handleSearch}>
-            Search
-          </button>
-        </div>
-  
-        <div className="view-record-sort">
-          <select
-            className="view-record-input1"
-            onChange={(e) => setQuickFilter(e.target.value)}
-          >
-            <option value="employeeID">Employee ID</option>
-            <option value="lastName">Last Name</option>
-            <option value="firstName">First Name</option>
-            <option value="middleName">Middle Name</option>
-            <option value="gender">Gender</option>
-            <option value="dateOfBirth">Birthday</option>
-            <option value="address">Address</option>
-            <option value="contactNumber">Contact Number</option>
-            <option value="employmentStatus">Employment Status</option>
-            <option value="position">Position</option>
-            <option value="designation">Designation</option>
-            <option value="salaryPerMonth">Salary Per Month</option>
-            <option value="department">Department</option>
-            <option value="dateHired">Date Hired</option>
-            <option value="prc">PRC</option>
-            <option value="prcExpiry">PRC Expiry</option>
-            <option value="philhealth">Philhealth</option>
-            <option value="pagibig">Pagibig</option>
-            <option value="sss">SSS</option>
-          </select>
-        </div>
-  
-        <div>
-          <select
-            className="view-record-input2"
-            onChange={(e) => handleSortOrderChange(e.target.value)}
-          >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-          <button
-            className="view-record-button"
-            onClick={() => handleQuickSort(quickFilter)}
-          >
-            Sort
-          </button>
-        </div>
-        <div>
-          {columnSelectors.map((group, index) => (
-            <div key={index}>
-              <label>
-                {group.label}
-                <input
-                  type="checkbox"
-                  checked={!group.columns.some(col => !columnVisibility[col])}
-                  onChange={() => {
-                    group.columns.forEach(col => handleColumnToggle(col))
-                  }}
-                />
-              </label>
-            </div>
-          ))}
-        </div>
+      <div className="view-record-search">
+  <div className="search-controls">
+    <input
+      className="view-record-input"
+      type="text"
+      value={searchInput}
+      onChange={(e) => setSearchInput(e.target.value)}
+      placeholder="Search Record"
+    />
+    <button className="view-record-button" onClick={handleSearch}>
+      Search
+    </button>
+  </div>
+
+  <div className="view-record-controls">
+    <div className="column-controls">
+      <select
+        className="view-record-input1"
+        onChange={(e) => {
+          setQuickFilter(e.target.value);
+          handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
+        }}
+      >
+       <option value="">Sort</option>          
+      <option value="employeeID">Employee ID</option>
+      <option value="lastName">Last Name</option>
+      <option value="firstName">First Name</option>
+      <option value="middleName">Middle Name</option>
+      <option value="gender">Gender</option>
+      <option value="dateOfBirth">Birthday</option>
+      <option value="address">Address</option>
+      <option value="contactNumber">Contact Number</option>
+      <option value="employmentStatus">Employment Status</option>
+      <option value="position">Position</option>
+      <option value="designation">Designation</option>
+      <option value="salaryPerMonth">Salary Per Month</option>
+      <option value="department">Department</option>
+      <option value="dateHired">Date Hired</option>
+      <option value="prc">PRC</option>
+      <option value="prcExpiry">PRC Expiry</option>
+      <option value="philhealth">Philhealth</option>
+      <option value="pagibig">Pagibig</option>
+      <option value="sss">SSS</option>
+      </select>
+    
+      <select
+        className="view-record-input2"
+        onChange={(e) => handleSortOrderChange(e.target.value)}
+      >
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
+    
+    <div className="checkbox-controls">
+      <div className="flex flex-row justify-center">
+        {columnSelectors.map((group, index) => (
+          <div key={index} className="checkbox-wrapper-3">
+            <input
+              type="checkbox"
+              id={`cbx-${index}`}
+              onChange={() => {
+                group.columns.forEach((col) => handleColumnToggle(col));
+              }}
+              checked={!group.columns.some((col) => !columnVisibility[col])}
+              className="hidden"
+            />
+            <label htmlFor={`cbx-${index}`} className="toggle text-base sm:text-xl3 ml-2 cursor-pointer select-none">
+              <span className="w-4 h-4 border border-gray-400 rounded-md mr-2 flex-shrink-0"></span>
+              {group.label}
+            </label>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
         <div style={{ overflowX: 'auto' }}>
           <table className="view-record-table">
             <thead>
@@ -420,29 +469,31 @@ const ViewRecord = () => {
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {filteredRecords.map((record, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className={
-                    Object.values(record).every((value) => !value)
-                      ? 'empty-row'
-                      : ''
-                  }
-                  onClick={() => handleRowClick(rowIndex)}
-                  style={{
-                    backgroundColor:
-                      rowIndex === selectedRowIndex ? '#F9AF40' : '',
-                  }}
-                  >
-                  {staticColumnOrder.map((column, index) => (
-                    columnVisibility[column] && (
-                      <td key={index}>{record[column] || '\u00A0'}</td>
-                    )
-                  ))}
-                </tr>
-              ))}
-            </tbody>
+           
+
+<tbody>
+  {filteredRecords.map((record, rowIndex) => (
+    <tr
+      key={rowIndex}
+      className={
+        Object.values(record).every((value) => !value)
+          ? 'empty-row'
+          : ''
+      }
+      onClick={() => handleRowClick(rowIndex)}
+      style={{
+        backgroundColor:
+          rowIndex === selectedRowIndex ? '#F9AF40' : '',
+      }}
+      >
+      {staticColumnOrder.map((column, index) => (
+        columnVisibility[column] && (
+          <td key={index} style={{ textTransform: 'capitalize' }}>{record[column] || '\u00A0'}</td>
+        )
+      ))}
+    </tr>
+  ))}
+</tbody>
           </table>
         </div>
   

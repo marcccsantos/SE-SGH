@@ -25,6 +25,7 @@
   text-align: left;
   text-transform: uppercase;
   border: none;
+  
 }
 
 /* Original style for alternating rows */
@@ -63,14 +64,13 @@
 }
 
 .view-record-input {
-  width: 60%;
+  width: 100%;
+  max-width: 600px ;
   padding: 10px;
   margin-right: 20px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
-  margin-top: 10px;
-  margin-bottom: 5px;
   border-radius: 100px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   color: black;
@@ -78,35 +78,36 @@
 }
 /* Revised styles for the search input emp id etc */
 .view-record-input1 {
-    width: 80%;
-    padding: 10px;
-    margin-left: 18px;
-    margin-top: 3px;
-    text-align: center;
-    font-family: 'Inter';
-    font-weight:600;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-    color: black;
-    border: 1px solid transparent;
+  width: 100%;
+  max-width: 250px;
+  padding: 10px;
+  text-align: center;
+  font-family: 'Inter';
+  font-weight: 600;
+  margin-right: 1100px; 
+  margin-top: -10px;
+  margin-bottom: -100px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;
 }
-.view-record-input2 { /*asc desc*/
-  width: 80%;
-    padding: 10px;
-    margin-left: 18px;
-    margin-top: 3px;
-    text-align: center;
-    font-family: 'Inter';
-    font-weight:600;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-    color: black;
-    border: 1px solid transparent;
+
+.view-record-input2 { /* asc desc */
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  margin-right: 1150px; /* You may adjust this value based on your layout */
+  margin-top: 30px; /* Added margin-top to create space between input1 and input2 */
+  text-align: center;
+  font-family: 'Inter';
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  border: 1px solid transparent;
 }
+
 
 
 /* Revised styles for the search input when focused */
@@ -137,23 +138,32 @@
   color: black;
 }
 
+.view-record-button1{
+  width: 70%;
+  max-width: 80px;
+  background-color: white;
+  border-style: none;
+  font-family: 'Inter';
+  padding: 3px;
+  margin-left: 30px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  color: black;
+}
+
 
 /* Add styles for the search bar container */
 .view-record-search {
-  width: 80%;
+  width: 100%;
   margin-top: -50px;
-  margin-right: 50px;
   text-align: center;
   font-family: 'Inter';
   font-weight:600;
   color: black;
   border: 1px solid transparent;
-}
-
-/* Original styles for popup content */
-.popup-content {
-  display: flex;
-  justify-content: space-between;
 }
 
 /* Revised styles for the container */
@@ -175,14 +185,10 @@
   z-index: 1;
 }
 
-.popup-content {
-  padding: 100px;
-}
 
-.popup-content h2 {
-  margin: 0 0 10px;
+.popup-content{
+  
 }
-
 .popup-content button {
   display: block;
   width: 100%;
@@ -217,6 +223,90 @@
 }
 
 
+
+.checkbox-wrapper-3 {
+  width: 100%;
+  max-width: 50px;
+  text-align: center;
+  font-family: 'Inter';
+  font-weight: 600;
+  margin-right: 50px; 
+  margin-top: -70px;
+  margin-bottom: 60px;
+}
+
+.checkbox-wrapper-3 input[type="checkbox"] {
+  visibility: hidden;
+  display: none;
+}
+
+.checkbox-wrapper-3 .toggle {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 20px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-3 .toggle:before {
+  content: "";
+  position: relative;
+  top: 3px;
+  left: 3px;
+  width: 34px;
+  height: 14px;
+  display: block;
+  background: #9A9999;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.checkbox-wrapper-3 .toggle span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
+  transition: all 0.2s ease;
+}
+
+.checkbox-wrapper-3 .toggle span:before {
+  content: "";
+  position: absolute;
+  display: block;
+  margin: -18px;
+  width: 56px;
+  height: 56px;
+  background: rgba(79, 46, 220, 0.5);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 1;
+  pointer-events: none;
+}
+
+.checkbox-wrapper-3 input[type="checkbox"]:checked + .toggle:before {
+  background: #49d757;
+}
+
+.checkbox-wrapper-3 input[type="checkbox"]:checked + .toggle span {
+  background: #059b11;
+  transform: translateX(20px);
+  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+}
+
+.checkbox-wrapper-3 input[type="checkbox"]:checked + .toggle span:before {
+  transform: scale(1);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
 /* Media queries for responsiveness */
 @media screen and (min-width: 321px) and (max-width: 475px) {
   .view-record-input {
@@ -234,4 +324,3 @@
     font-size: 1.563vw;
   }
 }
-
