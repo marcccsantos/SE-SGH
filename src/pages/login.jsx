@@ -83,7 +83,7 @@ const Login = () => {
               localStorage.setItem("userRole", userRole);
               const storedUserRole = localStorage.getItem("userRole");
               console.log(storedUserRole);
-              navigate("/search");
+              navigate("/search", { state: { loggedInEmployeeID } });
             } else if (userRole === "employee") {
               localStorage.setItem("userRole", userRole);
               const storedUserRole = localStorage.getItem("userRole");

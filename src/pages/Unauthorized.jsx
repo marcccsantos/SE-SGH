@@ -17,9 +17,9 @@ const Unauthorized = () => {
         <div className="err-text">
           Sorry, but you are not authorized to view this page.
         </div>
-        <button className="button-err" onClick={goBack}>
+        {/* <button className="button-err" onClick={goBack}>
           Go Back
-        </button>
+        </button> */}
       </div>
     </div>
   );

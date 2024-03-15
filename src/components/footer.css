@@ -1,20 +1,20 @@
 footer {
-    background-color: #176906;
-    font-family: 'Lexend', sans-serif;
-    font-size: 11px;
-    color: white;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: auto;
+  background-color: #176906;
+  font-family: "Lexend", sans-serif;
+  font-size: 11px;
+  color: white;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
 }
 
 @media screen and (max-width: 425px) {
-    .copyright-footer {
-        font-size: 8px;
-    }
-    footer {
-        height: 30px;
-    }
+  .copyright-footer {
+    font-size: 8px;
+  }
+  footer {
+    height: 30px;
+  }
 }
