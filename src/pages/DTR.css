@@ -1,5 +1,5 @@
 body.dtrPage {
-  background-color:#176906;
+  background-color: #176906;
 }
 .dtr-container {
   display: flex;
@@ -12,13 +12,13 @@ body.dtrPage {
   text-align: center;
   margin-bottom: 20px;
 }
-.dtr-card{
+.dtr-card {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding: 40px;
-  font-family: 'Inter';
+  font-family: "Inter";
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
@@ -32,7 +32,7 @@ body.dtrPage {
   margin-bottom: 15px;
   padding: 5px;
   font-size: 13px;
-  font-family: 'Inter';
+  font-family: "Inter";
 }
 .dtr-button {
   width: 100%;
@@ -43,7 +43,7 @@ body.dtrPage {
   background-color: #176906;
   border: 1px solid #176906;
   border-radius: 5px;
-  font-family: 'Inter';
+  font-family: "Inter";
   cursor: pointer;
 }
 .dtr-button:hover {
@@ -59,8 +59,7 @@ body.dtrPage {
   position: absolute;
   width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-
+  background-color: #00000080;
 }
 .popup-content {
   display: flex;
@@ -69,7 +68,7 @@ body.dtrPage {
   flex-direction: column;
   background-color: white;
   padding: 30px 40px;
-  font-family: 'Inter';
+  font-family: "Inter";
   border-radius: 10px;
 }
 .text-popup {
@@ -87,31 +86,30 @@ body.dtrPage {
   border: 1px solid #176906;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Inter';
+  font-family: "Inter";
 }
-@media screen and (max-width:320px) {
+@media screen and (max-width: 320px) {
   .dtr-heading {
     font-size: 24px;
   }
-  .dtr-card{
+  .dtr-card {
     margin: 20px;
     padding: 30px;
   }
-  .dtr-input{
+  .dtr-input {
     width: 93.5%;
     font-size: 13px;
   }
 }
-@media screen and (min-width:321px) and (max-width:425px){
+@media screen and (min-width: 321px) and (max-width: 425px) {
   .dtr-heading {
     font-size: 24px;
   }
-  .dtr-card{
+  .dtr-card {
     margin: 20px;
     padding: 30px;
   }
-  .dtr-input{
+  .dtr-input {
     width: 95.3%;
   }
 }
-
