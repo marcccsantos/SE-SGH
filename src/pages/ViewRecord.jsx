@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
-import {
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  getDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
 import { db } from "../firebase"; // Import your Firestore instance
 import Header from "../components/header";
 import Footer from "../components/footer";
 import "./ViewRecord.css"; // Import the CSS file
 import { useParams } from "react-router-dom"; // Import useParams only, since useHistory is not used
+import { IoIosSearch } from "react-icons/io";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import { TbArrowsSort } from "react-icons/tb";
+
+
 
 const ViewRecord = () => {
   const { searchQuery } = useParams();
@@ -373,29 +371,30 @@ const ViewRecord = () => {
       ],
     },
   ];
+  const [showDropdown, setShowDropdown] = useState(false); // State to control dropdown visibility
 
   return (
     <>
       <Header />
       <div className="view-record-container">
-        <div className="view-record-search">
-          <div className="search-controls">
-            <input
-              className="view-record-input"
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search Record"
-            />
-            <button className="view-record-button" onClick={handleSearch}>
-              Search
-            </button>
-          </div>
+      <div className="w-full text-center font-inter font-semibold text-black border border-transparent">
+      <div className="search-bar flex items-center justify-center mt-1">
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search Record"
+          className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 text-gray-800 max-w-xl"
+        />
+        <button onClick={handleSearch} className="search-button py-2 px-4 rounded-r-lg bg-green-500 hover:bg-green-600 text-white border border-green-400 border-l-0 focus:outline-none">
+          <IoIosSearch size={22} /> 
+        </button>
+      </div>
 
           <div className="view-record-controls">
             <div className="column-controls">
               <select
-                className="view-record-input1"
+                className="view-record-input1  py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
@@ -422,43 +421,56 @@ const ViewRecord = () => {
                 <option value="pagibig">Pagibig</option>
                 <option value="sss">SSS</option>
               </select>
-
+              <div className="checkbox-controls">
+  <div className="dropdowncol py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none">
+    <button
+    
+      onClick={() => setShowDropdown(!showDropdown)}
+      className="dropdown-toggle"
+    >
+      Select Columns
+    </button>
+    {showDropdown && (
+      <div className="dropdown-content">
+        {columnSelectors.map((group, index) => (
+          <div key={index} className="checkbox-wrapper-19">
+            <input
+              type="checkbox"
+              id={`cbx-${index}`}
+              onChange={() => {
+                group.columns.forEach((col) => handleColumnToggle(col));
+              }}
+              checked={
+                !group.columns.some((col) => !columnVisibility[col])
+              }
+              className="hidden"
+            />
+            <label
+              htmlFor={`cbx-${index}`}
+              className="check-box"
+            >
+  <span className="checkbox-label-text">{group.label}</span>
+            </label>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
               <select
-                className="view-record-input2"
+                className="view-record-input2  py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => handleSortOrderChange(e.target.value)}
+                
               >
+                
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
-            </div>
 
-            <div className="checkbox-controls">
-              <div className="flex flex-row justify-center">
-                {columnSelectors.map((group, index) => (
-                  <div key={index} className="checkbox-wrapper-3">
-                    <input
-                      type="checkbox"
-                      id={`cbx-${index}`}
-                      onChange={() => {
-                        group.columns.forEach((col) => handleColumnToggle(col));
-                      }}
-                      checked={
-                        !group.columns.some((col) => !columnVisibility[col])
-                      }
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor={`cbx-${index}`}
-                      className="toggle text-base sm:text-xl3 ml-2 cursor-pointer select-none"
-                    >
-                      <span className="w-4 h-4 border border-gray-400 rounded-md mr-2 flex-shrink-0"></span>
-                      {group.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
             </div>
-          </div>
+           
+         
+</div>
         </div>
         <div style={{ overflowX: "auto" }}>
           <table className="view-record-table">

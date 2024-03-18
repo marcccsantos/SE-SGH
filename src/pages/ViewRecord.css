@@ -72,38 +72,38 @@
   font-family: 'Inter';
   font-weight: 600;
   border-radius: 100px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   color: black;
   border: 1px solid transparent;
 }
 /* Revised styles for the search input emp id etc */
 .view-record-input1 {
   width: 100%;
-  max-width: 250px;
+  max-width: 200px;
   padding: 10px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
-  margin-right: 1100px; 
-  margin-top: -10px;
-  margin-bottom: -100px;
+  position: absolute;
+  display: inline-block;
+  margin-top: -75px; /* Adjust as needed */
+  margin-left: -610px; /* Adjust as needed */
   border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   color: black;
   border: 1px solid transparent;
 }
 
 .view-record-input2 { /* asc desc */
   width: 100%;
-  max-width: 200px;
+  position: static;
+  max-width: 150px;
   padding: 10px;
-  margin-right: 1150px; /* You may adjust this value based on your layout */
-  margin-top: 30px; /* Added margin-top to create space between input1 and input2 */
+  margin-right: 1070px; /* You may adjust this value based on your layout */
+  margin-top: -100px; /* Added margin-top to create space between input1 and input2 */
+  margin-bottom: 30px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
   border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   color: black;
   border: 1px solid transparent;
 }
@@ -113,7 +113,7 @@
 /* Revised styles for the search input when focused */
 .view-record-input:focus {
   outline: none;
-  border: 1px solid transparent;
+  border: 10px solid transparent;
 }
 
 /* Revised placeholder styles for the search input */
@@ -122,43 +122,12 @@
   font-weight: 600;
 }
 
-/* Revised styles for the search button */
-.view-record-button {
-  width: 70%;
-  max-width: 80px;
-  background-color: white;
-  border-style: none;
-  font-family: 'Inter';
-  padding: 3px;
-  margin-top: 20px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-  font-weight: 600;
-  color: black;
-}
 
-.view-record-button1{
-  width: 70%;
-  max-width: 80px;
-  background-color: white;
-  border-style: none;
-  font-family: 'Inter';
-  padding: 3px;
-  margin-left: 30px;
-  margin-top: 20px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-  font-weight: 600;
-  color: black;
-}
 
 
 /* Add styles for the search bar container */
 .view-record-search {
   width: 100%;
-  margin-top: -50px;
   text-align: center;
   font-family: 'Inter';
   font-weight:600;
@@ -177,6 +146,9 @@
 
 .options-container {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 200px;
   background-color: #fff;
   border: 1px solid #000000;
@@ -200,7 +172,7 @@
 }
 
 .popup-content button:hover {
-  background-color: #e0e0e0;
+  background-color: #34b93d;
 }
 
 /* Column Selector CSS */
@@ -221,91 +193,222 @@
 .column-selector-checkbox {
   margin-right: 5px;
 }
+/* Apply styles for the dropdown button */
+.dropdowncol {
+  position: absolute;
+  display: inline-block;
+  margin-top: -75px; /* Adjust as needed */
+  margin-left: 430px; /* Adjust as needed */
+  --font-size: 16px; /* Default font size */
+}
 
+.dropdowncol .checkbox-wrapper-19 .check-box {
+  font-size: var(--font-size); /* Apply font size to the checkbox label */
+}
 
-
-.checkbox-wrapper-3 {
+.dropdowncol-toggle {
   width: 100%;
-  max-width: 50px;
+  max-width: 200px;
+  padding: 10px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
-  margin-right: 50px; 
-  margin-top: -70px;
-  margin-bottom: 60px;
-}
-
-.checkbox-wrapper-3 input[type="checkbox"] {
-  visibility: hidden;
-  display: none;
-}
-
-.checkbox-wrapper-3 .toggle {
-  position: relative;
-  display: block;
-  width: 40px;
-  height: 20px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transform: translate3d(0, 0, 0);
-}
-
-.checkbox-wrapper-3 .toggle:before {
-  content: "";
-  position: relative;
-  top: 3px;
-  left: 3px;
-  width: 34px;
-  height: 14px;
-  display: block;
-  background: #9A9999;
-  border-radius: 8px;
-  transition: background 0.2s ease;
-}
-
-.checkbox-wrapper-3 .toggle span {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  display: block;
-  background: white;
   border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
-  transition: all 0.2s ease;
+  color: black;
+  border: 1px solid transparent;
+  background-color: #4a90e2; /* Same as view-record-input2 */
+  cursor: pointer;
 }
 
-.checkbox-wrapper-3 .toggle span:before {
-  content: "";
+.dropdowncol-toggle:hover {
+  background-color: #34b93d; /* Same as view-record-input2 */
+}
+
+/* Apply styles for the dropdown content */
+.dropdowncol-content {
+  display: none;
   position: absolute;
+  background-color: #f9f9f9;
+  width: max-content;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Show the dropdown content */
+.dropdowncol:hover .dropdown-content {
   display: block;
-  margin: -18px;
-  width: 56px;
-  height: 56px;
-  background: rgba(79, 46, 220, 0.5);
-  border-radius: 50%;
-  transform: scale(0);
-  opacity: 1;
-  pointer-events: none;
 }
 
-.checkbox-wrapper-3 input[type="checkbox"]:checked + .toggle:before {
-  background: #49d757;
+.dropdowncol:focus-within .dropdown-content {
+  display: block;
 }
 
-.checkbox-wrapper-3 input[type="checkbox"]:checked + .toggle span {
-  background: #059b11;
-  transform: translateX(20px);
-  transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
-  box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+.dropdowncol-content label {
+  display: block;
+  padding: 10px;
 }
 
-.checkbox-wrapper-3 input[type="checkbox"]:checked + .toggle span:before {
-  transform: scale(1);
-  opacity: 0;
-  transition: all 0.4s ease;
+.dropdowncol-content label:hover {
+  background-color: #176906;
 }
+
+  .checkbox-wrapper-19 {
+    box-sizing: border-box;
+    --background-color: #fff;
+    --checkbox-height: 25px;
+  }
+
+  @-moz-keyframes dothabottomcheck-19 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: calc(var(--checkbox-height) / 2);
+    }
+  }
+
+  @-webkit-keyframes dothabottomcheck-19 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: calc(var(--checkbox-height) / 2);
+    }
+  }
+
+  @keyframes dothabottomcheck-19 {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: calc(var(--checkbox-height) / 2);
+    }
+  }
+
+  @keyframes dothatopcheck-19 {
+    0% {
+      height: 0;
+    }
+    50% {
+      height: 0;
+    }
+    100% {
+      height: calc(var(--checkbox-height) * 1.2);
+    }
+  }
+
+  @-webkit-keyframes dothatopcheck-19 {
+    0% {
+      height: 0;
+    }
+    50% {
+      height: 0;
+    }
+    100% {
+      height: calc(var(--checkbox-height) * 1.2);
+    }
+  }
+
+  @-moz-keyframes dothatopcheck-19 {
+    0% {
+      height: 0;
+    }
+    50% {
+      height: 0;
+    }
+    100% {
+      height: calc(var(--checkbox-height) * 1.2);
+    }
+  }
+
+  .checkbox-wrapper-19 input[type=checkbox] {
+    display: none;
+  }
+
+  .checkbox-wrapper-19 .check-box {
+    height: var(--checkbox-height);
+    width: var(--checkbox-height);
+    background-color: transparent;
+    border: calc(var(--checkbox-height) * .1) solid #609655;
+    border-radius: 5px;
+    margin-right: 110px;
+    position: relative;
+    display: inline-block;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-transition: border-color ease 0.2s;
+    -o-transition: border-color ease 0.2s;
+    -webkit-transition: border-color ease 0.2s;
+    transition: border-color ease 0.2s;
+    cursor: pointer;
+  }
+  .checkbox-wrapper-19 .check-box::before,
+  .checkbox-wrapper-19 .check-box::after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    height: 0;
+    width: calc(var(--checkbox-height) * .2);
+    background-color: #34b93d;
+    display: inline-block;
+    -moz-transform-origin: left top;
+    -ms-transform-origin: left top;
+    -o-transform-origin: left top;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    border-radius: 5px;
+    content: "";
+    -webkit-transition: opacity ease 0.5;
+    -moz-transition: opacity ease 0.5;
+    transition: opacity ease 0.5;
+  }
+  .checkbox-wrapper-19 .check-box::before {
+    top: calc(var(--checkbox-height) * .72);
+    left: calc(var(--checkbox-height) * .41);
+    box-shadow: 0 0 0 calc(var(--checkbox-height) * .05) var(--background-color);
+    -moz-transform: rotate(-135deg);
+    -ms-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+  }
+  .checkbox-wrapper-19 .check-box::after {
+    top: calc(var(--checkbox-height) * .37);
+    left: calc(var(--checkbox-height) * .05);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+
+  .checkbox-wrapper-19 input[type=checkbox]:checked + .check-box,
+  .checkbox-wrapper-19 .check-box.checked {
+    border-color: #34b93d;
+  }
+  .checkbox-wrapper-19 input[type=checkbox]:checked + .check-box::after,
+  .checkbox-wrapper-19 .check-box.checked::after {
+    height: calc(var(--checkbox-height) / 2);
+    -moz-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+    -o-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+    -webkit-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+    animation: dothabottomcheck-19 0.2s ease 0s forwards;
+  }
+  .checkbox-wrapper-19 input[type=checkbox]:checked + .check-box::before,
+  .checkbox-wrapper-19 .check-box.checked::before {
+    height: calc(var(--checkbox-height) * 1.2);
+    -moz-animation: dothatopcheck-19 0.4s ease 0s forwards;
+    -o-animation: dothatopcheck-19 0.4s ease 0s forwards;
+    -webkit-animation: dothatopcheck-19 0.4s ease 0s forwards;
+    animation: dothatopcheck-19 0.4s ease 0s forwards;
+  }
+
+  .checkbox-label-text {
+    margin-left: 35px; /* Adjust the margin as needed */
+  }
 
 /* Media queries for responsiveness */
 @media screen and (min-width: 321px) and (max-width: 475px) {
