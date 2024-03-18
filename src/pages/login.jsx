@@ -275,7 +275,7 @@ const Login = () => {
           <Link to="/forgot" className="forgot-password">
             Forgot Password?
           </Link>
-          <img className="stethoscope" src="/stethoscope.png" alt="" />
+          {/* <img className="stethoscope" src="/stethoscope.png" alt="" /> */}
         </div>
       </div>
     </>
