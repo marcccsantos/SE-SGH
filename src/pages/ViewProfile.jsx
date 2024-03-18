@@ -179,7 +179,622 @@ const ViewProfile = () => {
   return (
     <>
       <Header />
-      <div className="form-container">
+      <form className=" mx-5 md:mx-16 mt-8 mb-8 flex flex-col p-3 bg-[#e8e8e8] sm:min-h-lvh">
+        <div className="flex items-center flex-col">
+          <div className="font-inter">
+            <div>
+              <div className=" flex justify-center items-center w-full h-[240px] mb-2 bg-white">
+                {isEditing ? (
+                  <div className="flex items-center justify-center w-full">
+                    <img
+                      src={
+                        newImage
+                          ? URL.createObjectURL(newImage)
+                          : employeeData.imageUrl
+                      }
+                      alt="Employee"
+                      style={{ maxWidth: "150px" }}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={employeeData.imageUrl}
+                    alt="Employee"
+                    style={{ maxWidth: "150px" }}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="grid w-full max-w-xs items-center gap-1.5">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="flex h-10 w-full  border border-input bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row md:space-x-5 font-inter">
+          {/* Personal Information */}
+          <div className="mt-5 flex flex-1 justify-start items-start flex-col bg-white">
+            <h1 className="w-full flex justify-start p-2 bg-[#176906] text-white">
+              Personal Information
+            </h1>
+            <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1">
+              <label
+                htmlFor="empid"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Employee ID
+              </label>
+              <input
+                type="text"
+                name="empid"
+                id="empid"
+                value={employeeData.employeeID}
+                readOnly
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="fname"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                name="fname"
+                id="fname"
+                value={
+                  isEditing ? editedData.firstName : employeeData.firstName
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="lname"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                name="lname"
+                id="lname"
+                value={isEditing ? editedData.lastName : employeeData.lastName}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="mname"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Middle Name
+              </label>
+              <input
+                type="text"
+                name="mname"
+                id="mname"
+                value={
+                  isEditing ? editedData.middleName : employeeData.middleName
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="contact"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Contact No.
+              </label>
+              <input
+                type="text"
+                name="contact"
+                id="contact"
+                value={
+                  isEditing
+                    ? editedData.contactNumber
+                    : employeeData.contactNumber
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="email"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={isEditing ? editedData.email : employeeData.email}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="date"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="date"
+                id="date"
+                value={
+                  isEditing ? editedData.dateOfBirth : employeeData.dateOfBirth
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="age"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Age
+              </label>
+              <input
+                type="number"
+                name="age"
+                id="age"
+                value={age}
+                readOnly
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="gender"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Gender
+              </label>
+              <select
+                name="gender"
+                id="gender"
+                value={isEditing ? editedData.gender : employeeData.gender}
+                onChange={(e) => handleChange(e)}
+                disabled={!isEditing}
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                required
+              >
+                <option value=""></option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Address Information */}
+          <div className="mt-5 flex flex-1 justify-start items-start flex-col bg-white">
+            <h1 className="w-full flex justify-start p-2 bg-[#176906] text-white">
+              Address Information
+            </h1>
+
+            <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1">
+              <label
+                htmlFor="street"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Street
+              </label>
+              <input
+                type="text"
+                name="street"
+                id="street"
+                value={isEditing ? editedData.street : employeeData.street}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="city"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                City
+              </label>
+              <input
+                type="text"
+                name="city"
+                id="city"
+                value={isEditing ? editedData.city : employeeData.city}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="province"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Province
+              </label>
+              <input
+                type="text"
+                name="province"
+                id="province"
+                value={isEditing ? editedData.province : employeeData.province}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="barangay"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Barangay
+              </label>
+              <input
+                type="text"
+                name="barangay"
+                id="barangay"
+                value={isEditing ? editedData.barangay : employeeData.barangay}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="lot"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Lot Number
+              </label>
+              <input
+                type="text"
+                name="lot"
+                id="lot"
+                value={
+                  isEditing ? editedData.lotNumber : employeeData.lotNumber
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row md:space-x-5 font-inter">
+          {/* Government ID and Benefits */}
+          <div className="mt-5 flex flex-1 justify-start items-start flex-col bg-white">
+            <h1 className=" w-full flex justify-start p-2 bg-[#176906] text-white">
+              Government IDs and Benefits
+            </h1>
+            <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1">
+              <label
+                htmlFor="tin"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                TIN
+              </label>
+              <input
+                type="text"
+                name="tin"
+                id="tin"
+                value={isEditing ? editedData.tin : employeeData.tin}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="prc"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                PRC
+              </label>
+              <input
+                type="text"
+                name="prc"
+                id="prc"
+                value={isEditing ? editedData.prc : employeeData.prc}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="prcExpiry"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                PRC Expiry
+              </label>
+              <input
+                type="date"
+                name="prcExpiry"
+                id="prcExpiry"
+                value={
+                  isEditing ? editedData.prcExpiry : employeeData.prcExpiry
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="sss"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                SSS
+              </label>
+              <input
+                type="text"
+                name="sss"
+                id="sss"
+                value={isEditing ? editedData.sss : employeeData.sss}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="sssDeduction"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                SSS Deduction
+              </label>
+              <input
+                type="number"
+                name="sssDeduction"
+                id="sssDeduction"
+                value={
+                  isEditing
+                    ? editedData.sssDeduction
+                    : employeeData.sssDeduction
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="philhealth"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Philhealth
+              </label>
+              <input
+                type="text"
+                name="philhealth"
+                id="philhealth"
+                value={
+                  isEditing ? editedData.philhealth : employeeData.philhealth
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="philhealthDeduction"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px] whitespace-nowrap"
+              >
+                <div className="overflow-hidden">Philhealth Deduction</div>
+              </label>
+              <input
+                type="number"
+                name="philhealthDeduction"
+                id="philhealthDeduction"
+                value={
+                  isEditing
+                    ? editedData.philhealthDeduction
+                    : employeeData.philhealthDeduction
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="pagibig"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px] whitespace-nowrap"
+              >
+                Pagibig
+              </label>
+              <input
+                type="text"
+                name="pagibig"
+                id="pagibig"
+                value={isEditing ? editedData.pagibig : employeeData.pagibig}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="pagibigDeduction"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px] whitespace-nowrap"
+              >
+                <div className="overflow-hidden">Pagibig Deduction</div>
+              </label>
+              <input
+                type="number"
+                name="pagibigDeduction"
+                id="pagibigDeduction"
+                value={
+                  isEditing
+                    ? editedData.pagibigDeduction
+                    : employeeData.pagibigDeduction
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+            </div>
+          </div>
+
+          {/* Employment Information */}
+          <div className="mt-5 flex flex-1 justify-start items-start flex-col bg-white">
+            <h1 className=" w-full flex justify-start p-2 bg-[#176906] text-white">
+              Employment Information
+            </h1>
+            <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1">
+              <label
+                htmlFor="department"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Department
+              </label>
+              <input
+                type="text"
+                name="department"
+                id="department"
+                value={
+                  isEditing ? editedData.department : employeeData.department
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="position"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Position
+              </label>
+              <input
+                type="text"
+                name="position"
+                id="position"
+                value={isEditing ? editedData.position : employeeData.position}
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="hired"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Date Hired
+              </label>
+              <input
+                type="date"
+                name="hired"
+                id="hired"
+                value={
+                  isEditing ? editedData.dateHired : employeeData.dateHired
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="salary"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Salary
+              </label>
+              <input
+                type="number"
+                name="salary"
+                id="salary"
+                value={
+                  isEditing
+                    ? editedData.salaryPerMonth
+                    : employeeData.salaryPerMonth
+                }
+                readOnly={!isEditing}
+                onChange={handleChange}
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="role"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                System Role
+              </label>
+              <input
+                type="text"
+                name="role"
+                id="role"
+                value={
+                  employeeData.role === "admin"
+                    ? "Admin"
+                    : employeeData.role === "employee"
+                    ? "Employee"
+                    : employeeData.role // Default value if none of the conditions match
+                }
+                readOnly
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+              <label
+                htmlFor="shift"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+              >
+                Shift Schedule
+              </label>
+              <input
+                type="text"
+                name="shift"
+                id="shift"
+                value={
+                  employeeData.shift === "7-5"
+                    ? "7:00AM to 5:00PM"
+                    : employeeData.shift === "5-7"
+                    ? "5:00PM to 7:00AM"
+                    : employeeData.shift === "8-5"
+                    ? "8:00AM to 5:00PM"
+                    : employeeData.shift // Default value if none of the conditions match
+                }
+                readOnly
+                required
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+              />
+            </div>
+          </div>
+        </div>
+        {isEditing ? (
+          <div>
+            <button type="button" className="save-btn-rec" onClick={handleSave}>
+              Save
+            </button>
+            <button
+              type="button"
+              className="save-btn-rec"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <div>
+            <button type="button" className="cancel-add" onClick={handleEdit}>
+              Edit
+            </button>
+          </div>
+        )}
+      </form>
+
+      {/* <div className="form-container">
         <form>
           <div className="upload-img">
             <div className="preview">
@@ -786,7 +1401,6 @@ const ViewProfile = () => {
                       />
                       <span className="placeholder">Extras</span>
                     </label>
-                    {/* Add extras reason input */}
                     <label className="field">
                       <input
                         type="text"
@@ -813,7 +1427,6 @@ const ViewProfile = () => {
                       />
                       <span className="placeholder">Deductions</span>
                     </label>
-                    {/* Add deductions reason input */}
                     <label className="field">
                       <input
                         type="text"
@@ -897,7 +1510,7 @@ const ViewProfile = () => {
             ))}
           </tbody>
         </table>
-      </div>
+      </div> */}
       <Footer />
     </>
   );
