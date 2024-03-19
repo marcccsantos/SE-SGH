@@ -14,7 +14,7 @@ import { TbArrowsSort } from "react-icons/tb";
 const ViewRecord = () => {
   const { searchQuery } = useParams();
   const [searchInput, setSearchInput] = useState("");
-  const [quickFilter, setQuickFilter] = useState("");
+  const [quickFilter, setQuickFilter] = useState("employeeID");
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
@@ -88,6 +88,7 @@ const ViewRecord = () => {
   useEffect(() => {
     fetchRecords();
   }, []);
+  
 
   useEffect(() => {
     const performSearch = async () => {
@@ -113,10 +114,58 @@ const ViewRecord = () => {
   }, [searchQuery, records]); // Added 'records' as a dependency
 
   useEffect(() => {
+    const padFilteredRecords = () => {
+      const remainingRows = 12 - filteredRecords.length;
+      if (remainingRows > 0) {
+        const paddedRecords = [...filteredRecords];
+        for (let i = 0; i < remainingRows; i++) {
+          paddedRecords.push({});
+        }
+        setFilteredRecords(paddedRecords);
+      }
+    };
+  
+    padFilteredRecords();
+  }, [filteredRecords]);
+  
+  useEffect(() => {
     handleQuickSort(quickFilter);
   }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
 
+  useEffect(() => {
+    const fetchRecordsAndApplyDefaultSorting = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "employees_active"));
+        const results = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          // Include document ID in the data object
+          return { id: doc.id, ...data };
+        });
+        const uniqueRecords = filterUniqueRecords(results);
+        const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
+        
+        // Apply default sorting by EmployeeID in ascending order
+        const sortedRecords = [...paddedRecords].sort((a, b) => {
+          return a.employeeID - b.employeeID;
+        });
   
+        setRecords(sortedRecords);
+        setFilteredRecords(sortedRecords);
+        setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
+        
+        // Initialize column visibility state
+        const initialColumnVisibility = {};
+        Object.keys(paddedRecords[0] || {}).forEach((column) => {
+          initialColumnVisibility[column] = true;
+        });
+        setColumnVisibility(initialColumnVisibility);
+      } catch (error) {
+        console.error("Error fetching records:", error);
+      }
+    };
+  
+    fetchRecordsAndApplyDefaultSorting(); // Fetch records and apply default sorting
+  }, []);
   useEffect(() => {
     let timeoutId;
 
@@ -208,20 +257,7 @@ const ViewRecord = () => {
       console.error("Error searching records:", error);
     }
   };
-  useEffect(() => {
-    // Set initial quick filter to 'employeeID'
-    setQuickFilter('employeeID');
-    // Set initial sort order to 'asc'
-    setSortOrder('asc');
-  
-    fetchRecords(); // Fetch records after setting initial sort order
-  }, []);
-  
-  useEffect(() => {
-    if (quickFilter !== '') {
-      handleQuickSort(quickFilter);
-    }
-  }, [quickFilter, sortOrder, records]); // Listen for changes in quickFilter, sortOrder, or records
+ 
   const handleQuickSort = (column) => {
     const sortedRecords = [...filteredRecords].sort((a, b) => {
       const valueA =
