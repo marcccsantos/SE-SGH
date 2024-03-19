@@ -86,7 +86,8 @@ nav a {
 .dropdown {
   width: 100%;
   max-width: 20px;
-  margin-left: 5px;
+  margin-left: 3px;
+  margin-top: 3px;
 }
 .list-record ul {
   z-index: 2;

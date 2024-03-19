@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase'; // Import your Firestore and Storage instances
-
-
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../firebase"; // Import your Firestore and Storage instances
 
 const ViewProfile = () => {
   const { employeeID } = useParams();
@@ -13,25 +18,26 @@ const ViewProfile = () => {
   const [editedData, setEditedData] = useState(null);
   const [documentId, setDocumentId] = useState(null);
   const [newImage, setNewImage] = useState(null); // New state to hold newly uploaded image
-  const [age, setAge] = useState('');
-
+  const [age, setAge] = useState("");
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const employeeQuery = query(collection(db, 'employees_active'), where('employeeID', '==', employeeID));
+        const employeeQuery = query(
+          collection(db, "employees_active"),
+          where("employeeID", "==", employeeID)
+        );
         const querySnapshot = await getDocs(employeeQuery);
         if (!querySnapshot.empty) {
           const docData = querySnapshot.docs[0].data();
           setEmployeeData(docData);
           setEditedData({ ...docData }); // Initialize editedData with employeeData
           setDocumentId(querySnapshot.docs[0].id); // Set the document ID
-
         } else {
-          console.error('No employee found with the provided ID');
+          console.error("No employee found with the provided ID");
         }
       } catch (error) {
-        console.error('Error fetching employee data:', error);
+        console.error("Error fetching employee data:", error);
       }
     };
 
@@ -45,7 +51,10 @@ const ViewProfile = () => {
       const birthDate = new Date(employeeData.dateOfBirth);
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDifference = today.getMonth() - birthDate.getMonth();
-      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      if (
+        monthDifference < 0 ||
+        (monthDifference === 0 && today.getDate() < birthDate.getDate())
+      ) {
         age--;
       }
       setAge(age.toString()); // Update age state
@@ -67,29 +76,39 @@ const ViewProfile = () => {
         imageUrl = await getDownloadURL(imageRef); // Update imageUrl with the new URL
       }
 
-    // Calculate age based on date of birth if it's edited
-    let updatedAge = age;
-    if (editedData.dateOfBirth && editedData.dateOfBirth !== employeeData.dateOfBirth) {
-      const today = new Date();
-      const birthDate = new Date(editedData.dateOfBirth);
-      let calculatedAge = today.getFullYear() - birthDate.getFullYear();
-      const monthDifference = today.getMonth() - birthDate.getMonth();
-      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-        calculatedAge--;
+      // Calculate age based on date of birth if it's edited
+      let updatedAge = age;
+      if (
+        editedData.dateOfBirth &&
+        editedData.dateOfBirth !== employeeData.dateOfBirth
+      ) {
+        const today = new Date();
+        const birthDate = new Date(editedData.dateOfBirth);
+        let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        if (
+          monthDifference < 0 ||
+          (monthDifference === 0 && today.getDate() < birthDate.getDate())
+        ) {
+          calculatedAge--;
+        }
+        updatedAge = calculatedAge;
       }
-      updatedAge = calculatedAge;
-    }
 
-    // Convert age to number
-    updatedAge = parseInt(updatedAge, 10);
+      // Convert age to number
+      updatedAge = parseInt(updatedAge, 10);
 
       // Update Firestore document with new data including the updated age
-      const employeeRef = doc(db, 'employees_active', documentId);
-      await updateDoc(employeeRef, { ...editedData, age: updatedAge, imageUrl });
+      const employeeRef = doc(db, "employees_active", documentId);
+      await updateDoc(employeeRef, {
+        ...editedData,
+        age: updatedAge,
+        imageUrl,
+      });
       setIsEditing(false);
-      console.log('Employee data updated successfully');
+      console.log("Employee data updated successfully");
     } catch (error) {
-      console.error('Error updating employee data:', error);
+      console.error("Error updating employee data:", error);
     }
   };
 
@@ -117,55 +136,128 @@ const ViewProfile = () => {
       </div>
       <div>
         <label>Last Name:</label>
-        <input type="text" value={isEditing ? editedData.lastName : employeeData.lastName} readOnly={!isEditing} name="lastName" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.lastName : employeeData.lastName}
+          readOnly={!isEditing}
+          name="lastName"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>First Name:</label>
-        <input type="text" value={isEditing ? editedData.firstName : employeeData.firstName} readOnly={!isEditing} name="firstName" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.firstName : employeeData.firstName}
+          readOnly={!isEditing}
+          name="firstName"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Middle Name:</label>
-        <input type="text" value={isEditing ? editedData.middleName : employeeData.middleName} readOnly={!isEditing} name="middleName" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.middleName : employeeData.middleName}
+          readOnly={!isEditing}
+          name="middleName"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Province:</label>
-        <input type="text" value={isEditing ? editedData.province : employeeData.province} readOnly={!isEditing} name="province" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.province : employeeData.province}
+          readOnly={!isEditing}
+          name="province"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>City:</label>
-        <input type="text" value={isEditing ? editedData.city : employeeData.city} readOnly={!isEditing} name="city" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.city : employeeData.city}
+          readOnly={!isEditing}
+          name="city"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Barangay:</label>
-        <input type="text" value={isEditing ? editedData.barangay : employeeData.barangay} readOnly={!isEditing} name="barangay" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.barangay : employeeData.barangay}
+          readOnly={!isEditing}
+          name="barangay"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Street:</label>
-        <input type="text" value={isEditing ? editedData.street : employeeData.street} readOnly={!isEditing} name="street" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.street : employeeData.street}
+          readOnly={!isEditing}
+          name="street"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Lot Number:</label>
-        <input type="text" value={isEditing ? editedData.lotNumber : employeeData.lotNumber} readOnly={!isEditing} name="lotNumber" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.lotNumber : employeeData.lotNumber}
+          readOnly={!isEditing}
+          name="lotNumber"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Email:</label>
-        <input type="text" value={isEditing ? editedData.email : employeeData.email} readOnly={!isEditing} name="email" onChange={handleChange} />
+        <input
+          type="text"
+          value={isEditing ? editedData.email : employeeData.email}
+          readOnly={!isEditing}
+          name="email"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Contact Number:</label>
-        <input type="text" value={isEditing ? editedData.contactNumber : employeeData.contactNumber} readOnly={!isEditing} name="contactNumber" onChange={handleChange} />
+        <input
+          type="text"
+          value={
+            isEditing ? editedData.contactNumber : employeeData.contactNumber
+          }
+          readOnly={!isEditing}
+          name="contactNumber"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Date of Birth:</label>
-        <input type="date" value={isEditing ? editedData.dateOfBirth : employeeData.dateOfBirth} readOnly={!isEditing} name="dateOfBirth" onChange={handleChange} />
+        <input
+          type="date"
+          value={isEditing ? editedData.dateOfBirth : employeeData.dateOfBirth}
+          readOnly={!isEditing}
+          name="dateOfBirth"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <label>Age:</label>
-        <input type="number" value={age} readOnly/>      
+        <input type="number" value={age} readOnly />
       </div>
       <div>
         <label>Gender:</label>
-          <select value={isEditing ? editedData.gender : employeeData.gender} onChange={(e) => handleChange(e)} disabled={!isEditing} name="gender">
+        <select
+          value={isEditing ? editedData.gender : employeeData.gender}
+          onChange={(e) => handleChange(e)}
+          disabled={!isEditing}
+          name="gender"
+        >
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -219,7 +311,9 @@ const ViewProfile = () => {
         <label>Salary Per Month:</label>
         <input
           type="number"
-          value={isEditing ? editedData.salaryPerMonth : employeeData.salaryPerMonth}
+          value={
+            isEditing ? editedData.salaryPerMonth : employeeData.salaryPerMonth
+          }
           onChange={(e) => handleChange(e)}
           readOnly={!isEditing}
           name="salaryPerMonth"
@@ -269,7 +363,9 @@ const ViewProfile = () => {
         <label>SSS Deduction:</label>
         <input
           type="number"
-          value={isEditing ? editedData.sssDeduction : employeeData.sssDeduction}
+          value={
+            isEditing ? editedData.sssDeduction : employeeData.sssDeduction
+          }
           onChange={(e) => handleChange(e)}
           readOnly={!isEditing}
           name="sssDeduction"
@@ -289,7 +385,11 @@ const ViewProfile = () => {
         <label>Philhealth Deduction:</label>
         <input
           type="number"
-          value={isEditing ? editedData.philhealthDeduction : employeeData.philhealthDeduction}
+          value={
+            isEditing
+              ? editedData.philhealthDeduction
+              : employeeData.philhealthDeduction
+          }
           onChange={(e) => handleChange(e)}
           readOnly={!isEditing}
           name="philhealthDeduction"
@@ -309,7 +409,11 @@ const ViewProfile = () => {
         <label>Pagibig Deduction:</label>
         <input
           type="number"
-          value={isEditing ? editedData.pagibigDeduction : employeeData.pagibigDeduction}
+          value={
+            isEditing
+              ? editedData.pagibigDeduction
+              : employeeData.pagibigDeduction
+          }
           onChange={(e) => handleChange(e)}
           readOnly={!isEditing}
           name="pagibigDeduction"
@@ -325,20 +429,30 @@ const ViewProfile = () => {
         {isEditing ? (
           <input type="file" accept="image/*" onChange={handleImageChange} />
         ) : (
-          <img src={employeeData.imageUrl} alt="Employee" style={{ maxWidth: '200px' }} />
+          <img
+            src={employeeData.imageUrl}
+            alt="Employee"
+            style={{ maxWidth: "200px" }}
+          />
         )}
       </div>
 
       {isEditing ? (
-  <div>
-    <button type="button" onClick={handleSave}>Save</button>
-    <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
-  </div>
-) : (
-  <div>
-    <button type="button" onClick={handleEdit}>Edit</button>
-  </div>
-)}
+        <div>
+          <button type="button" onClick={handleSave}>
+            Save
+          </button>
+          <button type="button" onClick={() => setIsEditing(false)}>
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <div>
+          <button type="button" onClick={handleEdit}>
+            Edit
+          </button>
+        </div>
+      )}
     </form>
   );
 };
@@ -1211,81 +1325,81 @@ export default ViewProfile;
 //                 </div>
 //               </div>
 
-//               <div className="extras-deductions-form">
-//                 <h2>Submit Extras and Deductions</h2>
-//                 <div className="text-fields">
-//                   <label htmlFor="date">Date:</label>
-//                   <input
-//                     type="date"
-//                     id="date"
-//                     name="date"
-//                     value={selectedDate}
-//                     onChange={(e) => setSelectedDate(e.target.value)}
-//                     required
-//                   />
-//                   <div className="extras">
-//                     <label className="field">
-//                       <input
-//                         type="number"
-//                         name="extras"
-//                         id="extras"
-//                         value={extras}
-//                         onChange={(e) => setExtras(e.target.value)}
-//                         className="input"
-//                         required
-//                       />
-//                       <span className="placeholder">Extras</span>
-//                     </label>
-//                     <label className="field">
-//                       <input
-//                         type="text"
-//                         name="extrasReason"
-//                         id="extrasReason"
-//                         value={extrasReason}
-//                         onChange={(e) => setExtrasReason(e.target.value)}
-//                         className="input"
-//                         required
-//                       />
-//                       <span className="placeholder">Reason for Extras</span>
-//                     </label>
-//                   </div>
-//                   <div className="deductions">
-//                     <label className="field">
-//                       <input
-//                         type="number"
-//                         name="deductions"
-//                         id="deductions"
-//                         value={deductions}
-//                         onChange={(e) => setDeductions(e.target.value)}
-//                         className="input"
-//                         required
-//                       />
-//                       <span className="placeholder">Deductions</span>
-//                     </label>
-//                     <label className="field">
-//                       <input
-//                         type="text"
-//                         name="deductionsReason"
-//                         id="deductionsReason"
-//                         value={deductionsReason}
-//                         onChange={(e) => setDeductionsReason(e.target.value)}
-//                         className="input"
-//                         required
-//                       />
-//                       <span className="placeholder">Reason for Deductions</span>
-//                     </label>
-//                   </div>
-//                 </div>
-//                 <div className="submit-extras-deductions">
-//                   <button
-//                     type="button"
-//                     className="submit-btn"
-//                     onClick={submitExtrasAndDeductions}
-//                   >
-//                     Submit
-//                   </button>
-//                 </div>
-//               </div>
+// <div className="extras-deductions-form">
+//   <h2>Submit Extras and Deductions</h2>
+//   <div className="text-fields">
+//     <label htmlFor="date">Date:</label>
+//     <input
+//       type="date"
+//       id="date"
+//       name="date"
+//       value={selectedDate}
+//       onChange={(e) => setSelectedDate(e.target.value)}
+//       required
+//     />
+//     <div className="extras">
+//       <label className="field">
+//         <input
+//           type="number"
+//           name="extras"
+//           id="extras"
+//           value={extras}
+//           onChange={(e) => setExtras(e.target.value)}
+//           className="input"
+//           required
+//         />
+//         <span className="placeholder">Extras</span>
+//       </label>
+//       <label className="field">
+//         <input
+//           type="text"
+//           name="extrasReason"
+//           id="extrasReason"
+//           value={extrasReason}
+//           onChange={(e) => setExtrasReason(e.target.value)}
+//           className="input"
+//           required
+//         />
+//         <span className="placeholder">Reason for Extras</span>
+//       </label>
+//     </div>
+//     <div className="deductions">
+//       <label className="field">
+//         <input
+//           type="number"
+//           name="deductions"
+//           id="deductions"
+//           value={deductions}
+//           onChange={(e) => setDeductions(e.target.value)}
+//           className="input"
+//           required
+//         />
+//         <span className="placeholder">Deductions</span>
+//       </label>
+//       <label className="field">
+//         <input
+//           type="text"
+//           name="deductionsReason"
+//           id="deductionsReason"
+//           value={deductionsReason}
+//           onChange={(e) => setDeductionsReason(e.target.value)}
+//           className="input"
+//           required
+//         />
+//         <span className="placeholder">Reason for Deductions</span>
+//       </label>
+//     </div>
+//   </div>
+//   <div className="submit-extras-deductions">
+//     <button
+//       type="button"
+//       className="submit-btn"
+//       onClick={submitExtrasAndDeductions}
+//     >
+//       Submit
+//     </button>
+//   </div>
+// </div>
 
 //               <div className="save-rec">
 //                 {isEditing ? (
@@ -1321,35 +1435,34 @@ export default ViewProfile;
 //           </div>
 //         </form>
 //       </div>
-//       <div className="logs-container">
-//         <h2>Extras and Deductions Logs</h2>
-//         <table>
-//           <thead>
-//             <tr>
-//               <th>Date</th>
-//               <th>Extras</th>
-//               <th>Extras Reason</th>
-//               <th>Deductions</th>
-//               <th>Deductions Reason</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {logs.map((log, index) => (
-//               <tr key={index}>
-//                 <td>{log.date}</td>
-//                 <td>{isNaN(log.extras) ? "" : log.extras}</td>
-//                 <td>{log.extrasReason}</td>
-//                 <td>{isNaN(log.deductions) ? "" : log.deductions}</td>
-//                 <td>{log.deductionsReason}</td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div> */}
+// <div className="logs-container">
+//   <h2>Extras and Deductions Logs</h2>
+//   <table>
+//     <thead>
+//       <tr>
+//         <th>Date</th>
+//         <th>Extras</th>
+//         <th>Extras Reason</th>
+//         <th>Deductions</th>
+//         <th>Deductions Reason</th>
+//       </tr>
+//     </thead>
+//     <tbody>
+//       {logs.map((log, index) => (
+//         <tr key={index}>
+//           <td>{log.date}</td>
+//           <td>{isNaN(log.extras) ? "" : log.extras}</td>
+//           <td>{log.extrasReason}</td>
+//           <td>{isNaN(log.deductions) ? "" : log.deductions}</td>
+//           <td>{log.deductionsReason}</td>
+//         </tr>
+//       ))}
+//     </tbody>
+//   </table>
+// </div> */}
 //       <Footer />
 //     </>
 //   );
 // };
 
 // export default ViewProfile;
-

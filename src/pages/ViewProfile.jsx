@@ -30,6 +30,9 @@ const ViewProfile = () => {
   const [deductionsReason, setDeductionsReason] = useState(""); // Add state for deductionsReason
   const [selectedDate, setSelectedDate] = useState("");
   const [logs, setLogs] = useState([]);
+  const [showPopupExtras, setShowPopupExtras] = useState(false);
+  const [showPopupDeduction, setShowPopupDeduction] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -42,6 +45,8 @@ const ViewProfile = () => {
         if (!querySnapshot.empty) {
           const docData = querySnapshot.docs[0].data();
           setEmployeeData(docData);
+          setEditedData({ ...docData }); // Initialize editedData with employeeData
+          setDocumentId(querySnapshot.docs[0].id); // Set the document ID
           // Fetch logs data here
           const logsQuery = query(
             collection(db, "extras_and_deductions"),
@@ -123,6 +128,7 @@ const ViewProfile = () => {
         imageUrl,
       });
       setIsEditing(false);
+      handleRefresh();
       console.log("Employee data updated successfully");
     } catch (error) {
       console.error("Error updating employee data:", error);
@@ -171,9 +177,34 @@ const ViewProfile = () => {
       setExtrasReason("");
       setDeductionsReason("");
       console.log("Extras and deductions submitted successfully");
+      setShowPopupExtras(false);
+      setShowPopupDeduction(false);
+      handleRefresh();
     } catch (error) {
       console.error("Error submitting extras and deductions:", error);
     }
+  };
+
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
+  const handleOpenPopupExtras = () => {
+    event.preventDefault();
+    setShowPopupExtras(true);
+  };
+
+  const handleOpenPopupDeduction = () => {
+    event.preventDefault();
+    setShowPopupDeduction(true);
+  };
+
+  const handleClosePopupExtras = () => {
+    setShowPopupExtras(false);
+  };
+
+  const handleClosePopupDeduction = () => {
+    setShowPopupDeduction(false);
   };
 
   return (
@@ -195,29 +226,37 @@ const ViewProfile = () => {
                       alt="Employee"
                       style={{ maxWidth: "150px" }}
                     />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                    />
                   </div>
                 ) : (
-                  <img
-                    src={employeeData.imageUrl}
-                    alt="Employee"
-                    style={{ maxWidth: "150px" }}
-                  />
+                  <div className="">
+                    <img
+                      src={employeeData.imageUrl}
+                      alt="Employee"
+                      style={{ maxWidth: "150px" }}
+                    />
+                  </div>
                 )}
               </div>
             </div>
-            <div className="grid w-full max-w-xs items-center gap-1.5">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="flex h-10 w-full  border border-input bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium"
-              />
-            </div>
+            {isEditing ? (
+              <div className="grid w-full max-w-xs items-center gap-1.5">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="flex h-10 w-full  border border-input bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium"
+                />
+              </div>
+            ) : (
+              <div className="grid w-full max-w-xs items-center gap-1.5">
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled
+                  className="flex h-10 w-full  border border-input bg-white px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium"
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col md:flex-row md:space-x-5 font-inter">
@@ -226,7 +265,7 @@ const ViewProfile = () => {
             <h1 className="w-full flex justify-start p-2 bg-[#176906] text-white">
               Personal Information
             </h1>
-            <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1">
+            <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1 ">
               <label
                 htmlFor="empid"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
@@ -655,7 +694,7 @@ const ViewProfile = () => {
             <div className="grid grid-cols-2 w-full my-5 px-3 md:gap-y-0.5 gap-y-1">
               <label
                 htmlFor="department"
-                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
+                className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center  bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 Department
               </label>
@@ -772,745 +811,212 @@ const ViewProfile = () => {
             </div>
           </div>
         </div>
-        {isEditing ? (
-          <div>
-            <button type="button" className="save-btn-rec" onClick={handleSave}>
-              Save
+        <div className="flex flex-col  font-inter mt-5  bg-white text-xs md:text-sm">
+          <h1 className=" w-full flex justify-start p-2 bg-[#176906] text-white">
+            Extras and Deductions Logs
+          </h1>
+          <div className="mt-5 mb-3 px-3 ">
+            <button
+              className="border-1 border-white bg-[#176906] text-white mr-2 px-3 py-1 rounded-sm font-semibold"
+              onClick={handleOpenPopupExtras}
+            >
+              Extras
             </button>
             <button
-              type="button"
-              className="save-btn-rec"
-              onClick={() => setIsEditing(false)}
+              className="border-1 border-white bg-[#176906] text-white mr-2 px-3 py-1 rounded-sm font-semibold"
+              onClick={handleOpenPopupDeduction}
             >
-              Cancel
+              Deductions
             </button>
           </div>
+
+          <div className="overflow-x-auto mb-5 px-3">
+            <table className="w-full text-center whitespace-nowrap border-spacing-y-0">
+              <thead className="bg-[#176906] text-white">
+                <tr>
+                  <th>Date</th>
+                  <th>Extras</th>
+                  <th>Extras Reason</th>
+                  <th>Deductions</th>
+                  <th>Deductions Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {logs.map((log, index) => (
+                  <tr
+                    key={index}
+                    className="even:bg-[#7bbf6d] odd:bg-[#b6d69c]"
+                  >
+                    <td>{log.date}</td>
+                    <td>{isNaN(log.extras) ? "" : log.extras}</td>
+                    <td>{log.extrasReason}</td>
+                    <td>{isNaN(log.deductions) ? "" : log.deductions}</td>
+                    <td>{log.deductionsReason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {isEditing ? (
+          <div className="flex flex-row justify-end mt-5 p-3 font-inter font-medium">
+            <div className="mr-2 px-3 py-1 flex items-center bg-[#176906] hover:bg:[#155e06]">
+              <button
+                type="button"
+                className="text-white hover:underline"
+                onClick={handleSave}
+              >
+                Save
+              </button>
+            </div>
+            <div className="mr-2 px-3 py-1 flex items-center bg-white">
+              <button
+                type="button"
+                className="hover:underline"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         ) : (
-          <div>
-            <button type="button" className="cancel-add" onClick={handleEdit}>
-              Edit
-            </button>
+          <div className="flex flex-row justify-end mt-5 p-3 font-inter font-medium">
+            <div className="mr-2 px-3 py-1 flex items-center bg-[#176906] hover:bg:[#155e06]">
+              <button
+                type="button"
+                className="text-white hover:underline"
+                onClick={handleEdit}
+              >
+                Edit
+              </button>
+            </div>
           </div>
         )}
       </form>
 
-      {/* <div className="form-container">
-        <form>
-          <div className="upload-img">
-            <div className="preview">
-              {isEditing ? (
-                <>
-                  <img
-                    src={
-                      newImage
-                        ? URL.createObjectURL(newImage)
-                        : employeeData.imageUrl
-                    }
-                    alt="Employee"
-                    style={{ maxWidth: "200px" }}
-                  />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </>
-              ) : (
-                <img
-                  src={employeeData.imageUrl}
-                  alt="Employee"
-                  style={{ maxWidth: "200px" }}
-                />
-              )}
+      {showPopupExtras && (
+        <div className="fixed inset-0 flex items-center justify-center w-full h-lvh font-inter bg-[#00000080]">
+          <div className="absolute flex flex-col items-center justify-center bg-white py-8 px-11 font-medium text-xs rounded-sm">
+            <h2 className="mb-3 w-full flex justify-start text-2xl">Extras</h2>
+            <div className="w-full mb-2 flex flex-col">
+              <label htmlFor="dateExtra">Date:</label>
+              <input
+                type="date"
+                id="dateExtra"
+                name="dateExtra"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0"
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col mb-2">
+              <label htmlFor="extras">Extras</label>
+              <input
+                type="number"
+                name="extras"
+                id="extras"
+                value={extras}
+                onChange={(e) => setExtras(e.target.value)}
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 "
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col">
+              <label htmlFor="extrasReason">Reason for Extras</label>
+              <input
+                type="text"
+                name="extrasReason"
+                id="extrasReason"
+                value={extrasReason}
+                onChange={(e) => setExtrasReason(e.target.value)}
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 "
+                required
+              />
+            </div>
+            <div className="mt-4 w-full flex justify-end">
+              <button
+                type="button"
+                className="mr-2 px-3 py-1 bg-blue-500 text-white font-medium hover:underline rounded-sm"
+                onClick={submitExtrasAndDeductions}
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                className="px-3 py-1 border border-gray-500 bg-white rounded-sm hover:underline"
+                onClick={handleClosePopupExtras}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-          <div className="form-information">
-            <div className="info">
-              <div className="personal-information">
-                <h1>Personal Information</h1>
-              </div>
+        </div>
+      )}
 
-              <div className="text-fields">
-                <div className="empid">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="empid"
-                      id="empid"
-                      value={employeeData.employeeID}
-                      readOnly
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Employee ID</span>
-                  </label>
-                </div>
-                <div className="fname">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="fname"
-                      id="fname"
-                      value={
-                        isEditing
-                          ? editedData.firstName
-                          : employeeData.firstName
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">First Name</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="lname"
-                      id="lname"
-                      value={
-                        isEditing ? editedData.lastName : employeeData.lastName
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Last Name</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="mname"
-                      id="mname"
-                      value={
-                        isEditing
-                          ? editedData.middleName
-                          : employeeData.middleName
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Middle Name</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="contact"
-                      id="contact"
-                      value={
-                        isEditing
-                          ? editedData.contactNumber
-                          : employeeData.contactNumber
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Contact No</span>
-                  </label>
-                </div>
-                <div className="email">
-                  <label className="field">
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      value={isEditing ? editedData.email : employeeData.email}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Email</span>
-                  </label>
-                </div>
-                <div className="date">
-                  <label className="field">
-                    <input
-                      type="date"
-                      name="date"
-                      id="date"
-                      value={
-                        isEditing
-                          ? editedData.dateOfBirth
-                          : employeeData.dateOfBirth
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Date of Birth</span>
-                  </label>
-                </div>
-                <div className="age">
-                  <label className="field">
-                    <input
-                      type="number"
-                      name="age"
-                      id="age"
-                      value={age}
-                      readOnly
-                      className="input"
-                    />
-                    <span className={`placeholder ${age ? "filled" : ""}`}>
-                      Age
-                    </span>
-                  </label>
-                </div>
-                <div className="gender">
-                  <label className="field">
-                    <select
-                      name="gender"
-                      id="gender"
-                      value={
-                        isEditing ? editedData.gender : employeeData.gender
-                      }
-                      onChange={(e) => handleChange(e)}
-                      disabled={!isEditing}
-                      className="input"
-                      required
-                    >
-                      <option value=""></option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                    <span className="placeholder">Gender</span>
-                  </label>
-                </div>
-              </div>
+      {showPopupDeduction && (
+        <div className="fixed inset-0 flex items-center justify-center w-full h-lvh font-inter bg-[#00000080]">
+          <div className="absolute flex flex-col items-center justify-center bg-white py-8 px-11 font-medium text-xs rounded-sm">
+            <h2 className="mb-3 w-full flex justify-start text-2xl">
+              Deductions
+            </h2>
+            <div className="w-full mb-2 flex flex-col">
+              <label htmlFor="dateDeductions">Date:</label>
+              <input
+                type="date"
+                id="dateDeductions"
+                name="dateDeductions"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0"
+                required
+              />
             </div>
-
-            <div className="address-info">
-              <div className="address-information">
-                <h1>Address Information</h1>
-              </div>
-
-              <div className="text-fields">
-                <div className="address">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="street"
-                      id="street"
-                      value={
-                        isEditing ? editedData.street : employeeData.street
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Street Address</span>
-                  </label>
-                </div>
-                <div className="city">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="city"
-                      id="city"
-                      value={isEditing ? editedData.city : employeeData.city}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">City</span>
-                  </label>
-                </div>
-                <div className="province">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="province"
-                      id="province"
-                      value={
-                        isEditing ? editedData.province : employeeData.province
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Province</span>
-                  </label>
-                </div>
-                <div className="barangay">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="barangay"
-                      id="barangay"
-                      value={
-                        isEditing ? editedData.barangay : employeeData.barangay
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Barangay</span>
-                  </label>
-                </div>
-                <div className="lot">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="lot"
-                      id="lot"
-                      value={
-                        isEditing
-                          ? editedData.lotNumber
-                          : employeeData.lotNumber
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Lot Number</span>
-                  </label>
-                </div>
-              </div>
+            <div className="w-full mb-2 flex flex-col">
+              <label htmlFor="deductions">Deductions</label>
+              <input
+                type="number"
+                name="deductions"
+                id="deductions"
+                value={deductions}
+                onChange={(e) => setDeductions(e.target.value)}
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 "
+                required
+              />
             </div>
-
-            <div className="employee-info">
-              <div className="employment-information">
-                <h1>Employment Information</h1>
-              </div>
-
-              <div className="text-fields">
-                <div className="department">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="department"
-                      id="department"
-                      value={
-                        isEditing
-                          ? editedData.department
-                          : employeeData.department
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Department</span>
-                  </label>
-                </div>
-                <div className="position">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="position"
-                      id="position"
-                      value={
-                        isEditing ? editedData.position : employeeData.position
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Position</span>
-                  </label>
-                </div>
-                <div className="hired">
-                  <label className="field">
-                    <input
-                      type="date"
-                      name="hired"
-                      id="hired"
-                      value={
-                        isEditing
-                          ? editedData.dateHired
-                          : employeeData.dateHired
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Date Hired</span>
-                  </label>
-                </div>
-                <div className="salary">
-                  <label className="field">
-                    <input
-                      type="number"
-                      name="salary"
-                      id="salary"
-                      value={
-                        isEditing
-                          ? editedData.salaryPerMonth
-                          : employeeData.salaryPerMonth
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Salary</span>
-                  </label>
-                </div>
-                <div className="role">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="role"
-                      id="role"
-                      value={
-                        employeeData.role === "admin"
-                          ? "Admin"
-                          : employeeData.role === "employee"
-                          ? "Employee"
-                          : employeeData.role // Default value if none of the conditions match
-                      }
-                      readOnly
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">System Role</span>
-                  </label>
-                </div>
-                <div className="shift">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="shift"
-                      id="shift"
-                      value={
-                        employeeData.shift === "7-5"
-                          ? "7:00AM to 5:00PM"
-                          : employeeData.shift === "5-7"
-                          ? "5:00PM to 7:00AM"
-                          : employeeData.shift === "8-5"
-                          ? "8:00AM to 5:00PM"
-                          : employeeData.shift // Default value if none of the conditions match
-                      }
-                      readOnly
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Shift Schedule</span>
-                  </label>
-                </div>
-              </div>
+            <div className="w-full mb-2 flex flex-col">
+              <label htmlFor="deductionsReason">Reason for Deductions</label>
+              <input
+                type="text"
+                name="deductionsReason"
+                id="deductionsReason"
+                value={deductionsReason}
+                onChange={(e) => setDeductionsReason(e.target.value)}
+                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 "
+                required
+              />
             </div>
-
-            <div className="id-info">
-              <div className="id-information">
-                <h1>Goverment IDs and Benefits</h1>
-              </div>
-
-              <div className="text-fields">
-                <div>
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="tin"
-                      id="tin"
-                      value={isEditing ? editedData.tin : employeeData.tin}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">TIN</span>
-                  </label>
-                </div>
-                <div className="prc">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="prc"
-                      id="prc"
-                      value={isEditing ? editedData.prc : employeeData.prc}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">PRC</span>
-                  </label>
-                </div>
-                <div className="prc-expiry">
-                  <label className="field">
-                    <input
-                      type="date"
-                      name="prcExpiry"
-                      id="prcExpiry"
-                      value={
-                        isEditing
-                          ? editedData.prcExpiry
-                          : employeeData.prcExpiry
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">PRC Expiry</span>
-                  </label>
-                </div>
-                <div className="sss">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="sss"
-                      id="sss"
-                      value={isEditing ? editedData.sss : employeeData.sss}
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">SSS</span>
-                  </label>
-                </div>
-                <div className="sss-deduction">
-                  <label className="field">
-                    <input
-                      type="number"
-                      name="sssDeduction"
-                      id="sssDeduction"
-                      value={
-                        isEditing
-                          ? editedData.sssDeduction
-                          : employeeData.sssDeduction
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">SSS Deduction</span>
-                  </label>
-                </div>
-                <div className="philhealth">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="philhealth"
-                      id="philhealth"
-                      value={
-                        isEditing
-                          ? editedData.philhealth
-                          : employeeData.philhealth
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Philhealth</span>
-                  </label>
-                </div>
-                <div className="philhealth-deduction">
-                  <label className="field">
-                    <input
-                      type="number"
-                      name="philhealthDeduction"
-                      id="philhealthDeduction"
-                      value={
-                        isEditing
-                          ? editedData.philhealthDeduction
-                          : employeeData.philhealthDeduction
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Philhealth Deduction</span>
-                  </label>
-                </div>
-                <div className="pagibig">
-                  <label className="field">
-                    <input
-                      type="text"
-                      name="pagibig"
-                      id="pagibig"
-                      value={
-                        isEditing ? editedData.pagibig : employeeData.pagibig
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange}
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Pagibig</span>
-                  </label>
-                </div>
-                <div className="pagibig-deduction">
-                  <label className="field">
-                    <input
-                      type="number"
-                      name="pagibigDeduction"
-                      id="pagibigDeduction"
-                      value={
-                        isEditing
-                          ? editedData.pagibigDeduction
-                          : employeeData.pagibigDeduction
-                      }
-                      readOnly={!isEditing}
-                      onChange={handleChange} // dapat 0-100 lang to
-                      className="input"
-                      required
-                    />
-                    <span className="placeholder">Pagibig Deduction</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="extras-deductions-form">
-                <h2>Submit Extras and Deductions</h2>
-                <div className="text-fields">
-                  <label htmlFor="date">Date:</label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    required
-                  />
-                  <div className="extras">
-                    <label className="field">
-                      <input
-                        type="number"
-                        name="extras"
-                        id="extras"
-                        value={extras}
-                        onChange={(e) => setExtras(e.target.value)}
-                        className="input"
-                        required
-                      />
-                      <span className="placeholder">Extras</span>
-                    </label>
-                    <label className="field">
-                      <input
-                        type="text"
-                        name="extrasReason"
-                        id="extrasReason"
-                        value={extrasReason}
-                        onChange={(e) => setExtrasReason(e.target.value)}
-                        className="input"
-                        required
-                      />
-                      <span className="placeholder">Reason for Extras</span>
-                    </label>
-                  </div>
-                  <div className="deductions">
-                    <label className="field">
-                      <input
-                        type="number"
-                        name="deductions"
-                        id="deductions"
-                        value={deductions}
-                        onChange={(e) => setDeductions(e.target.value)}
-                        className="input"
-                        required
-                      />
-                      <span className="placeholder">Deductions</span>
-                    </label>
-                    <label className="field">
-                      <input
-                        type="text"
-                        name="deductionsReason"
-                        id="deductionsReason"
-                        value={deductionsReason}
-                        onChange={(e) => setDeductionsReason(e.target.value)}
-                        className="input"
-                        required
-                      />
-                      <span className="placeholder">Reason for Deductions</span>
-                    </label>
-                  </div>
-                </div>
-                <div className="submit-extras-deductions">
-                  <button
-                    type="button"
-                    className="submit-btn"
-                    onClick={submitExtrasAndDeductions}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-
-              <div className="save-rec">
-                {isEditing ? (
-                  <div>
-                    <button
-                      type="button"
-                      className="save-btn-rec"
-                      onClick={handleSave}
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      className="save-btn-rec"
-                      onClick={() => setIsEditing(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <button
-                      type="button"
-                      className="cancel-add"
-                      onClick={handleEdit}
-                    >
-                      Edit
-                    </button>
-                  </div>
-                )}
-              </div>
+            <div className="mt-4 w-full flex justify-end">
+              <button
+                type="button"
+                className="mr-2 px-3 py-1 bg-blue-500 text-white font-medium hover:underline rounded-sm"
+                onClick={submitExtrasAndDeductions}
+              >
+                Submit
+              </button>
+              <button
+                type="button"
+                className="px-3 py-1 border border-gray-500 bg-white rounded-sm hover:underline"
+                onClick={handleClosePopupDeduction}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        </form>
-      </div>
-      <div className="logs-container">
-        <h2>Extras and Deductions Logs</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Extras</th>
-              <th>Extras Reason</th>
-              <th>Deductions</th>
-              <th>Deductions Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map((log, index) => (
-              <tr key={index}>
-                <td>{log.date}</td>
-                <td>{isNaN(log.extras) ? "" : log.extras}</td>
-                <td>{log.extrasReason}</td>
-                <td>{isNaN(log.deductions) ? "" : log.deductions}</td>
-                <td>{log.deductionsReason}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
+        </div>
+      )}
+
       <Footer />
     </>
   );
