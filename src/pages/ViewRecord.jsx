@@ -87,6 +87,7 @@ const ViewRecord = () => {
 
   const rowHeight = 100; // Adjust this value based on your row height
 
+  
   useEffect(() => {
     fetchRecords();
   }, []);
@@ -118,6 +119,7 @@ const ViewRecord = () => {
     handleQuickSort(quickFilter);
   }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
 
+  
   useEffect(() => {
     let timeoutId;
 
@@ -209,7 +211,20 @@ const ViewRecord = () => {
       console.error("Error searching records:", error);
     }
   };
-
+  useEffect(() => {
+    // Set initial quick filter to 'employeeID'
+    setQuickFilter('employeeID');
+    // Set initial sort order to 'asc'
+    setSortOrder('asc');
+  
+    fetchRecords(); // Fetch records after setting initial sort order
+  }, []);
+  
+  useEffect(() => {
+    if (quickFilter !== '') {
+      handleQuickSort(quickFilter);
+    }
+  }, [quickFilter, sortOrder, records]); // Listen for changes in quickFilter, sortOrder, or records
   const handleQuickSort = (column) => {
     const sortedRecords = [...filteredRecords].sort((a, b) => {
       const valueA =
@@ -400,7 +415,6 @@ const ViewRecord = () => {
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
                 }}
               >
-                <option value="">Sort</option>
                 <option value="employeeID">Employee ID</option>
                 <option value="lastName">Last Name</option>
                 <option value="firstName">First Name</option>
@@ -409,9 +423,8 @@ const ViewRecord = () => {
                 <option value="dateOfBirth">Birthday</option>
                 <option value="address">Address</option>
                 <option value="contactNumber">Contact Number</option>
-                <option value="employmentStatus">Employment Status</option>
+                <option value="email">Email</option>
                 <option value="position">Position</option>
-                <option value="designation">Designation</option>
                 <option value="salaryPerMonth">Salary Per Month</option>
                 <option value="department">Department</option>
                 <option value="dateHired">Date Hired</option>
