@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
-import {
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  getDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
 import { db } from "../firebase"; // Import your Firestore instance
 import Header from "../components/header";
 import Footer from "../components/footer";
 import "./ViewRecord.css"; // Import the CSS file
 import { useParams } from "react-router-dom"; // Import useParams only, since useHistory is not used
+import { IoIosSearch } from "react-icons/io";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import { TbArrowsSort } from "react-icons/tb";
+
+
 
 const ViewRecord = () => {
   const { searchQuery } = useParams();
@@ -87,8 +85,6 @@ const ViewRecord = () => {
     "pagibigDeduction",
   ];
 
-  const rowHeight = 100; // Adjust this value based on your row height
-
   useEffect(() => {
     fetchRecords();
   }, []);
@@ -120,6 +116,7 @@ const ViewRecord = () => {
     handleQuickSort(quickFilter);
   }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
 
+  
   useEffect(() => {
     let timeoutId;
 
@@ -211,7 +208,20 @@ const ViewRecord = () => {
       console.error("Error searching records:", error);
     }
   };
-
+  useEffect(() => {
+    // Set initial quick filter to 'employeeID'
+    setQuickFilter('employeeID');
+    // Set initial sort order to 'asc'
+    setSortOrder('asc');
+  
+    fetchRecords(); // Fetch records after setting initial sort order
+  }, []);
+  
+  useEffect(() => {
+    if (quickFilter !== '') {
+      handleQuickSort(quickFilter);
+    }
+  }, [quickFilter, sortOrder, records]); // Listen for changes in quickFilter, sortOrder, or records
   const handleQuickSort = (column) => {
     const sortedRecords = [...filteredRecords].sort((a, b) => {
       const valueA =
@@ -337,6 +347,21 @@ const ViewRecord = () => {
     }));
   };
 
+  const [confirmationAction, setConfirmationAction] = useState(null); // State to track the action requiring confirmation
+
+  const handleConfirmation = (action) => {
+    setConfirmationAction(action); // Set the action requiring confirmation
+  };
+
+  const confirmAction = (action) => {
+    if (action === "edit") {
+      handleEdit();
+    } else if (action === "archive") {
+      handleArchive();
+    }
+    setConfirmationAction(null); // Reset confirmation action after handling
+  };
+
   const columnSelectors = [
     {
       label: "Personal",
@@ -373,35 +398,35 @@ const ViewRecord = () => {
       ],
     },
   ];
+  const [showDropdown, setShowDropdown] = useState(false); // State to control dropdown visibility
 
   return (
     <>
       <Header />
       <div className="view-record-container">
-        <div className="view-record-search">
-          <div className="search-controls">
-            <input
-              className="view-record-input"
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search Record"
-            />
-            <button className="view-record-button" onClick={handleSearch}>
-              Search
-            </button>
-          </div>
+      <div className="w-full text-center font-inter font-semibold text-black border border-transparent">
+      <div className="search-bar flex items-center justify-center mt-1">
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search Record"
+          className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 text-gray-800 max-w-xl"
+        />
+        <button onClick={handleSearch} className="search-button py-2 px-4 rounded-r-lg bg-green-500 hover:bg-green-600 text-white border border-green-400 border-l-0 focus:outline-none">
+          <IoIosSearch size={22} /> 
+        </button>
+      </div>
 
           <div className="view-record-controls">
             <div className="column-controls">
               <select
-                className="view-record-input1"
+                className="view-record-input1  py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
                 }}
               >
-                <option value="">Sort</option>
                 <option value="employeeID">Employee ID</option>
                 <option value="lastName">Last Name</option>
                 <option value="firstName">First Name</option>
@@ -410,9 +435,8 @@ const ViewRecord = () => {
                 <option value="dateOfBirth">Birthday</option>
                 <option value="address">Address</option>
                 <option value="contactNumber">Contact Number</option>
-                <option value="employmentStatus">Employment Status</option>
+                <option value="email">Email</option>
                 <option value="position">Position</option>
-                <option value="designation">Designation</option>
                 <option value="salaryPerMonth">Salary Per Month</option>
                 <option value="department">Department</option>
                 <option value="dateHired">Date Hired</option>
@@ -422,43 +446,56 @@ const ViewRecord = () => {
                 <option value="pagibig">Pagibig</option>
                 <option value="sss">SSS</option>
               </select>
-
+              <div className="checkbox-controls">
+  <div className="dropdowncol py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none">
+    <button
+    
+      onClick={() => setShowDropdown(!showDropdown)}
+      className="dropdown-toggle"
+    >
+      Select Columns
+    </button>
+    {showDropdown && (
+      <div className="dropdown-content">
+        {columnSelectors.map((group, index) => (
+          <div key={index} className="checkbox-wrapper-19">
+            <input
+              type="checkbox"
+              id={`cbx-${index}`}
+              onChange={() => {
+                group.columns.forEach((col) => handleColumnToggle(col));
+              }}
+              checked={
+                !group.columns.some((col) => !columnVisibility[col])
+              }
+              className="hidden"
+            />
+            <label
+              htmlFor={`cbx-${index}`}
+              className="check-box"
+            >
+  <span className="checkbox-label-text">{group.label}</span>
+            </label>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
               <select
-                className="view-record-input2"
+                className="view-record-input2  py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => handleSortOrderChange(e.target.value)}
+                
               >
+                
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
-            </div>
 
-            <div className="checkbox-controls">
-              <div className="flex flex-row justify-center">
-                {columnSelectors.map((group, index) => (
-                  <div key={index} className="checkbox-wrapper-3">
-                    <input
-                      type="checkbox"
-                      id={`cbx-${index}`}
-                      onChange={() => {
-                        group.columns.forEach((col) => handleColumnToggle(col));
-                      }}
-                      checked={
-                        !group.columns.some((col) => !columnVisibility[col])
-                      }
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor={`cbx-${index}`}
-                      className="toggle text-base sm:text-xl3 ml-2 cursor-pointer select-none"
-                    >
-                      <span className="w-4 h-4 border border-gray-400 rounded-md mr-2 flex-shrink-0"></span>
-                      {group.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
             </div>
-          </div>
+           
+         
+</div>
         </div>
         <div style={{ overflowX: "auto" }}>
           <table className="view-record-table">
@@ -502,17 +539,21 @@ const ViewRecord = () => {
           </table>
         </div>
 
-        {selectedRecord && (
-          <div
-            className="options-container"
-            style={{ top: `${calculatePopupPosition()}px` }}
-          >
-            <div className="popup-content">
-              <button onClick={handleEdit}>Edit</button>
-              <button onClick={handleArchive}>Archive</button>
-            </div>
-          </div>
-        )}
+        {selectedRecord && !confirmationAction && (
+    <div className="options-container">
+      <div className="popup-content">
+        <button onClick={() => handleConfirmation("edit")}>Edit</button>
+        <button onClick={() => handleConfirmation("archive")}>Archive</button>
+      </div>
+    </div>
+  )}
+  {confirmationAction && (
+    <div className="confirmation-dialog">
+      <p>Are you sure you want to {confirmationAction}?</p>
+      <button onClick={() => confirmAction(confirmationAction)}>Yes</button>
+      <button onClick={() => setConfirmationAction(null)}>No</button>
+    </div>
+  )}
       </div>
       <Footer />
     </>
