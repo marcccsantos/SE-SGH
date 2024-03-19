@@ -151,6 +151,14 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/DTR"
+            element={
+              <ProtectedRoute user={user}>
+                <DTR />
+              </ProtectedRoute>
+            }
+          />
         </>
       ) : (
         <Route path="*" element={<Navigate to="/Unauthorized" />} />
@@ -189,7 +197,6 @@ const App = () => {
           {employeeRoutes}
           <Route path="*" element={<NotFound />} />
           <Route path="/Unauthorized" element={<Unauthorized />} />
-          <Route path="/DTR" element={<DTR />} />
         </Routes>
       </Router>
     </div>

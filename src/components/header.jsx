@@ -116,6 +116,9 @@ const header = () => {
                     <li>
                       <Link to="/PayrollFinal">PAYROLL</Link>
                     </li>
+                    <li>
+                      <Link to="/DTR">DTR</Link>
+                    </li>
                   </div>
                 </div>
               </ul>

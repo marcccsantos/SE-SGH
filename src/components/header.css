@@ -161,6 +161,7 @@ nav a {
   border: 1px solid black;
   padding: 20px 40px;
   margin-top: 36px;
+  z-index: 2;
 }
 .profile-icon:hover .profile-info {
   display: block;
