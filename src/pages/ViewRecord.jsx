@@ -85,9 +85,6 @@ const ViewRecord = () => {
     "pagibigDeduction",
   ];
 
-  const rowHeight = 100; // Adjust this value based on your row height
-
-  
   useEffect(() => {
     fetchRecords();
   }, []);
@@ -350,6 +347,21 @@ const ViewRecord = () => {
     }));
   };
 
+  const [confirmationAction, setConfirmationAction] = useState(null); // State to track the action requiring confirmation
+
+  const handleConfirmation = (action) => {
+    setConfirmationAction(action); // Set the action requiring confirmation
+  };
+
+  const confirmAction = (action) => {
+    if (action === "edit") {
+      handleEdit();
+    } else if (action === "archive") {
+      handleArchive();
+    }
+    setConfirmationAction(null); // Reset confirmation action after handling
+  };
+
   const columnSelectors = [
     {
       label: "Personal",
@@ -527,17 +539,21 @@ const ViewRecord = () => {
           </table>
         </div>
 
-        {selectedRecord && (
-          <div
-            className="options-container"
-            style={{ top: `${calculatePopupPosition()}px` }}
-          >
-            <div className="popup-content">
-              <button onClick={handleEdit}>Edit</button>
-              <button onClick={handleArchive}>Archive</button>
-            </div>
-          </div>
-        )}
+        {selectedRecord && !confirmationAction && (
+    <div className="options-container">
+      <div className="popup-content">
+        <button onClick={() => handleConfirmation("edit")}>Edit</button>
+        <button onClick={() => handleConfirmation("archive")}>Archive</button>
+      </div>
+    </div>
+  )}
+  {confirmationAction && (
+    <div className="confirmation-dialog">
+      <p>Are you sure you want to {confirmationAction}?</p>
+      <button onClick={() => confirmAction(confirmationAction)}>Yes</button>
+      <button onClick={() => setConfirmationAction(null)}>No</button>
+    </div>
+  )}
       </div>
       <Footer />
     </>

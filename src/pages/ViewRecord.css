@@ -143,38 +143,6 @@
   font-family: "Inter", sans-serif;
   min-height: 100vh;
 }
-
-.options-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  background-color: #fff;
-  border: 1px solid #000000;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-
-.popup-content{
-  
-}
-.popup-content button {
-  display: block;
-  width: 100%;
-  padding: 8px 0;
-  margin-bottom: 5px;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
-}
-
-.popup-content button:hover {
-  background-color: #34b93d;
-}
-
 /* Column Selector CSS */
 
 .column-selector-container {
@@ -409,7 +377,66 @@
   .checkbox-label-text {
     margin-left: 35px; /* Adjust the margin as needed */
   }
+  
+  .popup-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popup-content button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    margin-bottom: 10px ;
+    border: none;
+    background-color: #72d37f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .popup-content button:hover {
+    background-color: #34b93d;
+  }
 
+  .confirmation-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center align the content */
+  }
+  
+  .confirmation-dialog p {
+    margin-bottom: 10px;
+  }
+  
+  .confirmation-dialog button {
+    padding: 12px 24px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #72d37f;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .confirmation-dialog button:last-child {
+    margin-right: 0;
+  }
+.confirmation-dialog button:hover {
+  background-color: #34b93d;
+}
 /* Media queries for responsiveness */
 @media screen and (min-width: 321px) and (max-width: 475px) {
   .view-record-input {
