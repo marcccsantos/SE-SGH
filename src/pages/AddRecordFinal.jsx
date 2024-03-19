@@ -13,6 +13,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { IoIosInformationCircle } from "react-icons/io";
+import Loading from "../components/loading";
 
 const AddRecordFinal = () => {
   const [employeeID, setEmployeeID] = useState("");
@@ -793,12 +794,16 @@ const AddRecordFinal = () => {
       )}
 
       {loading && (
-        <div className="fixed inset-0 flex items-center justify-center w-full h-lvh font-inter bg-white">
-          <div className="absolute flex flex-col items-center justify-center bg-white p-8 font-medium">
-            <p>Loading...</p>
+        <div className="fixed inset-0 flex items-center justify-center w-full h-lvh bg-white border border-red-500">
+          <div className="absolute flex flex-col items-center justify-center bg-white p-8 ">
+            <div className="loader-container">
+              <div className="loader"></div>
+              <div className="loader-text">Loading...</div>
+            </div>
           </div>
         </div>
       )}
+
       <Footer />
     </>
   );

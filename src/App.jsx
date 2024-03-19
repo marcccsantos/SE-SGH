@@ -25,6 +25,7 @@ import EmployeePayRoll from "./pages/EmployeePayroll";
 import Unauthorized from "./pages/Unauthorized";
 import SearchProfile from "./pages/DefaultViewProfile";
 import { useEffect, useState } from "react";
+import Loading from "./components/loading";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -45,7 +46,7 @@ const App = () => {
   }, []);
 
   if (isFetching) {
-    return <h2>Loading...</h2>;
+    return <Loading />;
   }
 
   if (storedUserRole !== "admin") {
