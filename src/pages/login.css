@@ -11,9 +11,9 @@ body.loginPage::before {
   position: absolute;
   top: 0;
   right: 0;
-  width: 50%; 
+  width: 50%;
   height: 100%;
-  background-color:#176906;
+  background-color: #176906;
 }
 .login-page {
   display: flex;
@@ -47,16 +47,16 @@ body.loginPage::before {
   margin-left: 16%;
   position: fixed;
   top: 50%;
-  transform: translateY(-50%); 
+  transform: translateY(-50%);
 }
-.white-pattern{
+.white-pattern {
   width: 100%;
   height: auto;
   max-width: 695px;
   margin-left: -13%;
   position: fixed;
   top: 50%;
-  transform: translateY(-50%); 
+  transform: translateY(-50%);
 }
 .logo-left {
   width: 100%;
@@ -78,13 +78,13 @@ body.loginPage::before {
   width: 100%;
   font-size: 10px;
   font-weight: 600;
-  font-family: 'Inter';
+  font-family: "Inter";
   color: white;
   position: fixed;
   text-align: center;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: 39%;
   margin-left: 12%;
 }
@@ -95,7 +95,7 @@ body.loginPage::before {
   max-height: 820px;
   position: relative;
   top: 50%;
-  transform: translateY(-50%); 
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -112,7 +112,7 @@ body.loginPage::before {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: -20%;
   margin-left: -9%;
 }
@@ -121,18 +121,18 @@ body.loginPage::before {
   width: 45%;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: -3%;
   margin-left: -10%;
   position: absolute;
   border: none;
   border-bottom: 2px solid black;
   outline: none;
-  font-family: 'Lexend';
+  font-family: "Lexend";
   font-size: 14px;
-  font-weight:400;
+  font-weight: 400;
 }
-.password{
+.password {
   margin-top: 7%;
   z-index: 2;
 }
@@ -140,7 +140,7 @@ body.loginPage::before {
 .eye-slash-btn {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-left: 10%;
   position: absolute;
   width: 3%;
@@ -151,12 +151,12 @@ body.loginPage::before {
 .login-button {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-left: -10%;
   margin-top: 18%;
   position: absolute;
-  font-family: 'Lexend';
-  font-weight:400;
+  font-family: "Lexend";
+  font-weight: 400;
   text-align: center;
   cursor: pointer;
   text-decoration: none;
@@ -173,18 +173,17 @@ body.loginPage::before {
   transition: ease-out;
   text-decoration: underline;
 }
-.forgot-password{
+.forgot-password {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-left: -10%;
   margin-top: 24%;
   position: absolute;
   color: #176906;
   text-decoration: none;
   font-size: 10px;
-  font-family: 'Lexend';
-  font-weight: lighter;
+  font-family: "Poppins", sans-serif;
   z-index: 2;
 }
 .forgot-password:hover {
@@ -195,7 +194,7 @@ body.loginPage::before {
   max-width: 220px;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-left: 11%;
   margin-top: 28%;
   position: absolute;
@@ -204,38 +203,38 @@ body.loginPage::before {
 .error-message {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: -10%;
   margin-left: -11%;
   position: absolute;
-  font-family: 'Lexend';
-  font-weight:400;
+  font-family: "Lexend";
+  font-weight: 400;
   font-size: 14px;
   color: red;
   text-align: center;
 }
-.countdown-error{
+.countdown-error {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: -10%;
   margin-left: -8%;
   position: absolute;
-  font-family: 'Lexend';
-  font-weight:400;
+  font-family: "Lexend";
+  font-weight: 400;
   font-size: 14px;
   color: red;
   text-align: center;
 }
-.invalid-credentials{
+.invalid-credentials {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: -10%;
   margin-left: -8%;
   position: absolute;
-  font-family: 'Lexend';
-  font-weight:400;
+  font-family: "Lexend";
+  font-weight: 400;
   font-size: 14px;
   color: red;
   text-align: center;
@@ -243,12 +242,12 @@ body.loginPage::before {
 .reset {
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   margin-top: -10%;
   margin-left: -8%;
   position: absolute;
-  font-family: 'Lexend';
-  font-weight:400;
+  font-family: "Lexend";
+  font-weight: 400;
   font-size: 14px;
   color: red;
   text-align: center;
@@ -256,7 +255,7 @@ body.loginPage::before {
 .error-input {
   border-bottom: 2px solid red;
 }
-@media screen and (max-width:1024px) {
+@media screen and (max-width: 1024px) {
   .copyright {
     font-size: 0.781vw;
   }
@@ -280,7 +279,7 @@ body.loginPage::before {
     font-size: 1.042vw;
     border-radius: 0 3px 0 3px;
   }
-  .forgot-password{
+  .forgot-password {
     font-size: 0.781vw;
   }
   .stethoscope {
@@ -290,10 +289,10 @@ body.loginPage::before {
     font-size: 1.042vw;
     margin-left: -17%;
   }
-  .invalid-credentials{
+  .invalid-credentials {
     font-size: 1.042vw;
   }
-  .countdown-error{
+  .countdown-error {
     font-size: 1.042vw;
     margin-left: -17%;
   }
@@ -305,7 +304,7 @@ body.loginPage::before {
     border-bottom: 2px solid red;
   }
 }
-@media screen and (min-width:1025px) {
+@media screen and (min-width: 1025px) {
   .bg {
     width: 60%;
   }
@@ -323,11 +322,11 @@ body.loginPage::before {
     margin-left: -16%;
     font-size: 0.563rem;
   }
-  .invalid-credentials{
+  .invalid-credentials {
     margin-left: -9%;
     font-size: 0.563rem;
   }
-  .countdown-error{
+  .countdown-error {
     margin-left: -18%;
     font-size: 0.5rem;
   }

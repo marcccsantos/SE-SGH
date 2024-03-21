@@ -107,7 +107,7 @@ const SearchProfile = () => {
             </div>
           </div>
         </div>
-        <div className=" md:m-8 mx-3 grid md:grid-cols-2 bg-[#e8e8e8]">
+        <div className=" md:m-8 mx-3 mb-5 grid md:grid-cols-2 bg-[#e8e8e8]">
           {employeeData ? (
             employeeData.map((employee, index) => (
               <div
@@ -121,11 +121,11 @@ const SearchProfile = () => {
                       <img
                         src={employee.imageUrl}
                         alt="Profile"
-                        className="w-[90px] max-h-[90px] p-1"
+                        className="min-w-[90px] max-h-[90px] p-1"
                       />
                     </div>
-                    <div className="flex flex-col ml-3">
-                      <p className="font-poppins font-semibold text-lg">
+                    <div className="flex flex-col ml-3 overflow-x-scroll no-scrollbar">
+                      <p className="font-poppins font-semibold text-lg whitespace-nowrap">
                         Name: {toTitleCase(employee.fullName)}
                       </p>
                       <div className="font-inter font-medium text-[14px]">

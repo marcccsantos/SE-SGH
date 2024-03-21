@@ -1,114 +1,113 @@
 body.forgotPage {
-    background-color:#176906;
+  background-color: #176906;
 }
 .forgot {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
 }
 .input-form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .forgot-card {
-    padding: 40px;
-    border-radius: 10px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-    font-family: 'Inter';
+  padding: 40px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  font-family: "Inter";
 }
 .forgot-text {
-    font-family: 'Inter';
+  font-family: "Inter";
 }
 .email-forgot {
-    width: 96.1%;
-    margin-bottom: 15px;
-    padding: 5px;
-    font-size: 13px;
-    font-family: 'Inter';
-    border-radius: 5px;
-    border: 1px solid black
+  width: 96.1%;
+  margin-bottom: 15px;
+  padding: 5px;
+  font-size: 13px;
+  font-family: "Inter";
+  border-radius: 5px;
+  border: 1px solid black;
 }
 .btn-reset {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 5px;
-    font-size: 13px;
-    color: white;
-    background-color: #176906;
-    border: 1px solid #176906;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Inter';
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 5px;
+  font-size: 13px;
+  color: white;
+  background-color: #176906;
+  border: 1px solid #176906;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Inter";
 }
 .btn-reset:hover {
-    background-color: #155e06;
-    transition: ease-out;
-    text-decoration: underline;
+  background-color: #155e06;
+  transition: ease-out;
+  text-decoration: underline;
 }
 .info-forgot-pass {
-    width: 100%;
-    max-width: 300px;
-    font-size: 13px;
-    margin-top: -5px;
+  width: 100%;
+  max-width: 300px;
+  font-size: 13px;
+  margin-top: -5px;
 }
 .back {
-    display:flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 .forgot-back {
-    font-size: 12px;
-    font-family: 'Lexend';
-    font-weight: lighter;
-    color: #176906;
-    text-decoration: none;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  color: #176906;
+  text-decoration: none;
 }
 .forgot-back:hover {
-    text-decoration: underline;
-  }
-@media screen and (max-width:320px) {
-    .forgot-card {
-        margin: 20px;
-        padding: 30px;
-    }
-    .forgot-text {
-        font-size: 22px;
-    }
-    .info-forgot {
-        font-size: 13px;
-    }
-    .email-forgot {
-        font-size: 13px;
-        width: 94.5%;
-    }
-    .btn-reset {
-        font-size: 13px;
-    }
-    .forgot-back {
-        font-size: 12px;
-    }
+  text-decoration: underline;
 }
-@media screen and (min-width:321px) and (max-width:425px){
-    .forgot-card {
-        margin: 20px;
-        padding: 30px;
-    }
-    .forgot-text {
-        font-size: 22px;
-    }
-    .info-forgot {
-        font-size: 13px;
-    }
-    .email-forgot {
-        font-size: 13px;
-        width: 96%;
-    }
-    .btn-reset {
-        font-size: 13px;
-    }
-    .forgot-back {
-        font-size: 12px;
-    }
+@media screen and (max-width: 320px) {
+  /* .forgot-card {
+    margin: 20px;
+    padding: 30px;
+  } */
+  .forgot-text {
+    font-size: 22px;
+  }
+  .info-forgot {
+    font-size: 13px;
+  }
+  .email-forgot {
+    font-size: 13px;
+    width: 94.5%;
+  }
+  .btn-reset {
+    font-size: 13px;
+  }
+  .forgot-back {
+    font-size: 12px;
+  }
+}
+@media screen and (min-width: 321px) and (max-width: 425px) {
+  .forgot-card {
+    margin: 20px;
+    padding: 30px;
+  }
+  .forgot-text {
+    font-size: 22px;
+  }
+  .info-forgot {
+    font-size: 13px;
+  }
+  .email-forgot {
+    font-size: 13px;
+    width: 96%;
+  }
+  .btn-reset {
+    font-size: 13px;
+  }
+  .forgot-back {
+    font-size: 12px;
+  }
 }
