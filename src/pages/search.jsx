@@ -3,10 +3,20 @@ import { useNavigate } from "react-router-dom";
 import "./search.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import { CiSearch } from "react-icons/ci";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const navigate = useNavigate();
+
+  const handleFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsInputFocused(false);
+  };
 
   useEffect(() => {
     document.body.classList.add("searchPage");
@@ -31,25 +41,37 @@ const Search = () => {
     <>
       <Header />
 
-      <div className="search">
+      <div className="search bg-[#00000030]">
         <img className="logo-search" src="/logo-1.png" alt="" />
         <img className="sgh-search" src="/sgh.png" alt="" />
-        <div className="searchForm">
+        <div className="bg-white flex flex-row justify-center items-center rounded-md text-sm md:text-base font-inter shadow-lg pl-2 mt-2">
+          <CiSearch className="text-xl mr-2 font-semibold" />
+          <input
+            className={`p-1 px-2 outline-none border-l border-black ${
+              isInputFocused || searchQuery
+                ? "border-r-0 border-t-0 border-b-0"
+                : ""
+            }`}
+            name="search"
+            type="text"
+            placeholder="Search Record"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            autoComplete="off"
+          />
+          <button
+            className="ml-2 bg-[#176906] text-white rounded-r-md py-2 px-3 hover:bg-[#155e06]"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
+        </div>
+        {/* <div className="searchForm">
           <div className="search-box">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="search-icon"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
+            
             <input
               className="search-input"
               name="search"
@@ -64,7 +86,7 @@ const Search = () => {
           <button className="btn-search" onClick={handleSearch}>
             Search
           </button>
-        </div>
+        </div> */}
       </div>
 
       <Footer />

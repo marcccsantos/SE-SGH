@@ -128,6 +128,7 @@ const DTR = () => {
 
     if (employeesSnapshot.empty) {
       console.log("User does not exist.");
+      setUserExistPopUp(true);
       return;
     }
 
@@ -230,7 +231,7 @@ const DTR = () => {
         </h1>
         <div className="dtr-form  font-inter">
           <input
-            className="dtr-input border-2 border-black w-full mb-3 p-1 pl-2 rounded text-[13px]"
+            className="dtr-input border border-black w-full mb-3 p-1 pl-2 rounded text-[13px]"
             id="employeeID"
             type="text"
             value={employeeID}
@@ -240,7 +241,7 @@ const DTR = () => {
             placeholder="Employee ID"
           />
           <input
-            className="dtr-input border-2 border-black w-full mb-5 p-1 pl-2 rounded text-[13px]"
+            className="dtr-input border border-black w-full mb-5 p-1 pl-2 rounded text-[13px]"
             id="lastName"
             type="text"
             value={lastName}

@@ -29,8 +29,8 @@ function ForgotPassword() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen border-red-500 border p-2">
-      <div className="border border-red-500 mx-2 bg-white p-10 rounded-md">
+    <div className="flex justify-center items-center h-screen p-2">
+      <div className=" mx-2 bg-white p-10 rounded-md">
         <h1 className="font-inter font-bold md:text-[35px] text-[28px]">
           Forgot Password?
         </h1>

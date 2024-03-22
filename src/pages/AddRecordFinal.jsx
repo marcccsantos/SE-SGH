@@ -270,6 +270,7 @@ const AddRecordFinal = () => {
                 id="empid"
                 value={employeeID}
                 onChange={(e) => setEmployeeID(e.target.value.trim())}
+                autoComplete="off"
                 required
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -286,6 +287,7 @@ const AddRecordFinal = () => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
+                autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -301,6 +303,7 @@ const AddRecordFinal = () => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
+                autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -316,6 +319,7 @@ const AddRecordFinal = () => {
                 value={middleName}
                 onChange={(e) => setMiddleName(e.target.value)}
                 required
+                autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -331,6 +335,7 @@ const AddRecordFinal = () => {
                 value={contactNumber}
                 onChange={(e) => setContactNumber(e.target.value)}
                 required
+                autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -346,6 +351,7 @@ const AddRecordFinal = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -361,6 +367,7 @@ const AddRecordFinal = () => {
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 required
+                autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -419,6 +426,7 @@ const AddRecordFinal = () => {
                 value={street}
                 onChange={(e) => setStreet(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -434,6 +442,7 @@ const AddRecordFinal = () => {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -449,6 +458,7 @@ const AddRecordFinal = () => {
                 value={province}
                 onChange={(e) => setProvince(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -464,6 +474,7 @@ const AddRecordFinal = () => {
                 value={barangay}
                 onChange={(e) => setBarangay(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -479,6 +490,7 @@ const AddRecordFinal = () => {
                 value={lotNumber}
                 onChange={(e) => setLotNumber(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
             </div>
@@ -505,6 +517,7 @@ const AddRecordFinal = () => {
                 value={tin}
                 onChange={(e) => setTin(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -520,6 +533,7 @@ const AddRecordFinal = () => {
                 value={prc}
                 onChange={(e) => setPrc(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -535,6 +549,7 @@ const AddRecordFinal = () => {
                 value={prcExpiry}
                 onChange={(e) => setPrcExpiry(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -550,6 +565,7 @@ const AddRecordFinal = () => {
                 value={sss}
                 onChange={(e) => setSss(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -565,6 +581,7 @@ const AddRecordFinal = () => {
                 value={sssDeduction}
                 onChange={(e) => setSssDeduction(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -580,6 +597,7 @@ const AddRecordFinal = () => {
                 value={philhealth}
                 onChange={(e) => setPhilhealth(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -595,6 +613,7 @@ const AddRecordFinal = () => {
                 value={philhealthDeduction}
                 onChange={(e) => setPhilhealthDeduction(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -610,6 +629,7 @@ const AddRecordFinal = () => {
                 value={pagibig}
                 onChange={(e) => setPagibig(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -625,6 +645,7 @@ const AddRecordFinal = () => {
                 value={pagibigDeduction}
                 onChange={(e) => setPagibigDeduction(e.target.value)} // dapat 0-100 lang to
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
             </div>
@@ -649,6 +670,7 @@ const AddRecordFinal = () => {
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -664,6 +686,7 @@ const AddRecordFinal = () => {
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -679,6 +702,7 @@ const AddRecordFinal = () => {
                 value={dateHired}
                 onChange={(e) => setDateHired(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -694,6 +718,7 @@ const AddRecordFinal = () => {
                 value={salaryPerMonth}
                 onChange={(e) => setSalaryPerMonth(e.target.value)}
                 required
+                autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -737,7 +762,7 @@ const AddRecordFinal = () => {
           </div>
         </div>
         <div className="flex flex-row justify-end mt-5 p-3 font-inter font-medium">
-          <div className="mr-2 px-3 py-1 flex items-center bg-[#176906] hover:bg:[#155e06]">
+          <div className="mr-2 px-3 py-1 flex items-center bg-[#176906] hover:bg-[#155e06]">
             <button type="submit" className="text-white hover:underline">
               Submit
             </button>

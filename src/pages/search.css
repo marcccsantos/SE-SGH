@@ -1,5 +1,5 @@
 body.searchPage {
-  background: url("/public/bg-search.png") no-repeat center center fixed;
+  background: url("/public/bg-search-1.png") no-repeat center center fixed;
   -moz-background-size: cover;
   -webkit-background-size: cover;
   -o-background-size: cover;
@@ -10,7 +10,7 @@ body.searchPage {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: -35px;
+  margin-top: -55px;
   min-height: 100vh;
 }
 .logo-search {
