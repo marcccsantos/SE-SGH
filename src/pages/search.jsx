@@ -44,7 +44,7 @@ const Search = () => {
       <div className="search bg-[#00000030]">
         <img className="logo-search" src="/logo-1.png" alt="" />
         <img className="sgh-search" src="/sgh.png" alt="" />
-        <div className="bg-white flex flex-row justify-center items-center rounded-md text-sm md:text-base font-inter shadow-lg pl-2 mt-2">
+        <div className="bg-white flex flex-row justify-center items-center rounded-md text-[12px] md:text-base font-inter shadow-lg pl-2 mt-2">
           <CiSearch className="text-xl mr-2 font-semibold" />
           <input
             className={`p-1 px-2 outline-none border-l border-black ${
@@ -63,7 +63,7 @@ const Search = () => {
             autoComplete="off"
           />
           <button
-            className="ml-2 bg-[#176906] text-white rounded-r-md py-2 px-3 hover:bg-[#155e06]"
+            className="ml-2 bg-[#176906] text-white rounded-r py-2 px-3 hover:bg-[#155e06]"
             onClick={handleSearch}
           >
             Search

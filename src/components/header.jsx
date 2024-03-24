@@ -89,7 +89,7 @@ const header = () => {
             <nav className="nav">
               <ul>
                 <div className="all-tab">
-                  <div className="tab">
+                  <div className="tab whitespace-nowrap">
                     <li>
                       <Link to="/search">SEARCH RECORD</Link>
                     </li>

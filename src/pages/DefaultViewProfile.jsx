@@ -87,14 +87,14 @@ const SearchProfile = () => {
                     </svg>
                   </div>
                   <input
-                    type="text"
+                    type="number"
                     placeholder="EmployeeID"
                     name="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
                     autoComplete="off"
-                    className="w-full max-w-[160px] bg-white pl-2 md:text-base font-medium outline-0 text-sm"
+                    className="without_number w-full max-w-[160px] bg-white pl-2 md:text-base font-medium outline-0 text-sm"
                   />
                   <input
                     type="button"
@@ -117,15 +117,15 @@ const SearchProfile = () => {
               >
                 <div className="hover:border-[#176906] border-2 border-white rounded  hover:bg-[#176906] bg-white">
                   <div className="border-2 border-black flex flex-row p-3 rounded bg-white cursor-pointer">
-                    <div className="border border-black rounded w-[90px] flex items-center justify-center">
+                    <div className="border border-black rounded w-[80px] md:w-[90px] flex items-center justify-center">
                       <img
                         src={employee.imageUrl}
                         alt="Profile"
-                        className="min-w-[90px] max-h-[90px] p-1"
+                        className="md:min-w-[90px] md:max-h-[90px] p-1 min-w-[80px] max-h-[80px]"
                       />
                     </div>
                     <div className="flex flex-col ml-3 overflow-x-scroll no-scrollbar">
-                      <p className="font-poppins font-semibold text-lg whitespace-nowrap">
+                      <p className="font-poppins font-semibold md:text-lg md:whitespace-nowrap">
                         Name: {toTitleCase(employee.fullName)}
                       </p>
                       <div className="font-inter font-medium text-[14px]">

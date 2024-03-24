@@ -66,6 +66,11 @@
   opacity: 1;
   width: 210px;
 }
+input[type="number"].without_number::-webkit-inner-spin-button,
+input[type="number"].without_number::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 @media screen and (min-width: 2560px) {
   .search-input {

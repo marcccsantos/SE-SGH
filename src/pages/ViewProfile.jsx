@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   addDoc,
   collection,
@@ -15,6 +15,7 @@ import "./AddRecord.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import NotFound from "./not-found";
+import { MdError } from "react-icons/md";
 
 const ViewProfile = () => {
   const { employeeID } = useParams();
@@ -33,6 +34,8 @@ const ViewProfile = () => {
   const [showPopupExtras, setShowPopupExtras] = useState(false);
   const [showPopupDeduction, setShowPopupDeduction] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -57,9 +60,11 @@ const ViewProfile = () => {
           setLogs(logsData);
         } else {
           console.error("No employee found with the provided ID");
+          navigate(`/ViewProfile`);
         }
       } catch (error) {
         console.error("Error fetching employee data:", error);
+        navigate(`/ViewProfile`);
       }
     };
 
@@ -282,15 +287,15 @@ const ViewProfile = () => {
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
-                htmlFor="fname"
+                htmlFor="firstName"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 First Name
               </label>
               <input
                 type="text"
-                name="fname"
-                id="fname"
+                name="firstName"
+                id="firstName"
                 value={
                   isEditing ? editedData.firstName : employeeData.firstName
                 }
@@ -301,15 +306,15 @@ const ViewProfile = () => {
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
-                htmlFor="lname"
+                htmlFor="lastName"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 Last Name
               </label>
               <input
                 type="text"
-                name="lname"
-                id="lname"
+                name="lastName"
+                id="lastName"
                 value={isEditing ? editedData.lastName : employeeData.lastName}
                 readOnly={!isEditing}
                 onChange={handleChange}
@@ -318,15 +323,15 @@ const ViewProfile = () => {
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
-                htmlFor="mname"
+                htmlFor="middleName"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 Middle Name
               </label>
               <input
                 type="text"
-                name="mname"
-                id="mname"
+                name="middleName"
+                id="middleName"
                 value={
                   isEditing ? editedData.middleName : employeeData.middleName
                 }
@@ -337,15 +342,15 @@ const ViewProfile = () => {
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
-                htmlFor="contact"
+                htmlFor="contactNumber"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 Contact No.
               </label>
               <input
-                type="text"
-                name="contact"
-                id="contact"
+                type="number"
+                name="contactNumber"
+                id="contactNumber"
                 value={
                   isEditing
                     ? editedData.contactNumber
@@ -512,7 +517,7 @@ const ViewProfile = () => {
                 Lot Number
               </label>
               <input
-                type="text"
+                type="number"
                 name="lot"
                 id="lot"
                 value={isEditing ? editedData.lot : employeeData.lot}
@@ -747,15 +752,15 @@ const ViewProfile = () => {
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
-                htmlFor="hired"
+                htmlFor="dateHired"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 Date Hired
               </label>
               <input
                 type="date"
-                name="hired"
-                id="hired"
+                name="dateHired"
+                id="dateHired"
                 value={
                   isEditing ? editedData.dateHired : employeeData.dateHired
                 }
@@ -766,15 +771,15 @@ const ViewProfile = () => {
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
-                htmlFor="salary"
+                htmlFor="salaryPerMonth"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
               >
                 Salary
               </label>
               <input
                 type="number"
-                name="salary"
-                id="salary"
+                name="salaryPerMonth"
+                id="salaryPerMonth"
                 value={
                   isEditing
                     ? editedData.salaryPerMonth
