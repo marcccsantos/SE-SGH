@@ -108,13 +108,14 @@ body.loginPage::before {
 }
 .welcome-img {
   width: 100%;
-  max-width: 320px;
+  max-width: 250px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   margin-top: -20%;
   margin-left: -9%;
+  background-color: transparent;
 }
 .username,
 .password {
@@ -255,6 +256,7 @@ body.loginPage::before {
 .error-input {
   border-bottom: 2px solid red;
 }
+
 @media screen and (max-width: 1024px) {
   .copyright {
     font-size: 0.781vw;

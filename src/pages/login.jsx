@@ -10,8 +10,17 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisibility] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [loginAttempts, setLoginAttempts] = useState(0);
-  const [waitTime, setWaitTime] = useState(0);
+  const [loginAttempts, setLoginAttempts] = useState(
+    localStorage.getItem("loginAttempts")
+      ? parseInt(localStorage.getItem("loginAttempts"))
+      : 0
+  );
+
+  const [waitTime, setWaitTime] = useState(
+    localStorage.getItem("waitTime")
+      ? parseInt(localStorage.getItem("waitTime"))
+      : 0
+  );
 
   const navigate = useNavigate();
 
@@ -72,6 +81,8 @@ const Login = () => {
             .filter(Boolean); // Remove null entries
 
           if (results.length > 0) {
+            localStorage.removeItem("loginAttempts");
+            setLoginAttempts(0);
             // If user data exists with matching email/username
             const userRole = results[0].role;
             const userEmployeeID = results[0].employeeID;
@@ -113,7 +124,11 @@ const Login = () => {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
         setErrorMsg("Invalid username or password. Please try again.");
-        setLoginAttempts((prevAttempts) => prevAttempts + 1);
+        setLoginAttempts((prevAttempts) => {
+          const newAttempts = prevAttempts + 1;
+          localStorage.setItem("loginAttempts", newAttempts); // Store login attempts
+          return newAttempts;
+        });
         if (loginAttempts === 2 && waitTime === 0) {
           setWaitTime(60);
           startCountdown();
@@ -124,6 +139,7 @@ const Login = () => {
 
   const startCountdown = () => {
     if (waitTime > 0) {
+      localStorage.setItem("waitTime", waitTime);
       setTimeout(() => {
         setWaitTime((prevWaitTime) => prevWaitTime - 1);
       }, 1000);
@@ -134,8 +150,10 @@ const Login = () => {
     if (waitTime > 0) {
       const countdownInterval = setInterval(() => {
         setWaitTime((prevWaitTime) => prevWaitTime - 1);
+        localStorage.setItem("waitTime", waitTime - 1); // Update stored countdown value
       }, 1000);
       return () => clearInterval(countdownInterval);
+      localStorage.removeItem("waitTime"); // Remove countdown value on completion
     }
   }, [waitTime]);
 
@@ -166,6 +184,10 @@ const Login = () => {
     event.preventDefault();
   };
 
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <>
       <div className="login-page">
@@ -182,7 +204,7 @@ const Login = () => {
           <div className="bg-right">
             <img className="bg" alt="" src="/bg.png" />
           </div>
-          <img className="welcome-img" alt="" src="/welcome.png" />
+          <img className="welcome-img " alt="" src="/Welcome-1-2.png" />
 
           <form onSubmit={handleSubmit}>
             <input

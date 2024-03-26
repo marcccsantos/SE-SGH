@@ -8,6 +8,7 @@ function ForgotPassword() {
   const history = useNavigate();
 
   const handleSubmit = async (e) => {
+    localStorage.removeItem("loginAttempts");
     e.preventDefault();
     const emalVal = e.target.email.value;
     sendPasswordResetEmail(auth, emalVal)

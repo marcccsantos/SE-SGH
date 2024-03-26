@@ -11,6 +11,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { CgLogOut } from "react-icons/cg";
 import Hamburger from "hamburger-react";
+import { motion } from "framer-motion";
 
 const header = () => {
   const location = useLocation();
@@ -179,7 +180,11 @@ const header = () => {
       </header>
 
       {showMenu && (
-        <div className="profile-mobile">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="profile-mobile"
+        >
           <div className="profile-information-mobile">
             {profileImage && (
               <img src={profileImage} alt="Profile" className="header-img-2" />
@@ -218,7 +223,7 @@ const header = () => {
               <p>LOGOUT</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </>
   );
