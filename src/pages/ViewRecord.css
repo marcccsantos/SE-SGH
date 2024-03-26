@@ -1,5 +1,4 @@
 
-/* Original styles for the table */
 .view-record-table {
   width: 100%;
   border-collapse: separate;
@@ -8,7 +7,6 @@
   table-layout: auto;
 }
 
-/* Original style for the table header */
 .view-record-table th {
   background-color: #176906;
   color: #fff;
@@ -19,16 +17,15 @@
   white-space: nowrap;
 }
 
-/* Original style for the table data */
+
 .view-record-table td {
-  padding: 8px;
-  text-align: left;
-  text-transform: uppercase;
+  padding: 12px;
+  text-align: left; 
   border: none;
   
 }
 
-/* Original style for alternating rows */
+
 .view-record-table tbody tr:nth-child(even) {
   background-color: #609655;
 }
@@ -37,7 +34,7 @@
   background-color: #b6d69c;
 }
 
-/* Original style for empty rows */
+
 .view-record-table tbody tr.empty-row:nth-child(even) {
   background-color: #4B4B4B;
 }
@@ -46,7 +43,7 @@
   background-color: #D9D9D9;
 }
 
-/* Original styles for the heading */
+
 .view-record-heading {
   margin-top: 0;
   margin-bottom: 20px;
@@ -57,25 +54,16 @@
   margin-right: 20px;
 }
 
-/* Original styles for the footer */
+
 .view-record-footer {
   text-align: center;
   margin-top: 20px;
 }
 
-.view-record-input {
-  width: 100%;
-  max-width: 600px ;
-  padding: 10px;
-  margin-right: 20px;
-  text-align: center;
-  font-family: 'Inter';
-  font-weight: 600;
-  border-radius: 100px;
-  color: black;
-  border: 1px solid transparent;
+.search-bar{
+  margin-bottom: 20px;
 }
-/* Revised styles for the search input emp id etc */
+
 .view-record-input1 {
   width: 100%;
   max-width: 200px;
@@ -85,47 +73,37 @@
   font-weight: 600;
   position: absolute;
   display: inline-block;
-  margin-top: -75px; /* Adjust as needed */
-  margin-left: -610px; /* Adjust as needed */
-  border-radius: 10px;
-  color: black;
+  margin-top: -75px; 
+  margin-left: -610px; 
   border: 1px solid transparent;
 }
 
-.view-record-input2 { /* asc desc */
+.view-record-input2 { 
   width: 100%;
   position: static;
   max-width: 150px;
   padding: 10px;
-  margin-right: 1070px; /* You may adjust this value based on your layout */
-  margin-top: -100px; /* Added margin-top to create space between input1 and input2 */
-  margin-bottom: 30px;
+  margin-top: -50px;
+  margin-left: -1070px; 
+  margin-bottom: 20px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
-  border-radius: 10px;
-  color: black;
   border: 1px solid transparent;
 }
 
 
-
-/* Revised styles for the search input when focused */
 .view-record-input:focus {
   outline: none;
   border: 10px solid transparent;
 }
 
-/* Revised placeholder styles for the search input */
+
 .view-record-input::placeholder {
   color: black;
   font-weight: 600;
 }
 
-
-
-
-/* Add styles for the search bar container */
 .view-record-search {
   width: 100%;
   text-align: center;
@@ -135,7 +113,7 @@
   border: 1px solid transparent;
 }
 
-/* Revised styles for the container */
+
 .view-record-container {
   position: relative;
   margin: auto;
@@ -143,7 +121,7 @@
   font-family: "Inter", sans-serif;
   min-height: 100vh;
 }
-/* Column Selector CSS */
+
 
 .column-selector-container {
   margin-top: 20px;
@@ -161,17 +139,18 @@
 .column-selector-checkbox {
   margin-right: 5px;
 }
-/* Apply styles for the dropdown button */
+
 .dropdowncol {
+  width: 180px;
   position: absolute;
   display: inline-block;
-  margin-top: -75px; /* Adjust as needed */
-  margin-left: 430px; /* Adjust as needed */
-  --font-size: 16px; /* Default font size */
+  margin-top: -75px; 
+  margin-left: 430px; 
+  --font-size: 16px; 
 }
 
 .dropdowncol .checkbox-wrapper-19 .check-box {
-  font-size: var(--font-size); /* Apply font size to the checkbox label */
+  font-size: var(--font-size); 
 }
 
 .dropdowncol-toggle {
@@ -184,15 +163,15 @@
   border-radius: 10px;
   color: black;
   border: 1px solid transparent;
-  background-color: #4a90e2; /* Same as view-record-input2 */
+  background-color: #4a90e2; 
   cursor: pointer;
 }
 
 .dropdowncol-toggle:hover {
-  background-color: #34b93d; /* Same as view-record-input2 */
+  background-color: #34b93d; 
 }
 
-/* Apply styles for the dropdown content */
+
 .dropdowncol-content {
   display: none;
   position: absolute;
@@ -203,7 +182,7 @@
   z-index: 1;
 }
 
-/* Show the dropdown content */
+
 .dropdowncol:hover .dropdown-content {
   display: block;
 }
@@ -298,7 +277,7 @@
     height: var(--checkbox-height);
     width: var(--checkbox-height);
     background-color: transparent;
-    border: calc(var(--checkbox-height) * .1) solid #609655;
+    border: calc(var(--checkbox-height) * .1) solid #34b93d;
     border-radius: 5px;
     margin-right: 110px;
     position: relative;
@@ -320,7 +299,7 @@
     position: absolute;
     height: 0;
     width: calc(var(--checkbox-height) * .2);
-    background-color: #34b93d;
+    background-color: #1E5631;
     display: inline-block;
     -moz-transform-origin: left top;
     -ms-transform-origin: left top;
@@ -375,7 +354,7 @@
   }
 
   .checkbox-label-text {
-    margin-left: 35px; /* Adjust the margin as needed */
+    margin-left: 35px; 
   }
   
   .popup-content {
@@ -413,7 +392,7 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center align the content */
+    text-align: center; 
   }
   
   .confirmation-dialog p {
@@ -437,7 +416,9 @@
 .confirmation-dialog button:hover {
   background-color: #34b93d;
 }
-/* Media queries for responsiveness */
+
+
+
 @media screen and (min-width: 321px) and (max-width: 475px) {
   .view-record-input {
     width: 70%;

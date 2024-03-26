@@ -20,7 +20,6 @@ const ArchiveRecord = () => {
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const [popupTimeout, setPopupTimeout] = useState(null);
   const [columnVisibility, setColumnVisibility] = useState({
     firstName: true,
     middleName: true,
@@ -113,37 +112,23 @@ useEffect(() => {
   handleQuickSort(quickFilter);
 }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
 
+
 useEffect(() => {
-  let timeoutId;
-
-  const handleTimeout = () => {
-    setShowOptions(false); // Hide popup content
-  };
-
-  const resetTimeout = () => {
-    clearTimeout(timeoutId); // Clear previous timeout
-    timeoutId = setTimeout(handleTimeout, 5000); // Set new timeout
-  };
-
   const handleDocumentClick = (event) => {
-    if (!event.target.classList.contains("popup-content")) {
-      resetTimeout(); // Reset timeout when clicking outside the popup content
+    if (
+      event.target.closest('.popup-content') ||
+      event.target.closest('.view-record-table')
+    ) {
+      return;
     }
+    setSelectedRecord(null);
   };
-
-  if (selectedRecord) {
-    // Initialize timeout on component mount or when selectedRecord changes
-    resetTimeout();
-  }
-
-  // Set timeout for popup content to disappear when selectedRecord changes or component unmounts
-  document.addEventListener("click", handleDocumentClick);
-
+  document.addEventListener('click', handleDocumentClick);
   return () => {
-    clearTimeout(timeoutId);
-    document.removeEventListener("click", handleDocumentClick);
+    document.removeEventListener('click', handleDocumentClick);
   };
-}, [selectedRecord]);
+}, []);
+
 
 const fetchRecords = async () => {
   try {
@@ -248,27 +233,9 @@ const fetchRecords = async () => {
     ) {
       setSelectedRecord(clickedRecord);
       setSelectedRowIndex(rowIndex);
-      // Start the countdown
-      startCountdown();
+    } else {
+      setSelectedRecord(null);
     }
-  };
-  const startCountdown = () => {
-    clearTimeout(popupTimeout); // Clear existing timeout
-    const timeout = setTimeout(() => {
-      setSelectedRecord(null); // Hide the popup
-    }, 5000); // 5 seconds timeout
-    setPopupTimeout(timeout); // Save the timeout ID
-  };
-
-  // Effect to clear the countdown when the component unmounts or a new row is clicked
-  useEffect(() => {
-    return () => {
-      clearTimeout(popupTimeout); // Clear the timeout
-    };
-  }, [popupTimeout]);
-  const calculatePopupPosition = () => {
-    const popupTop = selectedRowIndex * rowHeight + 250; // Add or subtract offset as needed
-    return popupTop;
   };
 
   const handleEdit = () => {
@@ -343,8 +310,8 @@ const fetchRecords = async () => {
   const confirmAction = (action) => {
     if (action === "edit") {
       handleEdit();
-    } else if (action === "archive") {
-      handleArchive();
+    } else if (action === "unarchive") {
+      handleUnarchive();
     }
     setConfirmationAction(null); // Reset confirmation action after handling
   };
@@ -396,7 +363,7 @@ const fetchRecords = async () => {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search Archive"
-          className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 text-gray-800 max-w-xl"
+          className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 hover:bg-gray-300 text-gray-800 max-w-xl"
         />
         <button onClick={handleSearch} className="search-button py-2 px-4 rounded-r-lg bg-green-500 hover:bg-green-600 text-white border border-green-400 border-l-0 focus:outline-none">
           <IoIosSearch size={22} /> 
@@ -406,7 +373,7 @@ const fetchRecords = async () => {
           <div className="view-record-controls">
             <div className="column-controls">
               <select
-                className="view-record-input1  py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none"
+                className="view-record-input1  py-2 px-4  bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none rounded-md"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
@@ -432,7 +399,7 @@ const fetchRecords = async () => {
                 <option value="sss">SSS</option>
               </select>
               <div className="checkbox-controls">
-  <div className="dropdowncol py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none">
+              <div className="dropdowncol py-2 px-4 rounded-md bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none">
     <button
     
       onClick={() => setShowDropdown(!showDropdown)}
@@ -468,7 +435,7 @@ const fetchRecords = async () => {
   </div>
 </div>
               <select
-                className="view-record-input2  py-2 px-4 rounded-r-lg bg-gray-200 hover:bg-gray-300 text-black border border-black-400 border-l-0 focus:outline-none"
+                className="view-record-input2  py-2 px-4 rounded-md bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => handleSortOrderChange(e.target.value)}
                 
               >
@@ -527,8 +494,7 @@ const fetchRecords = async () => {
         {selectedRecord && !confirmationAction && (
     <div className="options-container">
       <div className="popup-content">
-        <button onClick={() => handleConfirmation("edit")}>Edit</button>
-        <button onClick={() => handleConfirmation("archive")}>Archive</button>
+        <button onClick={() => handleConfirmation("unarchive")}>Unarchive</button>
       </div>
     </div>
   )}
