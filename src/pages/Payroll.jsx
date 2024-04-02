@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
-import * as XLSX from 'xlsx';
-import './Payroll.css'; // Import Payroll CSS file
+import React, { useState, useEffect } from "react";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import * as XLSX from "xlsx";
+import "./Payroll.css"; // Import Payroll CSS file
 // Import Header and Footer components
-import Header from '../components/header';
-import Footer from '../components/footer';
+import Header from "../components/header";
+import Footer from "../components/footer";
 
 const Payroll = () => {
-  const [employeeID, setEmployeeID] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [employeeID, setEmployeeID] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [totalHours, setTotalHours] = useState(null);
   const [payrollData, setPayrollData] = useState([]);
   const [isGeneratingPayroll, setIsGeneratingPayroll] = useState(false);
@@ -20,7 +20,7 @@ const Payroll = () => {
   useEffect(() => {
     const fetchTotalHours = async () => {
       // Fetch daily time records based on the selected criteria
-      const dtrCollection = collection(db, 'daily_time_records');
+      const dtrCollection = collection(db, "daily_time_records");
       let dtrQuery = dtrCollection;
 
       // Add filters based on user inputs
@@ -28,20 +28,26 @@ const Payroll = () => {
         // If generating for all employees, no need for individual filters
       } else {
         if (employeeID) {
-          dtrQuery = query(dtrQuery, where('employeeID', '==', parseInt(employeeID, 10)));
+          dtrQuery = query(
+            dtrQuery,
+            where("employeeID", "==", parseInt(employeeID, 10))
+          );
         }
         if (lastName) {
-          dtrQuery = query(dtrQuery, where('lastName', '==', lastName));
+          dtrQuery = query(dtrQuery, where("lastName", "==", lastName));
         }
       }
 
       if (startDate && endDate) {
         // Format the startDate and endDate to match Firestore date format (YYYY-MM-DD)
-        const formattedStartDate = new Date(startDate).toISOString().split('T')[0];
-        const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
-        dtrQuery = query(dtrQuery, 
-          where('date', '>=', formattedStartDate),
-          where('date', '<=', formattedEndDate)
+        const formattedStartDate = new Date(startDate)
+          .toISOString()
+          .split("T")[0];
+        const formattedEndDate = new Date(endDate).toISOString().split("T")[0];
+        dtrQuery = query(
+          dtrQuery,
+          where("date", ">=", formattedStartDate),
+          where("date", "<=", formattedEndDate)
         );
       }
 
@@ -53,8 +59,8 @@ const Payroll = () => {
       dtrSnapshot.forEach((doc) => {
         const data = doc.data();
         if (data.timeIn && data.timeOut) {
-          const timeIn = new Date(data.date + ' ' + data.timeIn);
-          const timeOut = new Date(data.date + ' ' + data.timeOut);
+          const timeIn = new Date(data.date + " " + data.timeIn);
+          const timeOut = new Date(data.date + " " + data.timeOut);
           const hoursWorked = (timeOut - timeIn) / (1000 * 60 * 60);
           totalHours += hoursWorked;
           if (payrollData[data.employeeID]) {
@@ -74,7 +80,11 @@ const Payroll = () => {
       setIsGeneratingPayroll(false); // Reset flag after generating payroll
     };
 
-    if ((generateForAllEmployees || (employeeID || lastName)) && (startDate && endDate)) {
+    if (
+      (generateForAllEmployees || employeeID || lastName) &&
+      startDate &&
+      endDate
+    ) {
       fetchTotalHours();
     }
   }, [employeeID, lastName, startDate, endDate, generateForAllEmployees]);
@@ -86,8 +96,8 @@ const Payroll = () => {
   const savePayrollToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(payrollData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Payroll');
-    XLSX.writeFile(workbook, 'payroll.xlsx');
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Payroll");
+    XLSX.writeFile(workbook, "payroll.xlsx");
   };
 
   return (
