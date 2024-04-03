@@ -196,7 +196,7 @@ const Login = () => {
           <div className="logo-left">
             <img className="logo" src="/logo-1.png" alt="" />
           </div>
-          <p className="copyright">COPYRIGHTS © 2023 ALL RIGHTS RESERVED</p>
+          <p className="copyright">COPYRIGHTS © 2024 ALL RIGHTS RESERVED</p>
         </div>
 
         <div className="group-right">

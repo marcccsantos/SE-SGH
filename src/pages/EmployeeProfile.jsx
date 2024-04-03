@@ -10,6 +10,8 @@ const EmployeeProfile = () => {
   const { userEmployeeID } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [logs, setLogs] = useState([]);
+  const [documentId, setDocumentId] = useState(null);
   const loggedInEmployeeID =
     location.state && location.state.loggedInEmployeeID;
 
@@ -26,6 +28,17 @@ const EmployeeProfile = () => {
         if (!querySnapshot.empty) {
           const docData = querySnapshot.docs[0].data();
           setEmployeeData(docData);
+          setDocumentId(querySnapshot.docs[0].id); // Set the document ID
+          // Fetch logs data here
+          const logsQuery = query(
+            collection(db, "extras_and_deductions"),
+            where("employeeID", "==", loggedInEmployeeID)
+          );
+          const logsSnapshot = await getDocs(logsQuery);
+          const logsData = logsSnapshot.docs.map((doc) => doc.data());
+          logsData.sort((a, b) => a.date.localeCompare(b.date));
+          console.log(logsData);
+          setLogs(logsData);
         } else {
           console.error("No employee found with the provided ID");
           navigate("/Unauthorized");
@@ -46,7 +59,7 @@ const EmployeeProfile = () => {
   return employeeData ? (
     <>
       <Header />
-      <form className=" mx-5 md:mx-16 mt-8 mb-8 flex flex-col p-3 bg-[#e8e8e8] sm:min-h-lvh">
+      <form className=" mx-5 md:mx-16 mt-8 mb-8 flex flex-col p-3 bg-[#e8e8e8] sm:min-h-lvh text-xs md:text-sm">
         <div className="flex items-center flex-col">
           <div className="font-inter w-full max-w-xs items-center gap-1.5">
             <div className=" flex justify-center items-center w-full h-[240px] mb-2 bg-white 0">
@@ -544,6 +557,40 @@ const EmployeeProfile = () => {
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
             </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col  font-inter mt-5  bg-white text-xs md:text-sm">
+          <h1 className=" w-full flex justify-start p-2 bg-[#176906] text-white">
+            Extras and Deductions Logs
+          </h1>
+
+          <div className="overflow-x-auto mt-5 mb-3 px-3 no-scrollbar">
+            <table className="w-full text-center whitespace-nowrap border-spacing-y-0">
+              <thead className="bg-[#176906] text-white">
+                <tr>
+                  <th className="min-w-24">Date</th>
+                  <th className="min-w-24">Extras</th>
+                  <th className="min-w-24">Extras Reason</th>
+                  <th className="min-w-24">Deductions</th>
+                  <th className="min-w-24">Deductions Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {logs.map((log, index) => (
+                  <tr
+                    key={index}
+                    className="even:bg-[#7bbf6d] odd:bg-[#b6d69c]"
+                  >
+                    <td>{log.date}</td>
+                    <td>{isNaN(log.extras) ? "" : log.extras}</td>
+                    <td>{log.extrasReason}</td>
+                    <td>{isNaN(log.deductions) ? "" : log.deductions}</td>
+                    <td>{log.deductionsReason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </form>

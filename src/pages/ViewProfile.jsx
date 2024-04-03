@@ -57,6 +57,7 @@ const ViewProfile = () => {
           );
           const logsSnapshot = await getDocs(logsQuery);
           const logsData = logsSnapshot.docs.map((doc) => doc.data());
+          logsData.sort((a, b) => a.date.localeCompare(b.date));
           setLogs(logsData);
         } else {
           console.error("No employee found with the provided ID");
@@ -215,7 +216,7 @@ const ViewProfile = () => {
   return (
     <>
       <Header />
-      <form className=" mx-5 md:mx-16 mt-8 mb-8 flex flex-col p-3 bg-[#e8e8e8] sm:min-h-lvh">
+      <form className=" mx-5 md:mx-16 mt-8 mb-8 flex flex-col p-3 bg-[#e8e8e8] sm:min-h-lvh text-xs md:text-sm">
         <div className="flex items-center flex-col">
           <div className="font-inter">
             <div>
@@ -818,27 +819,23 @@ const ViewProfile = () => {
               >
                 Shift Schedule
               </label>
-              <input
-                type="text"
+              <select
                 name="shift"
                 id="shift"
-                value={
-                  employeeData.shift === "7-5"
-                    ? "7:00AM to 5:00PM"
-                    : employeeData.shift === "5-7"
-                    ? "5:00PM to 7:00AM"
-                    : employeeData.shift === "8-5"
-                    ? "8:00AM to 5:00PM"
-                    : employeeData.shift // Default value if none of the conditions match
-                }
-                readOnly
+                value={isEditing ? editedData.shift : employeeData.shift}
+                onChange={(e) => handleChange(e)}
+                disabled={!isEditing}
+                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
                 required
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
-              />
+              >
+                <option value="7-5">7:00AM - 5:00PM</option>
+                <option value="5-7">5:00PM - 7:00AM</option>
+                <option value="8-5">8:00AM - 5:00PM</option>
+              </select>
             </div>
           </div>
         </div>
-        <div className="flex flex-col  font-inter mt-5  bg-white text-xs md:text-sm">
+        <div className="flex flex-col  font-inter mt-5  bg-white ">
           <h1 className=" w-full flex justify-start p-2 bg-[#176906] text-white">
             Extras and Deductions Logs
           </h1>
@@ -857,15 +854,15 @@ const ViewProfile = () => {
             </button>
           </div>
 
-          <div className="overflow-x-auto mb-5 px-3">
+          <div className="overflow-x-auto mb-5 px-3 no-scrollbar">
             <table className="w-full text-center whitespace-nowrap border-spacing-y-0">
               <thead className="bg-[#176906] text-white">
                 <tr>
-                  <th>Date</th>
-                  <th>Extras</th>
-                  <th>Extras Reason</th>
-                  <th>Deductions</th>
-                  <th>Deductions Reason</th>
+                  <th className="min-w-24">Date</th>
+                  <th className="min-w-24">Extras</th>
+                  <th className="min-w-24">Extras Reason</th>
+                  <th className="min-w-24">Deductions</th>
+                  <th className="min-w-24">Deductions Reason</th>
                 </tr>
               </thead>
               <tbody>
