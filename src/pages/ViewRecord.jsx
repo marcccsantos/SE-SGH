@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom"; // Import useParams only, since us
 import { IoIosSearch } from "react-icons/io";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { TbArrowsSort } from "react-icons/tb";
-
+import { CiSearch } from "react-icons/ci";
 
 
 const ViewRecord = () => {
@@ -110,7 +110,7 @@ const ViewRecord = () => {
     };
 
     performSearch();
-  }, [searchQuery, records]); // Added 'records' as a dependency
+  }, [searchQuery, records]); 
 
   useEffect(() => {
     const padFilteredRecords = () => {
@@ -362,6 +362,7 @@ const ViewRecord = () => {
     setConfirmationAction(null); // Reset confirmation action after handling
   };
 
+  
   const columnSelectors = [
     {
       label: "Personal",
@@ -400,10 +401,12 @@ const ViewRecord = () => {
   ];
   const [showDropdown, setShowDropdown] = useState(false); // State to control dropdown visibility
 
+  
   return (
     <>
       <Header />
       <div className="view-record-container">
+        
       <div className="w-full text-center font-inter font-semibold text-black border border-transparent">
       <div className="search-bar flex items-center justify-center mt-1">
         <input
@@ -413,15 +416,19 @@ const ViewRecord = () => {
           placeholder="Search Record"
           className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 hover:bg-gray-300 text-gray-800 max-w-xl"
         />
-        <button onClick={handleSearch} className="search-button py-2 px-4 rounded-r-lg bg-green-500 hover:bg-green-600 text-white border border-green-400 border-l-0 focus:outline-none">
-          <IoIosSearch size={22} /> 
-        </button>
+        
+          <button
+            className="bg-[#176906] text-white rounded-r py-2 px-4 hover:bg-[#155e06]"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
       </div>
 
           <div className="view-record-controls">
             <div className="column-controls">
               <select
-                className="view-record-input1  py-2 px-4  bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none rounded-md"
+                className="view-record-input1  py-2 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
@@ -447,7 +454,7 @@ const ViewRecord = () => {
                 <option value="sss">SSS</option>
               </select>
               <div className="checkbox-controls">
-  <div className="dropdowncol py-2 px-4 rounded-md bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none">
+  <div className="dropdowncol py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none">
     <button
     
       onClick={() => setShowDropdown(!showDropdown)}
@@ -483,7 +490,7 @@ const ViewRecord = () => {
   </div>
 </div>
               <select
-                className="view-record-input2  py-2 px-4 rounded-md bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none"
+                className="view-record-input2  py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => handleSortOrderChange(e.target.value)}
               >
                 <option value="asc">Ascending</option>
@@ -538,20 +545,27 @@ const ViewRecord = () => {
         </div>
 
         {selectedRecord && !confirmationAction && (
-    <div className="options-container">
-      <div className="popup-content">
-        <button onClick={() => handleConfirmation("edit")}>Edit</button>
-        <button onClick={() => handleConfirmation("archive")}>Archive</button>
-      </div>
-    </div>
-  )}
-  {confirmationAction && (
-    <div className="confirmation-dialog">
-      <p>Are you sure you want to {confirmationAction}?</p>
-      <button onClick={() => confirmAction(confirmationAction)}>Yes</button>
-      <button onClick={() => setConfirmationAction(null)}>No</button>
-    </div>
-  )}
+          <div className="popup-container">
+            <div className="popup-content">
+              <button onClick={() => handleConfirmation("edit")}>Edit</button>
+              <button onClick={() => handleConfirmation("archive")}>Archive</button>
+            </div>
+            {/* Semi-transparent background only behind popup-content */}
+            <div className="popup-overlay" onClick={() => setSelectedRecord(null)}></div>
+          </div>
+        )}
+
+        {/* Confirmation dialog */}
+        {confirmationAction && (
+          <div className="popup-container">
+            <div className="confirmation-dialog">
+              <p>Are you sure you want to {confirmationAction}?</p>
+              <button onClick={() => confirmAction(confirmationAction)}>Yes</button>
+              <button onClick={() => setConfirmationAction(null)}>No</button>
+            </div>
+            <div className="popup-overlay" onClick={() => setConfirmationAction(null)}></div>
+          </div>
+        )}
       </div>
       <Footer />
     </>

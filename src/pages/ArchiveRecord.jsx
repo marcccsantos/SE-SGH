@@ -108,11 +108,45 @@ const ArchiveRecord = () => {
 
     performSearch();
 }, [searchQuery, records]); // Added 'records' as a dependency
+
 useEffect(() => {
   handleQuickSort(quickFilter);
 }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
 
+useEffect(() => {
+  const fetchRecordsAndApplyDefaultSorting = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "employees_archive"));
+      const results = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        // Include document ID in the data object
+        return { id: doc.id, ...data };
+      });
+      const uniqueRecords = filterUniqueRecords(results);
+      const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
+      
+      // Apply default sorting by EmployeeID in ascending order
+      const sortedRecords = [...paddedRecords].sort((a, b) => {
+        return a.employeeID - b.employeeID;
+      });
 
+      setRecords(sortedRecords);
+      setFilteredRecords(sortedRecords);
+      setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
+      
+      // Initialize column visibility state
+      const initialColumnVisibility = {};
+      Object.keys(paddedRecords[0] || {}).forEach((column) => {
+        initialColumnVisibility[column] = true;
+      });
+      setColumnVisibility(initialColumnVisibility);
+    } catch (error) {
+      console.error("Error fetching records:", error);
+    }
+  };
+
+  fetchRecordsAndApplyDefaultSorting(); // Fetch records and apply default sorting
+}, []);
 useEffect(() => {
   const handleDocumentClick = (event) => {
     if (
@@ -365,21 +399,25 @@ const fetchRecords = async () => {
           placeholder="Search Archive"
           className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 hover:bg-gray-300 text-gray-800 max-w-xl"
         />
-        <button onClick={handleSearch} className="search-button py-2 px-4 rounded-r-lg bg-green-500 hover:bg-green-600 text-white border border-green-400 border-l-0 focus:outline-none">
-          <IoIosSearch size={22} /> 
-        </button>
+        
+          <button
+            className="bg-[#176906] text-white rounded-r py-2 px-4 hover:bg-[#155e06]"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
       </div>
 
           <div className="view-record-controls">
             <div className="column-controls">
               <select
-                className="view-record-input1  py-2 px-4  bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none rounded-md"
+                className="view-record-input1  py-2 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
                 }}
               >
-             <option value="employeeID">Employee ID</option>
+                <option value="employeeID">Employee ID</option>
                 <option value="lastName">Last Name</option>
                 <option value="firstName">First Name</option>
                 <option value="middleName">Middle Name</option>
@@ -399,7 +437,7 @@ const fetchRecords = async () => {
                 <option value="sss">SSS</option>
               </select>
               <div className="checkbox-controls">
-              <div className="dropdowncol py-2 px-4 rounded-md bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none">
+  <div className="dropdowncol py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none">
     <button
     
       onClick={() => setShowDropdown(!showDropdown)}
@@ -435,11 +473,9 @@ const fetchRecords = async () => {
   </div>
 </div>
               <select
-                className="view-record-input2  py-2 px-4 rounded-md bg-[#7bbf6d] hover:bg-[#6ebe5e] text-black border border-black-400 border-l-0 focus:outline-none"
+                className="view-record-input2  py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none"
                 onChange={(e) => handleSortOrderChange(e.target.value)}
-                
               >
-                
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
@@ -462,49 +498,56 @@ const fetchRecords = async () => {
               </tr>
             </thead>
 
-            <tbody>
-              {filteredRecords.map((record, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className={
-                    Object.values(record).every((value) => !value)
-                      ? "empty-row"
-                      : ""
-                  }
-                  onClick={() => handleRowClick(rowIndex)}
-                  style={{
-                    backgroundColor:
-                      rowIndex === selectedRowIndex ? "#F9AF40" : "",
-                  }}
-                >
-                  {staticColumnOrder.map(
-                    (column, index) =>
-                      columnVisibility[column] && (
-                        <td key={index} style={{ textTransform: "capitalize" }}>
-                          {record[column] || "\u00A0"}
-                        </td>
-                      )
-                  )}
-                </tr>
-              ))}
-            </tbody>
+         <tbody>
+  {filteredRecords.map((record, rowIndex) => (
+    <tr
+      key={rowIndex}
+      className={
+        Object.values(record).every((value) => !value)
+          ? "empty-row"
+          : ""
+      }
+      onClick={() => handleRowClick(rowIndex)}
+      style={{
+        backgroundColor:
+          rowIndex === selectedRowIndex ? "#F9AF40" : "",
+      }}
+    >
+      {staticColumnOrder.map(
+        (column, index) =>
+          columnVisibility[column] && (
+            <td key={index} style={{ textTransform: column === "email" ? "lowercase" : "capitalize" }}>
+              {record[column] || "\u00A0"}
+            </td>
+          )
+      )}
+    </tr>
+  ))}
+</tbody>
           </table>
         </div>
 
         {selectedRecord && !confirmationAction && (
-    <div className="options-container">
-      <div className="popup-content">
-        <button onClick={() => handleConfirmation("unarchive")}>Unarchive</button>
-      </div>
-    </div>
-  )}
-  {confirmationAction && (
-    <div className="confirmation-dialog">
-      <p>Are you sure you want to {confirmationAction}?</p>
-      <button onClick={() => confirmAction(confirmationAction)}>Yes</button>
-      <button onClick={() => setConfirmationAction(null)}>No</button>
-    </div>
-  )}
+          <div className="popup-container">
+            <div className="popup-content">
+              <button onClick={() => handleConfirmation("unarchive")}>Unarchive</button>
+            </div>
+            {/* Semi-transparent background only behind popup-content */}
+            <div className="popup-overlay" onClick={() => setSelectedRecord(null)}></div>
+          </div>
+        )}
+
+        {/* Confirmation dialog */}
+        {confirmationAction && (
+          <div className="popup-container">
+            <div className="confirmation-dialog">
+              <p>Are you sure you want to {confirmationAction}?</p>
+              <button onClick={() => confirmAction(confirmationAction)}>Yes</button>
+              <button onClick={() => setConfirmationAction(null)}>No</button>
+            </div>
+            <div className="popup-overlay" onClick={() => setConfirmationAction(null)}></div>
+          </div>
+        )}
       </div>
       <Footer />
     </>
