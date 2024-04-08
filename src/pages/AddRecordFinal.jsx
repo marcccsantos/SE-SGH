@@ -581,6 +581,7 @@ const AddRecordFinal = () => {
                 value={sssDeduction}
                 onChange={(e) => setSssDeduction(e.target.value)}
                 required
+                placeholder="Enter a value between 0 and 100"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -613,6 +614,7 @@ const AddRecordFinal = () => {
                 value={philhealthDeduction}
                 onChange={(e) => setPhilhealthDeduction(e.target.value)}
                 required
+                placeholder="Enter a value between 0 and 100"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -645,6 +647,7 @@ const AddRecordFinal = () => {
                 value={pagibigDeduction}
                 onChange={(e) => setPagibigDeduction(e.target.value)} // dapat 0-100 lang to
                 required
+                placeholder="Enter a value between 0 and 100"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
