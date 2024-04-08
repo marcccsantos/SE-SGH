@@ -21,6 +21,8 @@ const DTR = () => {
   const [showPopupTimeIn, setShowPopupTimeIn] = useState(false);
   const [showPopupTimeOut, setShowPopupTimeOut] = useState(false);
   const [userExistPopUp, setUserExistPopUp] = useState(false);
+  const [timedToday, setTimedToday] = useState(false);
+  const [timedOutToday, setTimedOutToday] = useState(false);
 
   const handleTimeIn = async () => {
     // Check if the user exists in the employees collection
@@ -113,6 +115,7 @@ const DTR = () => {
       setLastName("");
     } else {
       console.log("User has already timed in today.");
+      setTimedToday(true);
     }
   };
 
@@ -165,6 +168,7 @@ const DTR = () => {
       setLastName("");
     } else {
       console.log("User has already timed out today or has not timed in.");
+      setTimedOutToday(true);
     }
   };
 
@@ -306,6 +310,45 @@ const DTR = () => {
             <div className="mt-3 flex justify-center ">
               <button
                 onClick={handleClosePopup}
+                className="border border-black py-1 px-5 rounded text-sm hover:underline "
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {timedToday && (
+        <div className="bg-[#00000080] w-full h-screen absolute flex justify-center items-center font-inter font-semibold">
+          <div className="bg-white flex flex-col p-5 rounded">
+            <div className="flex flex-row">
+              <MdError className="w-10 h-10 text-red-600" />
+              <h1 className="ml-3 mt-2">User has already timed in today</h1>
+            </div>
+            <div className="mt-3 flex justify-center ">
+              <button
+                onClick={() => setTimedToday(false)}
+                className="border border-black py-1 px-5 rounded text-sm hover:underline "
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {timedOutToday && (
+        <div className="bg-[#00000080] w-full h-screen absolute flex justify-center items-center font-inter font-semibold">
+          <div className="bg-white flex flex-col p-5 rounded  w-[350px]">
+            <div className="flex flex-row">
+              <MdError className="w-[60px] h-[60px] text-red-600" />
+              <h1 className="ml-4 mt-2">
+                User has already timed out today or has not timed in
+              </h1>
+              <h1 className="ml-3 mt-2"></h1>
+            </div>
+            <div className="mt-3 flex justify-center ">
+              <button
+                onClick={() => setTimedOutToday(false)}
                 className="border border-black py-1 px-5 rounded text-sm hover:underline "
               >
                 OK
