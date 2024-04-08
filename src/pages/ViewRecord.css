@@ -76,21 +76,25 @@
   margin-top: -75px; 
   margin-left: -610px; 
   border: 1px solid transparent;
+  text-align: left;
 }
+
 
 .view-record-input2 { 
   width: 100%;
   position: static;
-  max-width: 150px;
+  max-width: 170px;
   padding: 10px;
   margin-top: -50px;
-  margin-left: -1070px; 
+  margin-left: -1050px; 
   margin-bottom: 20px;
   text-align: center;
   font-family: 'Inter';
   font-weight: 600;
   border: 1px solid transparent;
+  text-align: left;
 }
+
 
 
 .view-record-input:focus {
@@ -147,6 +151,7 @@
   margin-top: -75px; 
   margin-left: 430px; 
   --font-size: 16px; 
+  
 }
 
 .dropdowncol .checkbox-wrapper-19 .check-box {
