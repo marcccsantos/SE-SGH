@@ -101,7 +101,7 @@ const DTR = () => {
           employeeID,
           date: dateString,
           deductions: lateArrivalMinutes,
-          deductionsReason: "Late arrival",
+          deductionsReason: "Late Arrival",
         };
         // Log deductions to 'extras_and_deductions' collection
         await addDoc(collection(db, "extras_and_deductions"), deductionsData);

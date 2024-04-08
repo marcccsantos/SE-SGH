@@ -335,6 +335,7 @@ const AddRecordFinal = () => {
                 value={contactNumber}
                 onChange={(e) => setContactNumber(e.target.value)}
                 required
+                placeholder="ex: 0917-123-4567"
                 autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -351,6 +352,7 @@ const AddRecordFinal = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                placeholder="ex: employeesgh@gmail.com"
                 autoComplete="off"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -383,6 +385,7 @@ const AddRecordFinal = () => {
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 disabled // Disable age field
+                placeholder="Filled automatically with Date of Birth"
                 className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
               <label
@@ -517,6 +520,7 @@ const AddRecordFinal = () => {
                 value={tin}
                 onChange={(e) => setTin(e.target.value)}
                 required
+                placeholder="ex: 000-123-456-001"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -533,6 +537,7 @@ const AddRecordFinal = () => {
                 value={prc}
                 onChange={(e) => setPrc(e.target.value)}
                 required
+                placeholder="ex: 0012345"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -565,6 +570,7 @@ const AddRecordFinal = () => {
                 value={sss}
                 onChange={(e) => setSss(e.target.value)}
                 required
+                placeholder="ex: 00-1234567-8"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -581,7 +587,7 @@ const AddRecordFinal = () => {
                 value={sssDeduction}
                 onChange={(e) => setSssDeduction(e.target.value)}
                 required
-                placeholder="Enter a value between 0 and 100"
+                placeholder="Enter value only between 0-100"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -598,6 +604,7 @@ const AddRecordFinal = () => {
                 value={philhealth}
                 onChange={(e) => setPhilhealth(e.target.value)}
                 required
+                placeholder="ex: 12-202412345-8"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -614,7 +621,7 @@ const AddRecordFinal = () => {
                 value={philhealthDeduction}
                 onChange={(e) => setPhilhealthDeduction(e.target.value)}
                 required
-                placeholder="Enter a value between 0 and 100"
+                placeholder="Enter value only between 0-100"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -631,6 +638,7 @@ const AddRecordFinal = () => {
                 value={pagibig}
                 onChange={(e) => setPagibig(e.target.value)}
                 required
+                placeholder="ex: 1234-5678-9101"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -645,9 +653,9 @@ const AddRecordFinal = () => {
                 name="pagibigDeduction"
                 id="pagibigDeduction"
                 value={pagibigDeduction}
-                onChange={(e) => setPagibigDeduction(e.target.value)} // dapat 0-100 lang to
+                onChange={(e) => setPagibigDeduction(e.target.value)} 
                 required
-                placeholder="Enter a value between 0 and 100"
+                placeholder="Enter value only between 0-100"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -721,6 +729,7 @@ const AddRecordFinal = () => {
                 value={salaryPerMonth}
                 onChange={(e) => setSalaryPerMonth(e.target.value)}
                 required
+                placeholder="Enter Monthly Salary"
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
