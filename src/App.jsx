@@ -105,7 +105,7 @@ const App = () => {
             path="/AddRecord"
             element={
               <ProtectedRoute user={user}>
-                <AddRecord />
+                <AddRecordFinal />
               </ProtectedRoute>
             }
           />
@@ -131,7 +131,7 @@ const App = () => {
             path="/Payroll"
             element={
               <ProtectedRoute user={user}>
-                <Payroll />
+                <PayrollFinal />
               </ProtectedRoute>
             }
           />

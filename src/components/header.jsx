@@ -104,7 +104,7 @@ const header = () => {
                           <Link to="/ViewRecord">VIEW RECORD</Link>
                         </li>
                         <li>
-                          <Link to="/AddRecordFinal">ADD RECORD</Link>
+                          <Link to="/AddRecord">ADD RECORD</Link>
                         </li>
                         <li>
                           <Link to="/ArchiveRecord">ARCHIVE RECORD</Link>
@@ -115,7 +115,7 @@ const header = () => {
                       <Link to="/ViewProfile">VIEW PROFILE</Link>
                     </li>
                     <li>
-                      <Link to="/PayrollFinal">PAYROLL</Link>
+                      <Link to="/Payroll">PAYROLL</Link>
                     </li>
                     <li>
                       <Link to="/DTR">DTR</Link>
