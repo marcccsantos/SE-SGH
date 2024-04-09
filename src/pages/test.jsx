@@ -426,7 +426,7 @@ const test = () => {
             <div className=" min-h-full md:flex items-start justify-start flex-col  0 hidden  mt-12">
               <select
                 // className="view-record-input1  py-2 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md"
-                className=" py-3 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md text-sm hidden md:block"
+                className=" py-3 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md  hidden md:block"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
