@@ -391,23 +391,22 @@ const fetchRecords = async () => {
       <Header />
       <div className="view-record-container">
       <div className="w-full text-center font-inter font-semibold text-black border border-transparent">
-      <div className="search-bar flex items-center justify-center mt-1">
+      <div className="search-bar flex items-center justify-center mt--1">
         <input
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search Archive"
-          className="search-input py-2 px-4 rounded-l-lg border-r-0 focus:outline-none bg-gray-200 hover:bg-gray-300 text-gray-800 max-w-xl"
+          className="search-input py-2 px-4 rounded-lg bg-gray-200 text-gray-800 max-w-xl"
         />
         
           <button
-            className="bg-[#176906] text-white rounded-r py-2 px-4 hover:bg-[#155e06]"
+            className="bg-[#176906] text-white rounded-lg py-2 px-4 hover:bg-[#155e06] ml-2"
             onClick={handleSearch}
           >
             Search
           </button>
       </div>
-
           <div className="view-record-controls">
             <div className="column-controls">
               <select
