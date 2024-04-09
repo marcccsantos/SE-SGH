@@ -26,6 +26,7 @@ import Unauthorized from "./pages/Unauthorized";
 import SearchProfile from "./pages/DefaultViewProfile";
 import { useEffect, useState } from "react";
 import Loading from "./components/loading";
+import Test from "./pages/test";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -157,6 +158,14 @@ const App = () => {
             element={
               <ProtectedRoute user={user}>
                 <DTR />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test"
+            element={
+              <ProtectedRoute user={user}>
+                <Test />
               </ProtectedRoute>
             }
           />
