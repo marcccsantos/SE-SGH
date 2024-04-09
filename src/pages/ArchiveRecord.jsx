@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from "react";
-import {
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  getDoc,
-  deleteDoc,
-} from "firebase/firestore";
-import { db } from "../firebase"; // Import your Firestore instance
-import Header from "../components/header";
-import Footer from "../components/footer";
-import "./ViewRecord.css"; // Import the CSS file
-import { useParams } from "react-router-dom"; // Import useParams only, since useHistory is not used
-import { CiSearch } from "react-icons/ci";
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, doc, setDoc, getDoc, deleteDoc} from 'firebase/firestore';
+import { db } from '../firebase'; // Import your Firestore instance
+import Header from '../components/header';
+import Footer from '../components/footer';
+import './ViewRecord.css'; // Import the CSS file
+import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory
+import { IoIosSearch } from "react-icons/io";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import { TbArrowsSort } from "react-icons/tb";
 
 const ArchiveRecord = () => {
   const { searchQuery } = useParams();
   const [searchInput, setSearchInput] = useState("");
-  const [quickFilter, setQuickFilter] = useState("employeeID");
+  const [quickFilter, setQuickFilter] = useState("");
   const [records, setRecords] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
@@ -25,7 +20,6 @@ const ArchiveRecord = () => {
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const [isInputFocused, setIsInputFocused] = useState(false);
   const [columnVisibility, setColumnVisibility] = useState({
     firstName: true,
     middleName: true,
@@ -94,98 +88,48 @@ const ArchiveRecord = () => {
 
   useEffect(() => {
     const performSearch = async () => {
-      try {
-        if (!searchQuery || searchQuery.trim() === "") {
-          // If searchQuery is empty, reset filteredRecords to show all records
-          setFilteredRecords(records);
-        } else {
-          // Perform search based on searchQuery
-          const results = records.filter((record) =>
-            Object.values(record).some((value) =>
-              String(value).toLowerCase().includes(searchQuery.toLowerCase())
-            )
-          );
-          setFilteredRecords(results);
+        try {
+            if (!searchQuery || searchQuery.trim() === '') {
+                // If searchQuery is empty, reset filteredRecords to show all records
+                setFilteredRecords(records);
+            } else {
+                // Perform search based on searchQuery
+                const results = records.filter((record) =>
+                    Object.values(record).some((value) =>
+                        String(value).toLowerCase().includes(searchQuery.toLowerCase())
+                    )
+                );
+                setFilteredRecords(results);
+            }
+        } catch (error) {
+            console.error('Error searching records:', error);
         }
-      } catch (error) {
-        console.error("Error searching records:", error);
-      }
     };
 
     performSearch();
-  }, [searchQuery, records]);
+}, [searchQuery, records]); // Added 'records' as a dependency
 
-  useEffect(() => {
-    const padFilteredRecords = () => {
-      const remainingRows = 12 - filteredRecords.length;
-      if (remainingRows > 0) {
-        const paddedRecords = [...filteredRecords];
-        for (let i = 0; i < remainingRows; i++) {
-          paddedRecords.push({});
-        }
-        setFilteredRecords(paddedRecords);
+useEffect(() => {
+  const padFilteredRecords = () => {
+    const remainingRows = 12 - filteredRecords.length;
+    if (remainingRows > 0) {
+      const paddedRecords = [...filteredRecords];
+      for (let i = 0; i < remainingRows; i++) {
+        paddedRecords.push({});
       }
-    };
+      setFilteredRecords(paddedRecords);
+    }
+  };
 
-    padFilteredRecords();
-  }, [filteredRecords]);
+  padFilteredRecords();
+}, [filteredRecords]);
 
-  useEffect(() => {
-    handleQuickSort(quickFilter);
-  }, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
+useEffect(() => {
+  handleQuickSort(quickFilter);
+}, [quickFilter, sortOrder]); // Listen for changes in quickFilter or sortOrder
 
-  useEffect(() => {
-    const fetchRecordsAndApplyDefaultSorting = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "employees_archive"));
-        const results = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          // Include document ID in the data object
-          return { id: doc.id, ...data };
-        });
-        const uniqueRecords = filterUniqueRecords(results);
-        const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
-
-        // Apply default sorting by EmployeeID in ascending order
-        const sortedRecords = [...paddedRecords].sort((a, b) => {
-          return a.employeeID - b.employeeID;
-        });
-
-        setRecords(sortedRecords);
-        setFilteredRecords(sortedRecords);
-        setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
-
-        // Initialize column visibility state
-        const initialColumnVisibility = {};
-        Object.keys(paddedRecords[0] || {}).forEach((column) => {
-          initialColumnVisibility[column] = true;
-        });
-        setColumnVisibility(initialColumnVisibility);
-      } catch (error) {
-        console.error("Error fetching records:", error);
-      }
-    };
-
-    fetchRecordsAndApplyDefaultSorting(); // Fetch records and apply default sorting
-  }, []);
-
-  useEffect(() => {
-    const handleDocumentClick = (event) => {
-      if (
-        event.target.closest(".popup-content") ||
-        event.target.closest(".view-record-table")
-      ) {
-        return;
-      }
-      setSelectedRecord(null);
-    };
-    document.addEventListener("click", handleDocumentClick);
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
-  }, []);
-
-  const fetchRecords = async () => {
+useEffect(() => {
+  const fetchRecordsAndApplyDefaultSorting = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "employees_archive"));
       const results = querySnapshot.docs.map((doc) => {
@@ -195,9 +139,16 @@ const ArchiveRecord = () => {
       });
       const uniqueRecords = filterUniqueRecords(results);
       const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
-      setRecords(paddedRecords);
-      setFilteredRecords(paddedRecords);
+      
+      // Apply default sorting by EmployeeID in ascending order
+      const sortedRecords = [...paddedRecords].sort((a, b) => {
+        return a.employeeID - b.employeeID;
+      });
+
+      setRecords(sortedRecords);
+      setFilteredRecords(sortedRecords);
       setSelectedColumns(Object.keys(paddedRecords[0] || {})); // Initialize selected columns with all columns
+      
       // Initialize column visibility state
       const initialColumnVisibility = {};
       Object.keys(paddedRecords[0] || {}).forEach((column) => {
@@ -209,9 +160,46 @@ const ArchiveRecord = () => {
     }
   };
 
+  fetchRecordsAndApplyDefaultSorting(); // Fetch records and apply default sorting
+}, []);
+useEffect(() => {
+  const handleDocumentClick = (event) => {
+    if (
+      event.target.closest('.popup-content') ||
+      event.target.closest('.view-record-table')
+    ) {
+      return;
+    }
+    setSelectedRecord(null);
+  };
+  document.addEventListener('click', handleDocumentClick);
+  return () => {
+    document.removeEventListener('click', handleDocumentClick);
+  };
+}, []);
+
+
+const fetchRecords = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'employees_archive'));
+    const results = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Include document ID in the data object
+      return { id: doc.id, ...data };
+    });
+    const uniqueRecords = filterUniqueRecords(results);
+    const paddedRecords = padRecords(uniqueRecords, 12); // Pad with empty records if less than 12
+    setRecords(paddedRecords);
+    setFilteredRecords(paddedRecords);
+  } catch (error) {
+    console.error('Error fetching records:', error);
+  }
+};
+
+
   const filterUniqueRecords = (records) => {
     const uniqueIds = new Set();
-    return records.filter((record) => {
+    return records.filter(record => {
       if (uniqueIds.has(record.employeeID)) {
         return false; // Duplicate record, filter it out
       }
@@ -230,7 +218,7 @@ const ArchiveRecord = () => {
 
   const handleSearch = async () => {
     try {
-      if (searchInput.trim() === "") {
+      if (searchInput.trim() === '') {
         setFilteredRecords(records);
       } else {
         const results = records.filter((record) =>
@@ -241,10 +229,24 @@ const ArchiveRecord = () => {
         setFilteredRecords(results);
       }
     } catch (error) {
-      console.error("Error searching records:", error);
+      console.error('Error searching records:', error);
     }
   };
-
+  useEffect(() => {
+    // Set initial quick filter to 'employeeID'
+    setQuickFilter('employeeID');
+    // Set initial sort order to 'asc'
+    setSortOrder('asc');
+  
+    fetchRecords(); // Fetch records after setting initial sort order
+  }, []);
+  
+  useEffect(() => {
+    if (quickFilter !== '') {
+      handleQuickSort(quickFilter);
+    }
+  }, [quickFilter, sortOrder, records]); // Listen for changes in quickFilter, sortOrder, or records
+  
   const handleQuickSort = (column) => {
     const sortedRecords = [...filteredRecords].sort((a, b) => {
       const valueA =
@@ -264,6 +266,7 @@ const ArchiveRecord = () => {
     });
     setFilteredRecords(sortedRecords);
   };
+
 
   const handleSortOrderChange = (order) => {
     setSortOrder(order);
@@ -288,68 +291,65 @@ const ArchiveRecord = () => {
     // Check if a record is selected
     if (selectedRecord) {
       // Open ViewProfile page in a new tab with the employeeID of the selected record
-      window.open(`/ViewProfile/${selectedRecord.employeeID}`, "_blank");
+      window.open(`/ViewProfile/${selectedRecord.employeeID}`, '_blank');
     } else {
-      console.error("No record selected for editing");
+      console.error('No record selected for editing');
     }
   };
 
-  const handleArchive = async () => {
+  const handleUnarchive = async () => {
     try {
       // Check if a record is selected
       if (selectedRecord) {
         // Get the document ID of the selected record
         const documentId = selectedRecord.id;
+  
+        console.log('Selected Record:', selectedRecord);
 
-        console.log("Selected Record:", selectedRecord);
-
-        // Check if the record already exists in the archive
-        const archiveRecordRef = doc(db, "employees_archive", documentId);
+  
+        // Check if the record already exists in the destination collection
+        const archiveRecordRef = doc(db, 'employees_active', documentId);
         const archiveRecordSnapshot = await getDoc(archiveRecordRef);
         if (archiveRecordSnapshot.exists()) {
-          console.error("Record already exists in the archive.");
+          console.error('Record already exists in the active collection.');
           return;
         }
-
+  
         // Get a reference to the selected record in the active collection
-        const activeRecordRef = doc(db, "employees_active", documentId);
+        const activeRecordRef = doc(db, 'employees_archive', documentId);
         const activeRecordSnapshot = await getDoc(activeRecordRef);
-
+        
         // Check if the selected record exists in the active collection
         if (!activeRecordSnapshot.exists()) {
-          console.error(
-            "Selected record does not exist in the current collection."
-          );
+          console.error('Selected record does not exist in the current collection.');
           return;
         }
-
+  
         // Retrieve the data of the selected record
         const recordData = activeRecordSnapshot.data();
-
+  
         // Set the record data in the archive collection using the same document ID
         await setDoc(archiveRecordRef, recordData);
-
-        // Delete the record from the active collection
+  
+        // Delete the record from the archive collection
         await deleteDoc(activeRecordRef);
-
-        console.log("Record successfully archived.");
-        // Fetch records again to update UI
-        fetchRecords();
+  
+        console.log('Record successfully unarchived.');
+      // Fetch records again to update UI
+      fetchRecords();
       } else {
-        console.error("No record selected for archiving");
+        console.error('No record selected for unarchiving');
       }
     } catch (error) {
-      console.error("Error archiving record:", error);
+      console.error('Error unarchiving record:', error);
     }
   };
-
   const handleColumnToggle = (column) => {
     setColumnVisibility((prevVisibility) => ({
       ...prevVisibility,
       [column]: !prevVisibility[column],
     }));
   };
-
   const [confirmationAction, setConfirmationAction] = useState(null); // State to track the action requiring confirmation
 
   const handleConfirmation = (action) => {
@@ -359,12 +359,11 @@ const ArchiveRecord = () => {
   const confirmAction = (action) => {
     if (action === "edit") {
       handleEdit();
-    } else if (action === "archive") {
-      handleArchive();
+    } else if (action === "unarchive") {
+      handleUnarchive();
     }
     setConfirmationAction(null); // Reset confirmation action after handling
   };
-
   const columnSelectors = [
     {
       label: "Personal",
@@ -416,10 +415,9 @@ const ArchiveRecord = () => {
   const handleBlur = () => {
     setIsInputFocused(false);
   };
-
   return (
     <>
-      <Header />
+     <Header />
       <div className="min-h-lvh">
         <div>
           <div className=" w-full  mt-5 md:mt-16 flex justify-center items center flex-row">
@@ -598,9 +596,8 @@ const ArchiveRecord = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div
+        </div>
+        <div
             style={{ overflowX: "auto" }}
             className="md:mt-10 mt-5 mx-4 md:mx-8 mb-10"
           >
