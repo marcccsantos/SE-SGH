@@ -12,6 +12,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import "./ViewRecord.css"; // Import the CSS file
 import { useParams } from "react-router-dom"; // Import useParams only, since useHistory is not used
+import { CiSearch } from "react-icons/ci";
 
 const ViewRecord = () => {
   const { searchQuery } = useParams();
@@ -24,6 +25,7 @@ const ViewRecord = () => {
   const [showOptions, setShowOptions] = useState(false); // State to control display of options
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [selectedColumns, setSelectedColumns] = useState([]);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [columnVisibility, setColumnVisibility] = useState({
     firstName: true,
     middleName: true,
@@ -401,32 +403,30 @@ const ViewRecord = () => {
   ];
   const [showDropdown, setShowDropdown] = useState(false); // State to control dropdown visibility
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const handleFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsInputFocused(false);
+  };
+
   return (
     <>
       <Header />
-      <div className="view-record-container">
-        <div className="w-full text-center font-inter font-semibold text-black border border-transparent">
-          <div className="search-bar flex items-center justify-center mt--1">
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search Record"
-              className="search-input py-2 px-4 rounded-lg bg-gray-200 text-gray-800 max-w-xl"
-            />
-
-            <button
-              className="bg-[#176906] text-white rounded-lg py-2 px-4 hover:bg-[#155e06] ml-2"
-              onClick={handleSearch}
-            >
-              Search
-            </button>
-          </div>
-
-          <div className="view-record-controls">
-            <div className="column-controls">
+      <div className="min-h-lvh">
+        <div>
+          <div className=" w-full  mt-5 md:mt-16 flex justify-center items center flex-row">
+            <div className=" min-h-full md:flex items-start justify-start flex-col  0 hidden  mt-12">
               <select
-                className="view-record-input1  py-2 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md"
+                // className="view-record-input1  py-2 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md"
+                className=" py-3 px-4  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md  hidden md:block"
                 onChange={(e) => {
                   setQuickFilter(e.target.value);
                   handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
@@ -451,12 +451,119 @@ const ViewRecord = () => {
                 <option value="pagibig">Pagibig</option>
                 <option value="sss">SSS</option>
               </select>
+              <select
+                className="w-full mt-2 py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none hidden md:block"
+                onChange={(e) => handleSortOrderChange(e.target.value)}
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
 
-              <div className="checkbox-controls">
-                <div className="dropdowncol py-3 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0">
+            <div className="flex items-start flex-col">
+              <div className="md:mx-16 bg-white flex flex-row justify-center items-center rounded-md text-[12px] md:text-base font-inter shadow-lg pl-2  border border-black">
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search Record"
+                  className="p-1 px-2 outline-none "
+                />
+
+                <button
+                  className="bg-[#176906] text-white rounded-md py-2 px-4 hover:bg-[#155e06] ml-2"
+                  onClick={handleSearch}
+                >
+                  Search
+                </button>
+              </div>
+
+              <div className="flex justify-center items-start flex-row gap-x-3">
+                <div className="">
+                  <select
+                    className="mt-2 py-2 px-1  bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none rounded-md text-[12px] block md:hidden"
+                    onChange={(e) => {
+                      setQuickFilter(e.target.value);
+                      handleQuickSort(e.target.value); // Trigger sorting when sorting option changes
+                    }}
+                  >
+                    <option value="employeeID">Employee ID</option>
+                    <option value="lastName">Last Name</option>
+                    <option value="firstName">First Name</option>
+                    <option value="middleName">Middle Name</option>
+                    <option value="gender">Gender</option>
+                    <option value="dateOfBirth">Birthday</option>
+                    <option value="address">Address</option>
+                    <option value="contactNumber">Contact Number</option>
+                    <option value="email">Email</option>
+                    <option value="position">Position</option>
+                    <option value="salaryPerMonth">Salary Per Month</option>
+                    <option value="department">Department</option>
+                    <option value="dateHired">Date Hired</option>
+                    <option value="prc">PRC</option>
+                    <option value="prcExpiry">PRC Expiry</option>
+                    <option value="philhealth">Philhealth</option>
+                    <option value="pagibig">Pagibig</option>
+                    <option value="sss">SSS</option>
+                  </select>
+                  <select
+                    className="mt-2 py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white text-[12px] border border-black-400 border-l-0 focus:outline-none block md:hidden"
+                    onChange={(e) => handleSortOrderChange(e.target.value)}
+                  >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select>
+                </div>
+                <div className="min-h-full  items-end justify-end block md:hidden text-[12px] ml-2 w-[125px]">
+                  <div className="py-[6.5px] px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 mt-2">
+                    <button
+                      onClick={() => setShowDropdown(!showDropdown)}
+                      className=" whitespace-nowrap"
+                    >
+                      Select Columns
+                    </button>
+                    {showDropdown && (
+                      <div className="dropdown-content">
+                        {columnSelectors.map((group, index) => (
+                          <div key={index} className="checkbox-wrapper-19">
+                            <input
+                              type="checkbox"
+                              id={`cbx-${index}`}
+                              onChange={() => {
+                                group.columns.forEach((col) =>
+                                  handleColumnToggle(col)
+                                );
+                              }}
+                              checked={
+                                !group.columns.some(
+                                  (col) => !columnVisibility[col]
+                                )
+                              }
+                              className="hidden"
+                            />
+                            <label
+                              htmlFor={`cbx-${index}`}
+                              className="check-box"
+                            >
+                              <span className="checkbox-label-text">
+                                {group.label}
+                              </span>
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className="min-h-full  items-start justify-center   hidden md:block w-[155px] mt-12">
+                <div className="py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400">
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="dropdown-toggle"
+                    className=" whitespace-nowrap"
                   >
                     Select Columns
                   </button>
@@ -490,64 +597,60 @@ const ViewRecord = () => {
                   )}
                 </div>
               </div>
-              <select
-                className="view-record-input2  py-2 px-4 rounded-md bg-[#176906] hover:bg-[#155e06] text-white border border-black-400 border-l-0 focus:outline-none"
-                onChange={(e) => handleSortOrderChange(e.target.value)}
-              >
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
             </div>
           </div>
-        </div>
-        <div style={{ overflowX: "auto" }}>
-          <table className="view-record-table">
-            <thead>
-              <tr>
-                {staticColumnOrder.map(
-                  (column, index) =>
-                    columnVisibility[column] && (
-                      <th key={index}>{column.toUpperCase()}</th>
-                    )
-                )}
-              </tr>
-            </thead>
 
-            <tbody>
-              {filteredRecords.map((record, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className={
-                    Object.values(record).every((value) => !value)
-                      ? "empty-row"
-                      : ""
-                  }
-                  onClick={() => handleRowClick(rowIndex)}
-                  style={{
-                    backgroundColor:
-                      rowIndex === selectedRowIndex ? "#F9AF40" : "",
-                  }}
-                >
+          <div
+            style={{ overflowX: "auto" }}
+            className="md:mt-10 mt-5 mx-4 md:mx-8 mb-10"
+          >
+            <table className="view-record-table">
+              <thead>
+                <tr>
                   {staticColumnOrder.map(
                     (column, index) =>
                       columnVisibility[column] && (
-                        <td
-                          key={index}
-                          style={{
-                            textTransform:
-                              column === "email" ? "lowercase" : "capitalize",
-                          }}
-                        >
-                          {record[column] || "\u00A0"}
-                        </td>
+                        <th key={index}>{column.toUpperCase()}</th>
                       )
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
 
+              <tbody>
+                {filteredRecords.map((record, rowIndex) => (
+                  <tr
+                    key={rowIndex}
+                    className={
+                      Object.values(record).every((value) => !value)
+                        ? "empty-row"
+                        : ""
+                    }
+                    onClick={() => handleRowClick(rowIndex)}
+                    style={{
+                      backgroundColor:
+                        rowIndex === selectedRowIndex ? "#F9AF40" : "",
+                    }}
+                  >
+                    {staticColumnOrder.map(
+                      (column, index) =>
+                        columnVisibility[column] && (
+                          <td
+                            key={index}
+                            style={{
+                              textTransform:
+                                column === "email" ? "lowercase" : "capitalize",
+                            }}
+                          >
+                            {record[column] || "\u00A0"}
+                          </td>
+                        )
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
         {selectedRecord && !confirmationAction && (
           <div className="popup-container">
             <div className="popup-content">
