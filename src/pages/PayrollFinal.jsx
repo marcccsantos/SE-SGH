@@ -75,10 +75,15 @@ const PayrollFinal = () => {
         return;
       }
 
-      // Fetch extras and deductions
-      const extrasQuery = query(collection(db, "extras_and_deductions"));
+      // Fetch extras and deductions within the selected date range
+      const extrasQuery = query(
+        collection(db, "extras_and_deductions"),
+        where("date", ">=", startDate),
+        where("date", "<=", endDate)
+      );
       const extrasSnapshot = await getDocs(extrasQuery);
       const extrasData = extrasSnapshot.docs.map((doc) => doc.data());
+
 
       // Fetch daily time records within the selected date range
       let recordsQuery;
