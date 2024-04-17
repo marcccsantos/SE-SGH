@@ -589,7 +589,6 @@ const ViewProfile = () => {
                 }
                 readOnly={!isEditing}
                 onChange={handleChange}
-                required
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />

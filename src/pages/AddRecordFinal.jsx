@@ -553,7 +553,6 @@ const AddRecordFinal = () => {
                 id="prcExpiry"
                 value={prcExpiry}
                 onChange={(e) => setPrcExpiry(e.target.value)}
-                required
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
               />
@@ -653,7 +652,7 @@ const AddRecordFinal = () => {
                 name="pagibigDeduction"
                 id="pagibigDeduction"
                 value={pagibigDeduction}
-                onChange={(e) => setPagibigDeduction(e.target.value)} 
+                onChange={(e) => setPagibigDeduction(e.target.value)}
                 required
                 placeholder="Enter value only between 0-100"
                 autoComplete="off"
