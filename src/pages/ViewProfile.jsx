@@ -518,10 +518,12 @@ const ViewProfile = () => {
                 Lot Number
               </label>
               <input
-                type="number"
+                type="text"
                 name="lot"
                 id="lot"
-                value={isEditing ? editedData.lot : employeeData.lot}
+                value={
+                  isEditing ? editedData.lotNumber : employeeData.lotNumber
+                }
                 readOnly={!isEditing}
                 onChange={handleChange}
                 required
