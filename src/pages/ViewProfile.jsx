@@ -16,6 +16,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import NotFound from "./not-found";
 import { MdError } from "react-icons/md";
+import { FaPesoSign } from "react-icons/fa6";
 
 const ViewProfile = () => {
   const { employeeID } = useParams();
@@ -211,6 +212,15 @@ const ViewProfile = () => {
 
   const handleClosePopupDeduction = () => {
     setShowPopupDeduction(false);
+  };
+
+  const handleSalaryAmount = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters and format with commas
+    const formattedValue = value
+      .replace(/\D/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setEditedData({ ...editedData, [name]: formattedValue });
   };
 
   return (
@@ -778,21 +788,24 @@ const ViewProfile = () => {
               >
                 Salary
               </label>
-              <input
-                type="number"
-                name="salaryPerMonth"
-                id="salaryPerMonth"
-                value={
-                  isEditing
-                    ? editedData.salaryPerMonth
-                    : employeeData.salaryPerMonth
-                }
-                readOnly={!isEditing}
-                onChange={handleChange}
-                required
-                autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
-              />
+              <div className="flex flex-row py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ">
+                <FaPesoSign className="mt-1" />
+                <input
+                  type="text"
+                  name="salaryPerMonth"
+                  id="salaryPerMonth"
+                  value={
+                    isEditing
+                      ? editedData.salaryPerMonth
+                      : employeeData.salaryPerMonth
+                  }
+                  readOnly={!isEditing}
+                  onChange={handleSalaryAmount}
+                  required
+                  autoComplete="off"
+                  className="focus:outline-none px-2"
+                />
+              </div>
               <label
                 htmlFor="role"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"

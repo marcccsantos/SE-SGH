@@ -14,6 +14,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { IoIosInformationCircle } from "react-icons/io";
 import Loading from "../components/loading";
+import { FaPesoSign } from "react-icons/fa6";
 
 const AddRecordFinal = () => {
   const [employeeID, setEmployeeID] = useState("");
@@ -85,7 +86,7 @@ const AddRecordFinal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
 
     // Calculate age based on date of birth
 
@@ -100,6 +101,27 @@ const AddRecordFinal = () => {
       return;
     }
 
+    if (tin.length !== 15) {
+      console.log("TIN must be 12 digits long. ");
+      return;
+    } else if (contactNumber.length !== 13) {
+      console.log("Contact number must be 12 digits long.");
+      return;
+    } else if (prc.length !== 8) {
+      console.log("Prc must be 7 digits long.");
+      return;
+    } else if (sss.length !== 12) {
+      console.log("SSS must be 10 digits long.");
+      return;
+    } else if (philhealth.length !== 14) {
+      console.log("Philhealth must be 12 digits long.");
+      return;
+    } else if (pagibig.length !== 14) {
+      console.log("Pagibig must be 12 digits long.");
+      return;
+    }
+
+    setLoading(true);
     try {
       // Set filename to employeeID
       const filename = `${employeeID.trim()}`;
@@ -213,6 +235,127 @@ const AddRecordFinal = () => {
 
   const handleClosePopupCred = () => {
     setShowPopupCred(false);
+  };
+
+  const handleSalaryChange = (e) => {
+    // Remove non-numeric characters and format with commas
+    const formattedValue = e.target.value
+      .replace(/\D/g, "")
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setSalaryPerMonth(formattedValue);
+  };
+
+  const handleTinChange = (e) => {
+    // Remove non-numeric characters and limit to 12 digits
+    let formattedTin = e.target.value.replace(/\D/g, "").slice(0, 12);
+
+    // Add dashes after every 3 digits
+    formattedTin = formattedTin.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{0,3}).*/,
+      "$1-$2-$3-$4"
+    );
+
+    setTin(formattedTin);
+  };
+
+  const handleContactNumberChange = (e) => {
+    // Remove non-numeric characters and limit to 10 digits
+    let formattedContactNumber = e.target.value.replace(/\D/g, "").slice(0, 11);
+
+    // Add dashes to format the number
+    formattedContactNumber = formattedContactNumber.replace(
+      /^(\d{4})(\d{3})(\d{4})$/,
+      "$1-$2-$3"
+    );
+
+    setContactNumber(formattedContactNumber);
+  };
+
+  const handlePrcIdChange = (e) => {
+    // Remove non-numeric characters
+    let formattedPrcId = e.target.value.replace(/\D/g, "");
+
+    // Limit to a certain length (adjust as needed)
+    formattedPrcId = formattedPrcId.slice(0, 7); // Example: Limit to 7 digits
+
+    // Format with space between prefix and numeric portion
+    if (formattedPrcId.length > 3) {
+      formattedPrcId = formattedPrcId.replace(/(\d{3})(\d+)/, "$1 $2");
+    }
+
+    setPrc(formattedPrcId);
+  };
+
+  const handleSssNumberChange = (e) => {
+    // Remove non-numeric characters
+    let formattedSssNumber = e.target.value.replace(/\D/g, "");
+
+    // Limit to 10 digits
+    formattedSssNumber = formattedSssNumber.slice(0, 10);
+
+    // Format with dashes
+    formattedSssNumber = formattedSssNumber.replace(
+      /(\d{2})(\d{7})(\d{1})/,
+      "$1-$2-$3"
+    );
+
+    setSss(formattedSssNumber);
+  };
+
+  const handlePhilhealthNumberChange = (e) => {
+    // Remove non-numeric characters
+    let formattedSssNumber = e.target.value.replace(/\D/g, "");
+
+    // Limit to 10 digits
+    formattedSssNumber = formattedSssNumber.slice(0, 12);
+
+    // Format with dashes
+    formattedSssNumber = formattedSssNumber.replace(
+      /(\d{2})(\d{9})(\d{1})/,
+      "$1-$2-$3"
+    );
+
+    setPhilhealth(formattedSssNumber);
+  };
+
+  const handlePagibigNumberChange = (e) => {
+    // Remove non-numeric characters
+    let formattedSssNumber = e.target.value.replace(/\D/g, "");
+
+    // Limit to 10 digits
+    formattedSssNumber = formattedSssNumber.slice(0, 12);
+
+    // Format with dashes
+    formattedSssNumber = formattedSssNumber.replace(
+      /(\d{4})(\d{4})(\d{4})/,
+      "$1-$2-$3"
+    );
+
+    setPagibig(formattedSssNumber);
+  };
+
+  const handlePercentageChange = (e, deductionType) => {
+    // Remove non-numeric characters
+    let value = e.target.value.replace(/\D/g, "");
+
+    // Convert to a number
+    let parsedValue = parseInt(value, 10);
+
+    // Validate the number to be within the range of 0 to 100
+    if (isNaN(parsedValue) || parsedValue < 0) {
+      parsedValue = "";
+    } else if (parsedValue > 100) {
+      parsedValue = 100;
+    }
+
+    // Update the state with the formatted percentage based on deductionType
+    if (deductionType === "sss") {
+      setSssDeduction(parsedValue);
+    } else if (deductionType === "philhealth") {
+      setPhilhealthDeduction(parsedValue);
+    } else if (deductionType === "pagibig") {
+      setPagibigDeduction(parsedValue);
+    }
   };
 
   return (
@@ -333,11 +476,15 @@ const AddRecordFinal = () => {
                 name="contact"
                 id="contact"
                 value={contactNumber}
-                onChange={(e) => setContactNumber(e.target.value)}
+                onChange={handleContactNumberChange}
                 required
                 placeholder="ex: 0917-123-4567"
                 autoComplete="off"
-                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  contactNumber.length === 13 || contactNumber.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="email"
@@ -518,11 +665,15 @@ const AddRecordFinal = () => {
                 name="tin"
                 id="tin"
                 value={tin}
-                onChange={(e) => setTin(e.target.value)}
+                onChange={handleTinChange}
                 required
                 placeholder="ex: 000-123-456-001"
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  tin.length === 15 || tin.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="prc"
@@ -535,11 +686,15 @@ const AddRecordFinal = () => {
                 name="prc"
                 id="prc"
                 value={prc}
-                onChange={(e) => setPrc(e.target.value)}
+                onChange={handlePrcIdChange}
                 required
                 placeholder="ex: 0012345"
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  prc.length === 8 || prc.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="prcExpiry"
@@ -567,11 +722,15 @@ const AddRecordFinal = () => {
                 name="sss"
                 id="sss"
                 value={sss}
-                onChange={(e) => setSss(e.target.value)}
+                onChange={handleSssNumberChange}
                 required
                 placeholder="ex: 00-1234567-8"
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  sss.length === 12 || sss.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="sssDeduction"
@@ -584,7 +743,7 @@ const AddRecordFinal = () => {
                 name="sssDeduction"
                 id="sssDeduction"
                 value={sssDeduction}
-                onChange={(e) => setSssDeduction(e.target.value)}
+                onChange={(e) => handlePercentageChange(e, "sss")}
                 required
                 placeholder="Enter value only between 0-100"
                 autoComplete="off"
@@ -601,11 +760,15 @@ const AddRecordFinal = () => {
                 name="philhealth"
                 id="philhealth"
                 value={philhealth}
-                onChange={(e) => setPhilhealth(e.target.value)}
+                onChange={handlePhilhealthNumberChange}
                 required
                 placeholder="ex: 12-202412345-8"
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  philhealth.length === 14 || philhealth.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="philhealthDeduction"
@@ -618,7 +781,7 @@ const AddRecordFinal = () => {
                 name="philhealthDeduction"
                 id="philhealthDeduction"
                 value={philhealthDeduction}
-                onChange={(e) => setPhilhealthDeduction(e.target.value)}
+                onChange={(e) => handlePercentageChange(e, "philhealth")}
                 required
                 placeholder="Enter value only between 0-100"
                 autoComplete="off"
@@ -635,11 +798,15 @@ const AddRecordFinal = () => {
                 name="pagibig"
                 id="pagibig"
                 value={pagibig}
-                onChange={(e) => setPagibig(e.target.value)}
+                onChange={handlePagibigNumberChange}
                 required
                 placeholder="ex: 1234-5678-9101"
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  pagibig.length === 14 || pagibig.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="pagibigDeduction"
@@ -652,7 +819,7 @@ const AddRecordFinal = () => {
                 name="pagibigDeduction"
                 id="pagibigDeduction"
                 value={pagibigDeduction}
-                onChange={(e) => setPagibigDeduction(e.target.value)}
+                onChange={(e) => handlePercentageChange(e, "pagibig")}
                 required
                 placeholder="Enter value only between 0-100"
                 autoComplete="off"
@@ -721,17 +888,20 @@ const AddRecordFinal = () => {
               >
                 Salary
               </label>
-              <input
-                type="number"
-                name="salary"
-                id="salary"
-                value={salaryPerMonth}
-                onChange={(e) => setSalaryPerMonth(e.target.value)}
-                required
-                placeholder="Enter Monthly Salary"
-                autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
-              />
+              <div className="flex flex-row py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ">
+                <FaPesoSign className="mt-1" />
+                <input
+                  type="text"
+                  name="salary"
+                  id="salary"
+                  value={salaryPerMonth}
+                  onChange={handleSalaryChange}
+                  required
+                  placeholder="Enter Monthly Salary"
+                  autoComplete="off"
+                  className="focus:outline-none px-2 w-full"
+                />
+              </div>
               <label
                 htmlFor="role"
                 className="flex items-center justify-start pl-2 text-gray-800 font-semibold text-xs md:text-sm text-center bg-[#7bbf6d] ml-1 min-w-0 min-h-[30px]"
