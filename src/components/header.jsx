@@ -215,6 +215,9 @@ const header = () => {
               <li>
                 <Link to="/PayrollFinal">PAYROLL</Link>
               </li>
+              <li>
+                <Link to="/DTR">DTR</Link>
+              </li>
             </ul>
             <div className="logout-container-mobile" onClick={handleLogOut}>
               <div className="icon-logout-mobile">
