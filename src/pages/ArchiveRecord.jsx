@@ -602,16 +602,57 @@ const fetchRecords = async () => {
             className="md:mt-10 mt-5 mx-4 md:mx-8 mb-10"
           >
             <table className="view-record-table">
-              <thead>
-                <tr>
-                  {staticColumnOrder.map(
-                    (column, index) =>
-                      columnVisibility[column] && (
-                        <th key={index}>{column.toUpperCase()}</th>
-                      )
-                  )}
-                </tr>
-              </thead>
+               <thead>
+  <tr>
+    {staticColumnOrder.map((columnKey) => {
+      let columnHeader;
+      switch (columnKey) {
+        case "employeeID":
+          columnHeader = "Employee ID";
+          break;
+        case "dateOfBirth":
+          columnHeader = "Date of Birth";
+          break;
+        case "tin":
+          columnHeader = "TIN";
+          break;
+        case "sss":
+          columnHeader = "SSS";
+          break;
+        case "philhealth":
+          columnHeader = "PhilHealth";
+          break;
+        case "philhealthDeduction":
+          columnHeader = "PhilHealth Deduction";
+              break;
+        case "sssDeduction":
+          columnHeader = "SSS Deduction";
+          break;
+        case "pagibig":
+          columnHeader = "Pag-IBIG";
+          break;
+        case "pagibigDeduction":
+          columnHeader = "Pag-IBIG Deduction";
+          break;
+        case "prc":
+          columnHeader = "PRC";
+          break;
+        case "prcExpiry":
+          columnHeader = "PRC Expiry";
+          break;
+        default:
+          columnHeader = columnKey
+            .replace(/([A-Z])/g, " $1") // Add space before capital letters
+            .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
+      }
+      return (
+        <th key={columnKey}>
+          {columnHeader}
+        </th>
+      );
+    })}
+  </tr>
+</thead>
 
               <tbody>
                 {filteredRecords.map((record, rowIndex) => (
@@ -628,18 +669,15 @@ const fetchRecords = async () => {
                         rowIndex === selectedRowIndex ? "#F9AF40" : "",
                     }}
                   >
-                    {staticColumnOrder.map(
-                      (column, index) =>
-                        columnVisibility[column] && (
-                          <td
-                            key={index}
-                            style={{
-                              textTransform:
-                                column === "email" ? "lowercase" : "capitalize",
-                            }}
-                          >
-                            {record[column] || "\u00A0"}
-                          </td>
+                  {staticColumnOrder.map((column, index) => (
+  <td
+    key={index}
+    style={{
+      textTransform: column === "email" ? "lowercase" : "capitalize",
+    }}
+  >
+    {record[column] !== undefined ? record[column] : "\u00A0"}
+  </td>
                         )
                     )}
                   </tr>
