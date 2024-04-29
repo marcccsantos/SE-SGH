@@ -96,6 +96,31 @@ const ViewProfile = () => {
 
   const handleSave = async () => {
     try {
+      // Validate input lengths
+      if (editedData.tin.length !== 15) {
+        console.error("TIN must be 15 characters long.");
+        return;
+      }
+      if (editedData.contactNumber.length !== 13) {
+        console.error("Contact number must be 13 digits long.");
+        return;
+      }
+      if (editedData.prc.length !== 8) {
+        console.error("PRC must be 8 characters long.");
+        return;
+      }
+      if (editedData.sss.length !== 12) {
+        console.error("SSS must be 12 characters long.");
+        return;
+      }
+      if (editedData.philhealth.length !== 14) {
+        console.error("Philhealth must be 14 characters long.");
+        return;
+      }
+      if (editedData.pagibig.length !== 14) {
+        console.error("Pagibig must be 14 characters long.");
+        return;
+      }
       // If a new image is uploaded, upload it to Firebase Storage
       let imageUrl = employeeData.imageUrl; // By default, keep the existing image URL
       if (newImage) {
@@ -221,6 +246,120 @@ const ViewProfile = () => {
       .replace(/\D/g, "")
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     setEditedData({ ...editedData, [name]: formattedValue });
+  };
+
+  const handleContactNumberChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters and limit to 10 digits
+    let formattedContactNumber = value.replace(/\D/g, "").slice(0, 11);
+
+    // Add dashes to format the number
+    formattedContactNumber = formattedContactNumber.replace(
+      /^(\d{4})(\d{3})(\d{4})$/,
+      "$1-$2-$3"
+    );
+
+    setEditedData({ ...editedData, [name]: formattedContactNumber });
+  };
+
+  const handleTinChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters and limit to 12 digits
+    let formattedTin = value.replace(/\D/g, "").slice(0, 12);
+
+    // Add dashes after every 3 digits
+    formattedTin = formattedTin.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{0,3}).*/,
+      "$1-$2-$3-$4"
+    );
+
+    setEditedData({ ...editedData, [name]: formattedTin });
+  };
+
+  const handlePrcIdChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters
+    let formattedPrcId = value.replace(/\D/g, "");
+
+    // Limit to a certain length (adjust as needed)
+    formattedPrcId = formattedPrcId.slice(0, 7); // Example: Limit to 7 digits
+
+    // Format with space between prefix and numeric portion
+    if (formattedPrcId.length > 3) {
+      formattedPrcId = formattedPrcId.replace(/(\d{3})(\d+)/, "$1 $2");
+    }
+
+    setEditedData({ ...editedData, [name]: formattedPrcId });
+  };
+
+  const handleSssNumberChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters
+    let formattedSssNumber = value.replace(/\D/g, "");
+
+    // Limit to 10 digits
+    formattedSssNumber = formattedSssNumber.slice(0, 10);
+
+    // Format with dashes
+    formattedSssNumber = formattedSssNumber.replace(
+      /(\d{2})(\d{7})(\d{1})/,
+      "$1-$2-$3"
+    );
+
+    setEditedData({ ...editedData, [name]: formattedSssNumber });
+  };
+
+  const handlePhilhealthNumberChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters
+    let formattedNumber = value.replace(/\D/g, "");
+
+    // Limit to 10 digits
+    formattedNumber = formattedNumber.slice(0, 12);
+
+    // Format with dashes
+    formattedNumber = formattedNumber.replace(
+      /(\d{2})(\d{9})(\d{1})/,
+      "$1-$2-$3"
+    );
+
+    setEditedData({ ...editedData, [name]: formattedNumber });
+  };
+
+  const handlePagibigNumberChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters
+    let formattedNumber = e.target.value.replace(/\D/g, "");
+
+    // Limit to 10 digits
+    formattedNumber = formattedNumber.slice(0, 12);
+
+    // Format with dashes
+    formattedNumber = formattedNumber.replace(
+      /(\d{4})(\d{4})(\d{4})/,
+      "$1-$2-$3"
+    );
+
+    setEditedData({ ...editedData, [name]: formattedNumber });
+  };
+
+  const handlePercentageChange = (e) => {
+    const { name, value } = e.target;
+    // Remove non-numeric characters
+    let parsedValue = e.target.value.replace(/\D/g, "");
+
+    // Convert to a number
+    parsedValue = parseInt(parsedValue, 10);
+
+    // Validate the number to be within the range of 0 to 100
+    if (isNaN(parsedValue) || parsedValue < 0) {
+      parsedValue = "";
+    } else if (parsedValue > 100) {
+      parsedValue = 100;
+    }
+
+    // Update the state with the formatted percentage based on deductionType
+    setEditedData({ ...editedData, [name]: parsedValue });
   };
 
   return (
@@ -359,7 +498,7 @@ const ViewProfile = () => {
                 Contact No.
               </label>
               <input
-                type="number"
+                type="text"
                 name="contactNumber"
                 id="contactNumber"
                 value={
@@ -368,10 +507,15 @@ const ViewProfile = () => {
                     : employeeData.contactNumber
                 }
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handleContactNumberChange}
                 required
                 autoComplete="off"
-                className=" py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  editedData.contactNumber.length === 13 ||
+                  editedData.contactNumber.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="email"
@@ -562,10 +706,14 @@ const ViewProfile = () => {
                 id="tin"
                 value={isEditing ? editedData.tin : employeeData.tin}
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handleTinChange}
                 required
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  editedData.tin.length === 15 || editedData.tin.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="prc"
@@ -579,10 +727,14 @@ const ViewProfile = () => {
                 id="prc"
                 value={isEditing ? editedData.prc : employeeData.prc}
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handlePrcIdChange}
                 required
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  editedData.prc.length === 8 || editedData.prc.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="prcExpiry"
@@ -614,10 +766,14 @@ const ViewProfile = () => {
                 id="sss"
                 value={isEditing ? editedData.sss : employeeData.sss}
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handleSssNumberChange}
                 required
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  editedData.sss.length === 12 || editedData.sss.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="sssDeduction"
@@ -635,7 +791,7 @@ const ViewProfile = () => {
                     : employeeData.sssDeduction
                 }
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handlePercentageChange}
                 required
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
@@ -654,10 +810,15 @@ const ViewProfile = () => {
                   isEditing ? editedData.philhealth : employeeData.philhealth
                 }
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handlePhilhealthNumberChange}
                 required
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  editedData.philhealth.length === 14 ||
+                  editedData.philhealth.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="philhealthDeduction"
@@ -675,7 +836,7 @@ const ViewProfile = () => {
                     : employeeData.philhealthDeduction
                 }
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handlePercentageChange}
                 required
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
@@ -692,10 +853,15 @@ const ViewProfile = () => {
                 id="pagibig"
                 value={isEditing ? editedData.pagibig : employeeData.pagibig}
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handlePagibigNumberChange}
                 required
                 autoComplete="off"
-                className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
+                className={`py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1 ${
+                  editedData.pagibig.length === 14 ||
+                  editedData.pagibig.length === 0
+                    ? ""
+                    : "border-red-500 border-2 "
+                } `}
               />
               <label
                 htmlFor="pagibigDeduction"
@@ -713,7 +879,7 @@ const ViewProfile = () => {
                     : employeeData.pagibigDeduction
                 }
                 readOnly={!isEditing}
-                onChange={handleChange}
+                onChange={handlePercentageChange}
                 required
                 autoComplete="off"
                 className="py-1 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800 text-xs md:text-sm min-w-0 mr-1"
@@ -803,7 +969,7 @@ const ViewProfile = () => {
                   onChange={handleSalaryAmount}
                   required
                   autoComplete="off"
-                  className="focus:outline-none px-2"
+                  className="focus:outline-none px-2 w-full"
                 />
               </div>
               <label
